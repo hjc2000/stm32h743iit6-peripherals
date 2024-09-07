@@ -1,5 +1,5 @@
 #pragma once
-#include <base/SingletonGetter.h>
+#include <base/di/SingletonGetter.h>
 #include <bsp-interface/di/dma.h>
 #include <bsp-interface/di/interrupt.h>
 #include <bsp-interface/serial/ISerial.h>
