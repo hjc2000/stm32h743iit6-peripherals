@@ -210,6 +210,31 @@ void bsp::Serial::SetReadTimeoutByBaudCount(uint32_t value)
     }
 }
 
+bsp::Serial &bsp::Serial::Instance()
+{
+    class Getter : public base::SingletonGetter<Serial>
+    {
+    public:
+        std::unique_ptr<Serial> Create() override
+        {
+            return std::unique_ptr<Serial>{new Serial{}};
+        }
+
+        void Lock() override
+        {
+            DI_InterruptSwitch().DisableGlobalInterrupt();
+        }
+
+        void Unlock() override
+        {
+            DI_InterruptSwitch().EnableGlobalInterrupt();
+        }
+    };
+
+    Getter g;
+    return g.Instance();
+}
+
 void bsp::Serial::Open(bsp::ISerialOptions const &options)
 {
     if (_have_begun)

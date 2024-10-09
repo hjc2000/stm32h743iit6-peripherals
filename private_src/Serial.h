@@ -45,30 +45,7 @@ namespace bsp
         void SetReadTimeoutByBaudCount(uint32_t value);
 
     public:
-        static Serial &Instance()
-        {
-            class Getter : public base::SingletonGetter<Serial>
-            {
-            public:
-                std::unique_ptr<Serial> Create() override
-                {
-                    return std::unique_ptr<Serial>{new Serial{}};
-                }
-
-                void Lock() override
-                {
-                    DI_InterruptSwitch().DisableGlobalInterrupt();
-                }
-
-                void Unlock() override
-                {
-                    DI_InterruptSwitch().EnableGlobalInterrupt();
-                }
-            };
-
-            Getter g;
-            return g.Instance();
-        }
+        static Serial &Instance();
 
         std::string Name() override
         {
