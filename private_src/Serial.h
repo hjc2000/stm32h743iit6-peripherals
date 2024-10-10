@@ -6,7 +6,6 @@
 #include <bsp-interface/di/task.h>
 #include <bsp-interface/serial/ISerial.h>
 #include <SerialOptions.h>
-#include <task/BinarySemaphore.h>
 
 namespace bsp
 {
@@ -18,8 +17,8 @@ namespace bsp
 
         bool _have_begun = false;
         UART_HandleTypeDef _uart_handle{};
-        task::BinarySemaphore _sending_completion_signal;
-        task::BinarySemaphore _receiving_completion_signal;
+        std::shared_ptr<bsp::IBinarySemaphore> _sending_completion_signal = DICreate_BinarySemaphore();
+        std::shared_ptr<bsp::IBinarySemaphore> _receiving_completion_signal = DICreate_BinarySemaphore();
         std::shared_ptr<bsp::IMutex> _read_lock = DICreate_Mutex();
 
         bsp::IDmaChannel *_rx_dma_channel = nullptr;

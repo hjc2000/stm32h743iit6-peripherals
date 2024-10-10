@@ -125,17 +125,17 @@ int32_t bsp::Serial::HaveRead()
 
 void bsp::Serial::OnReceiveEventCallback(UART_HandleTypeDef *huart, uint16_t pos)
 {
-    bsp::Serial::Instance()._receiving_completion_signal.ReleaseFromISR();
+    bsp::Serial::Instance()._receiving_completion_signal->ReleaseFromISR();
 }
 
 void bsp::Serial::OnSendCompleteCallback(UART_HandleTypeDef *huart)
 {
-    bsp::Serial::Instance()._sending_completion_signal.ReleaseFromISR();
+    bsp::Serial::Instance()._sending_completion_signal->ReleaseFromISR();
 }
 
 void bsp::Serial::OnReadTimeout(UART_HandleTypeDef *huart)
 {
-    Serial::Instance()._receiving_completion_signal.ReleaseFromISR();
+    Serial::Instance()._receiving_completion_signal->ReleaseFromISR();
 }
 
 #pragma endregion
@@ -168,7 +168,7 @@ int32_t bsp::Serial::Read(uint8_t *buffer, int32_t offset, int32_t count)
                 _uart_handle.hdmarx->XferHalfCpltCallback = nullptr;
             });
 
-        _receiving_completion_signal.Acquire();
+        _receiving_completion_signal->Acquire();
         if (HaveRead() > 0)
         {
             return HaveRead();
@@ -178,7 +178,7 @@ int32_t bsp::Serial::Read(uint8_t *buffer, int32_t offset, int32_t count)
 
 void bsp::Serial::Write(uint8_t const *buffer, int32_t offset, int32_t count)
 {
-    _sending_completion_signal.Acquire();
+    _sending_completion_signal->Acquire();
     HAL_StatusTypeDef ret = HAL_UART_Transmit_DMA(&_uart_handle,
                                                   buffer + offset,
                                                   count);
@@ -252,7 +252,7 @@ void bsp::Serial::Open(bsp::ISerialOptions const &options)
      * 然后在发送完成之前，第二次 Write 就会被阻塞了，这还能防止 Write
      * 被多线程同时调用。
      */
-    _sending_completion_signal.Release();
+    _sending_completion_signal->Release();
     InitializeGpio();
     InitializeDma();
     InitializeUart(static_cast<SerialOptions const &>(options));
