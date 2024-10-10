@@ -1,11 +1,11 @@
-#include <base/container/Collection.h>
+#include <base/container/Dictionary.h>
 #include <base/di/SingletonGetter.h>
 #include <bsp-interface/di/serial.h>
 #include <Serial.h>
 
 /// @brief 包含所有可用串口的集合。
 /// @return
-base::ICollection<std::string, bsp::ISerial *> const &DI_SerialCollection()
+base::IDictionary<std::string, bsp::ISerial *> const &DI_SerialCollection()
 {
     class Collection
     {
@@ -17,11 +17,11 @@ base::ICollection<std::string, bsp::ISerial *> const &DI_SerialCollection()
 
         void Add(bsp::ISerial *o)
         {
-            _collection.Put(o->Name(), o);
+            _dic.Add(o->Name(), o);
         }
 
     public:
-        base::Collection<std::string, bsp::ISerial *> _collection{};
+        base::Dictionary<std::string, bsp::ISerial *> _dic{};
 
         static Collection &Instance()
         {
@@ -49,5 +49,5 @@ base::ICollection<std::string, bsp::ISerial *> const &DI_SerialCollection()
         }
     };
 
-    return Collection::Instance()._collection;
+    return Collection::Instance()._dic;
 }

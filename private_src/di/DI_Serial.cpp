@@ -1,4 +1,3 @@
-#include <base/container/Collection.h>
 #include <bsp-interface/di/serial.h>
 #include <Serial.h>
 
