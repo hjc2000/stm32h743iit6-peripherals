@@ -23,7 +23,7 @@ base::IDictionary<std::string, bsp::ISerial *> const &DI_SerialCollection()
     public:
         base::Dictionary<std::string, bsp::ISerial *> _dic{};
 
-        static Collection &Instance()
+        static_function Collection &Instance()
         {
             class Getter : public base::SingletonGetter<Collection>
             {

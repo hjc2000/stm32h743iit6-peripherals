@@ -1,4 +1,5 @@
 #pragma once
+#include <base/define.h>
 #include <base/di/SingletonGetter.h>
 #include <bsp-interface/di/dma.h>
 #include <bsp-interface/di/interrupt.h>
@@ -37,15 +38,15 @@ namespace bsp
         int32_t HaveRead();
 
 #pragma region 被中断处理函数回调的函数
-        static void OnReceiveEventCallback(UART_HandleTypeDef *huart, uint16_t pos);
-        static void OnSendCompleteCallback(UART_HandleTypeDef *huart);
-        static void OnReadTimeout(UART_HandleTypeDef *huart);
+        static_function void OnReceiveEventCallback(UART_HandleTypeDef *huart, uint16_t pos);
+        static_function void OnSendCompleteCallback(UART_HandleTypeDef *huart);
+        static_function void OnReadTimeout(UART_HandleTypeDef *huart);
 #pragma endregion
 
         void SetReadTimeoutByBaudCount(uint32_t value);
 
     public:
-        static Serial &Instance();
+        static_function Serial &Instance();
 
         std::string Name() override
         {
