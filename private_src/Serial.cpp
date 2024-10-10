@@ -149,7 +149,7 @@ int32_t bsp::Serial::Read(uint8_t *buffer, int32_t offset, int32_t count)
         throw std::invalid_argument{"count 太大"};
     }
 
-    base::LockGuard l{_read_lock};
+    base::LockGuard l{*_read_lock};
     while (true)
     {
         DI_InterruptSwitch().DoGlobalCriticalWork(
@@ -179,7 +179,10 @@ int32_t bsp::Serial::Read(uint8_t *buffer, int32_t offset, int32_t count)
 void bsp::Serial::Write(uint8_t const *buffer, int32_t offset, int32_t count)
 {
     _sending_completion_signal.Acquire();
-    HAL_StatusTypeDef ret = HAL_UART_Transmit_DMA(&_uart_handle, buffer + offset, count);
+    HAL_StatusTypeDef ret = HAL_UART_Transmit_DMA(&_uart_handle,
+                                                  buffer + offset,
+                                                  count);
+
     if (ret != HAL_StatusTypeDef::HAL_OK)
     {
         throw std::runtime_error{"发送失败"};

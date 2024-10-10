@@ -3,10 +3,10 @@
 #include <base/di/SingletonGetter.h>
 #include <bsp-interface/di/dma.h>
 #include <bsp-interface/di/interrupt.h>
+#include <bsp-interface/di/task.h>
 #include <bsp-interface/serial/ISerial.h>
 #include <SerialOptions.h>
 #include <task/BinarySemaphore.h>
-#include <task/Mutex.h>
 
 namespace bsp
 {
@@ -20,7 +20,7 @@ namespace bsp
         UART_HandleTypeDef _uart_handle{};
         task::BinarySemaphore _sending_completion_signal;
         task::BinarySemaphore _receiving_completion_signal;
-        task::Mutex _read_lock{};
+        std::shared_ptr<bsp::IMutex> _read_lock = DICreate_Mutex();
 
         bsp::IDmaChannel *_rx_dma_channel = nullptr;
         bsp::IDmaChannel *_tx_dma_channel = nullptr;
