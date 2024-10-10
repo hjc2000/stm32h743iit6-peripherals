@@ -6,7 +6,6 @@
 #include <bsp-interface/serial/ISerial.h>
 #include <SerialOptions.h>
 #include <task/BinarySemaphore.h>
-#include <task/Critical.h>
 #include <task/Mutex.h>
 
 namespace bsp

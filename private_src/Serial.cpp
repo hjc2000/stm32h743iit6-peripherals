@@ -152,7 +152,7 @@ int32_t bsp::Serial::Read(uint8_t *buffer, int32_t offset, int32_t count)
     task::MutexLockGuard l{_read_lock};
     while (true)
     {
-        task::Critical::Run(
+        DI_InterruptSwitch().DoGlobalCriticalWork(
             [&]()
             {
                 // HAL_UART_Receive_DMA
