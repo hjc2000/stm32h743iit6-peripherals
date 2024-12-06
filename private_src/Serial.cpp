@@ -99,9 +99,9 @@ void bsp::Serial::InitializeInterrupt()
                                HAL_DMA_IRQHandler(_uart_handle.hdmarx);
                            });
 
-    DI_InterruptSwitch().EnableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn), 10);
-    DI_InterruptSwitch().EnableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn), 10);
-    DI_InterruptSwitch().EnableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn), 10);
+    DI_EnableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn), 10);
+    DI_EnableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn), 10);
+    DI_EnableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn), 10);
 }
 
 #pragma endregion
@@ -142,7 +142,7 @@ int32_t bsp::Serial::Read(uint8_t *buffer, int32_t offset, int32_t count)
     base::LockGuard l{*_read_lock};
     while (true)
     {
-        DI_InterruptSwitch().DoGlobalCriticalWork(
+        DI_DoGlobalCriticalWork(
             [&]()
             {
                 // HAL_UART_Receive_DMA
@@ -182,9 +182,9 @@ void bsp::Serial::Write(uint8_t const *buffer, int32_t offset, int32_t count)
 void bsp::Serial::Close()
 {
     HAL_UART_DMAStop(&_uart_handle);
-    DI_InterruptSwitch().DisableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
-    DI_InterruptSwitch().DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
-    DI_InterruptSwitch().DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
+    DI_DisableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
+    DI_DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
+    DI_DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
     _have_begun = false;
 }
 
@@ -215,12 +215,12 @@ bsp::Serial &bsp::Serial::Instance()
 
         void Lock() override
         {
-            DI_InterruptSwitch().DisableGlobalInterrupt();
+            DI_DisableGlobalInterrupt();
         }
 
         void Unlock() override
         {
-            DI_InterruptSwitch().EnableGlobalInterrupt();
+            DI_EnableGlobalInterrupt();
         }
     };
 
