@@ -12,28 +12,18 @@ void bsp::Serial::InitializeGpio()
 
     // 发送引脚 PA9
     {
-        auto options = DICreate_GpioPinOptions();
-        options->SetAlternateFunction("usart1");
-        options->SetDriver(bsp::IGpioPinDriver::PushPull);
-        options->SetPullMode(bsp::IGpioPinPullMode::NoPull);
-        options->SetSpeedLevel(3);
-        options->SetWorkMode(bsp::IGpioPinWorkMode::AlternateFunction);
-
         auto pin = DI_GpioPinCollection().Get("PA9");
-        pin->Open(*options);
+        pin->OpenAsAlternateFunctionMode("usart1",
+                                         bsp::IGpioPinPullMode::NoPull,
+                                         bsp::IGpioPinDriver::PushPull);
     }
 
     // 接收引脚 PA10
     {
-        auto options = DICreate_GpioPinOptions();
-        options->SetAlternateFunction("usart1");
-        options->SetDriver(bsp::IGpioPinDriver::PushPull);
-        options->SetPullMode(bsp::IGpioPinPullMode::NoPull);
-        options->SetSpeedLevel(3);
-        options->SetWorkMode(bsp::IGpioPinWorkMode::AlternateFunction);
-
         auto pin = DI_GpioPinCollection().Get("PA10");
-        pin->Open(*options);
+        pin->OpenAsAlternateFunctionMode("usart1",
+                                         bsp::IGpioPinPullMode::NoPull,
+                                         bsp::IGpioPinDriver::PushPull);
     }
 }
 
