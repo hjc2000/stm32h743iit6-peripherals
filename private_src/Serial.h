@@ -1,6 +1,7 @@
 #pragma once
 #include <base/define.h>
 #include <base/di/SingletonGetter.h>
+#include <base/task/IMutex.h>
 #include <bsp-interface/di/dma.h>
 #include <bsp-interface/di/interrupt.h>
 #include <bsp-interface/di/task.h>
@@ -19,7 +20,7 @@ namespace bsp
         UART_HandleTypeDef _uart_handle{};
         std::shared_ptr<bsp::IBinarySemaphore> _sending_completion_signal = DICreate_BinarySemaphore();
         std::shared_ptr<bsp::IBinarySemaphore> _receiving_completion_signal = DICreate_BinarySemaphore();
-        std::shared_ptr<bsp::IMutex> _read_lock = DICreate_Mutex();
+        std::shared_ptr<base::IMutex> _read_lock = base::di::CreateMutex();
 
         bsp::IDmaChannel *_rx_dma_channel = nullptr;
         bsp::IDmaChannel *_tx_dma_channel = nullptr;
