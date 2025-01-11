@@ -1,6 +1,7 @@
 #include "Serial.h"
 #include <bsp-interface/di/gpio.h>
 #include <bsp-interface/di/interrupt.h>
+#include <bsp-interface/di/task.h>
 #include <FreeRTOS.h>
 #include <task.h>
 
@@ -145,7 +146,14 @@ int32_t bsp::Serial::Read(uint8_t *buffer, int32_t offset, int32_t count)
     while (true)
     {
         {
-            bsp::GlobalInterruptGuard g;
+            DI_TaskManager().SuspendAllTask();
+            __disable_irq();
+            base::Guard g{
+                []()
+                {
+                    DI_TaskManager().ResumeAllTask();
+                    __enable_irq();
+                }};
 
             // HAL_UART_Receive_DMA
             // HAL_UARTEx_ReceiveToIdle_DMA
@@ -207,22 +215,13 @@ void bsp::Serial::SetReadTimeoutByBaudCount(uint32_t value)
 
 bsp::Serial &bsp::Serial::Instance()
 {
-    class Getter : public base::SingletonGetter<Serial>
+    class Getter :
+        public bsp::TaskSingletonGetter<Serial>
     {
     public:
         std::unique_ptr<Serial> Create() override
         {
             return std::unique_ptr<Serial>{new Serial{}};
-        }
-
-        void Lock() override
-        {
-            DI_DisableGlobalInterrupt();
-        }
-
-        void Unlock() override
-        {
-            DI_EnableGlobalInterrupt();
         }
     };
 
