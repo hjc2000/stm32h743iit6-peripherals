@@ -1,7 +1,6 @@
 #include <base/container/Dictionary.h>
 #include <base/di/SingletonGetter.h>
 #include <bsp-interface/di/serial.h>
-#include <bsp-interface/di/task.h>
 #include <Serial.h>
 
 /// @brief 包含所有可用串口的集合。
@@ -26,13 +25,22 @@ base::IDictionary<std::string, bsp::ISerial *> const &DI_SerialCollection()
 
         static_function Collection &Instance()
         {
-            class Getter :
-                public bsp::TaskSingletonGetter<Collection>
+            class Getter : public base::SingletonGetter<Collection>
             {
             public:
                 std::unique_ptr<Collection> Create() override
                 {
                     return std::unique_ptr<Collection>{new Collection{}};
+                }
+
+                void Lock() override
+                {
+                    DI_DisableGlobalInterrupt();
+                }
+
+                void Unlock() override
+                {
+                    DI_EnableGlobalInterrupt();
                 }
             };
 
