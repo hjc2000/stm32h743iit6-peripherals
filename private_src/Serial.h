@@ -1,6 +1,5 @@
 #pragma once
 #include <base/define.h>
-#include <base/di/SingletonGetter.h>
 #include <base/task/IMutex.h>
 #include <bsp-interface/di/dma.h>
 #include <bsp-interface/di/interrupt.h>
