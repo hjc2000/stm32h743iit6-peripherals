@@ -17,8 +17,8 @@ namespace bsp
 
         bool _have_begun = false;
         UART_HandleTypeDef _uart_handle{};
-        std::shared_ptr<bsp::IBinarySemaphore> _sending_completion_signal = DICreate_BinarySemaphore();
-        std::shared_ptr<bsp::IBinarySemaphore> _receiving_completion_signal = DICreate_BinarySemaphore();
+        std::shared_ptr<bsp::IBinarySemaphore> _sending_completion_signal = bsp::di::task::CreateBinarySemaphore();
+        std::shared_ptr<bsp::IBinarySemaphore> _receiving_completion_signal = bsp::di::task::CreateBinarySemaphore();
         std::shared_ptr<base::IMutex> _read_lock = base::di::CreateMutex();
 
         bsp::IDmaChannel *_rx_dma_channel = nullptr;
