@@ -4,10 +4,11 @@
 
 namespace bsp
 {
-    class SerialOptions : public bsp::ISerialOptions
+    class SerialOptions :
+        public bsp::ISerialOptions
     {
     private:
-        UART_InitTypeDef _hal_uart_init;
+        UART_InitTypeDef _hal_uart_init{};
 
     public:
         SerialOptions();
