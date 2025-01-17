@@ -102,9 +102,9 @@ void bsp::Serial::InitializeInterrupt()
                                                 HAL_DMA_IRQHandler(_uart_handle.hdmarx);
                                             });
 
-    DI_EnableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn), 10);
-    DI_EnableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn), 10);
-    DI_EnableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn), 10);
+    bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn), 10);
+    bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn), 10);
+    bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn), 10);
 }
 
 #pragma endregion
@@ -146,7 +146,7 @@ int32_t bsp::Serial::Read(uint8_t *buffer, int32_t offset, int32_t count)
     while (true)
     {
         {
-            bsp::GlobalInterruptGuard g;
+            bsp::di::interrupt::GlobalInterruptGuard g;
 
             // HAL_UART_Receive_DMA
             // HAL_UARTEx_ReceiveToIdle_DMA
@@ -185,9 +185,9 @@ void bsp::Serial::Write(uint8_t const *buffer, int32_t offset, int32_t count)
 void bsp::Serial::Close()
 {
     HAL_UART_DMAStop(&_uart_handle);
-    DI_DisableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
-    DI_DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
-    DI_DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
+    bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
+    bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
+    bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
     _have_begun = false;
 }
 
