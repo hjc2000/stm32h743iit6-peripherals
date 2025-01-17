@@ -84,23 +84,23 @@ void bsp::Serial::InitializeUart(SerialOptions const &options)
 
 void bsp::Serial::InitializeInterrupt()
 {
-    DI_IsrManager().AddIsr(static_cast<uint32_t>(IRQn_Type::USART1_IRQn),
-                           [this]()
-                           {
-                               HAL_UART_IRQHandler(&_uart_handle);
-                           });
+    bsp::di::interrupt::IsrManager().AddIsr(static_cast<uint32_t>(IRQn_Type::USART1_IRQn),
+                                            [this]()
+                                            {
+                                                HAL_UART_IRQHandler(&_uart_handle);
+                                            });
 
-    DI_IsrManager().AddIsr(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn),
-                           [this]()
-                           {
-                               HAL_DMA_IRQHandler(_uart_handle.hdmatx);
-                           });
+    bsp::di::interrupt::IsrManager().AddIsr(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn),
+                                            [this]()
+                                            {
+                                                HAL_DMA_IRQHandler(_uart_handle.hdmatx);
+                                            });
 
-    DI_IsrManager().AddIsr(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn),
-                           [this]()
-                           {
-                               HAL_DMA_IRQHandler(_uart_handle.hdmarx);
-                           });
+    bsp::di::interrupt::IsrManager().AddIsr(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn),
+                                            [this]()
+                                            {
+                                                HAL_DMA_IRQHandler(_uart_handle.hdmarx);
+                                            });
 
     DI_EnableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn), 10);
     DI_EnableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn), 10);
