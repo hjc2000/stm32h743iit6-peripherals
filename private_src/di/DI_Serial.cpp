@@ -3,7 +3,7 @@
 
 /// @brief 主串口。
 /// @return
-bsp::serial::ISerial &DI_Serial()
+bsp::serial::ISerial &bsp::di::serial::Serial()
 {
     return bsp::Serial::Instance();
 }
