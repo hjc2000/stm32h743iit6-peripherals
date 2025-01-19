@@ -5,7 +5,7 @@
 
 /// @brief 包含所有可用串口的集合。
 /// @return
-base::IDictionary<std::string, bsp::ISerial *> const &DI_SerialCollection()
+base::IDictionary<std::string, bsp::serial::ISerial *> const &DI_SerialCollection()
 {
     class Collection
     {
@@ -15,13 +15,13 @@ base::IDictionary<std::string, bsp::ISerial *> const &DI_SerialCollection()
             Add(&bsp::Serial::Instance());
         }
 
-        void Add(bsp::ISerial *o)
+        void Add(bsp::serial::ISerial *o)
         {
             _dic.Add(o->Name(), o);
         }
 
     public:
-        base::Dictionary<std::string, bsp::ISerial *> _dic{};
+        base::Dictionary<std::string, bsp::serial::ISerial *> _dic{};
 
         static_function Collection &Instance()
         {

@@ -69,18 +69,18 @@ void bsp::Serial::InitializeUart()
 
     switch (_direction)
     {
-    case bsp::serial_property::Direction::RX:
+    case bsp::serial::property::Direction::RX:
         {
             _uart_handle.Init.Mode = UART_MODE_RX;
             break;
         }
-    case bsp::serial_property::Direction::TX:
+    case bsp::serial::property::Direction::TX:
         {
             _uart_handle.Init.Mode = UART_MODE_TX;
             break;
         }
     default:
-    case bsp::serial_property::Direction::RX_TX:
+    case bsp::serial::property::Direction::RX_TX:
         {
             _uart_handle.Init.Mode = UART_MODE_TX_RX;
             break;
@@ -107,17 +107,17 @@ void bsp::Serial::InitializeUart()
     switch (_parity)
     {
     default:
-    case bsp::serial_property::Parity::None:
+    case bsp::serial::property::Parity::None:
         {
             _uart_handle.Init.Parity = UART_PARITY_NONE;
             break;
         }
-    case bsp::serial_property::Parity::Even:
+    case bsp::serial::property::Parity::Even:
         {
             _uart_handle.Init.Parity = UART_PARITY_EVEN;
             break;
         }
-    case bsp::serial_property::Parity::Odd:
+    case bsp::serial::property::Parity::Odd:
         {
             _uart_handle.Init.Parity = UART_PARITY_ODD;
             break;
@@ -127,12 +127,12 @@ void bsp::Serial::InitializeUart()
     switch (_stop_bits)
     {
     default:
-    case bsp::serial_property::StopBits::One:
+    case bsp::serial::property::StopBits::One:
         {
             _uart_handle.Init.StopBits = UART_STOPBITS_1;
             break;
         }
-    case bsp::serial_property::StopBits::Tow:
+    case bsp::serial::property::StopBits::Tow:
         {
             _uart_handle.Init.StopBits = UART_STOPBITS_2;
             break;
@@ -142,22 +142,22 @@ void bsp::Serial::InitializeUart()
     switch (_hardware_flow_control)
     {
     default:
-    case bsp::serial_property::HardwareFlowControl::None:
+    case bsp::serial::property::HardwareFlowControl::None:
         {
             _uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
             break;
         }
-    case bsp::serial_property::HardwareFlowControl::RTS:
+    case bsp::serial::property::HardwareFlowControl::RTS:
         {
             _uart_handle.Init.HwFlowCtl = UART_HWCONTROL_RTS;
             break;
         }
-    case bsp::serial_property::HardwareFlowControl::CTS:
+    case bsp::serial::property::HardwareFlowControl::CTS:
         {
             _uart_handle.Init.HwFlowCtl = UART_HWCONTROL_CTS;
             break;
         }
-    case bsp::serial_property::HardwareFlowControl::RTS_CTS:
+    case bsp::serial::property::HardwareFlowControl::RTS_CTS:
         {
             _uart_handle.Init.HwFlowCtl = UART_HWCONTROL_RTS_CTS;
             break;
@@ -330,12 +330,12 @@ bsp::Serial &bsp::Serial::Instance()
     return g.Instance();
 }
 
-void bsp::Serial::Open(bsp::serial_property::Direction direction,
-                       bsp::serial_property::BaudRate const &baud_rate,
-                       bsp::serial_property::DataBits const &data_bits,
-                       bsp::serial_property::Parity parity,
-                       bsp::serial_property::StopBits stop_bits,
-                       bsp::serial_property::HardwareFlowControl hardware_flow_control)
+void bsp::Serial::Open(bsp::serial::property::Direction direction,
+                       bsp::serial::property::BaudRate const &baud_rate,
+                       bsp::serial::property::DataBits const &data_bits,
+                       bsp::serial::property::Parity parity,
+                       bsp::serial::property::StopBits stop_bits,
+                       bsp::serial::property::HardwareFlowControl hardware_flow_control)
 {
     _direction = direction;
     _baud_rate = baud_rate.Value();

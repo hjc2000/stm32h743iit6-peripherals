@@ -10,7 +10,7 @@
 namespace bsp
 {
     class Serial :
-        public bsp::ISerial
+        public bsp::serial::ISerial
     {
     private:
         Serial() = default;
@@ -24,12 +24,12 @@ namespace bsp
         bsp::IDmaChannel *_rx_dma_channel = nullptr;
         bsp::IDmaChannel *_tx_dma_channel = nullptr;
 
-        bsp::serial_property::Direction _direction;
+        bsp::serial::property::Direction _direction;
         uint32_t _baud_rate;
         uint8_t _data_bits;
-        bsp::serial_property::Parity _parity;
-        bsp::serial_property::StopBits _stop_bits;
-        bsp::serial_property::HardwareFlowControl _hardware_flow_control;
+        bsp::serial::property::Parity _parity;
+        bsp::serial::property::StopBits _stop_bits;
+        bsp::serial::property::HardwareFlowControl _hardware_flow_control;
 
 #pragma region 初始化
         void InitializeGpio();
@@ -87,18 +87,18 @@ namespace bsp
         /// @param parity 奇偶校验。
         /// @param stop_bits 停止位位数。
         /// @param hardware_flow_control 硬件流控。
-        virtual void Open(bsp::serial_property::Direction direction,
-                          bsp::serial_property::BaudRate const &baud_rate,
-                          bsp::serial_property::DataBits const &data_bits,
-                          bsp::serial_property::Parity parity,
-                          bsp::serial_property::StopBits stop_bits,
-                          bsp::serial_property::HardwareFlowControl hardware_flow_control) override;
+        virtual void Open(bsp::serial::property::Direction direction,
+                          bsp::serial::property::BaudRate const &baud_rate,
+                          bsp::serial::property::DataBits const &data_bits,
+                          bsp::serial::property::Parity parity,
+                          bsp::serial::property::StopBits stop_bits,
+                          bsp::serial::property::HardwareFlowControl hardware_flow_control) override;
 
 #pragma region 串口属性
 
         /// @brief 数据传输方向
         /// @return
-        virtual bsp::serial_property::Direction Direction() override
+        virtual bsp::serial::property::Direction Direction() override
         {
             return _direction;
         }
@@ -119,21 +119,21 @@ namespace bsp
 
         /// @brief 校验位。
         /// @return
-        virtual bsp::serial_property::Parity Parity() const override
+        virtual bsp::serial::property::Parity Parity() const override
         {
             return _parity;
         }
 
         /// @brief 停止位个数。
         /// @return
-        virtual bsp::serial_property::StopBits StopBits() const override
+        virtual bsp::serial::property::StopBits StopBits() const override
         {
             return _stop_bits;
         }
 
         /// @brief 硬件流控。
         /// @return
-        virtual bsp::serial_property::HardwareFlowControl HardwareFlowControl() const override
+        virtual bsp::serial::property::HardwareFlowControl HardwareFlowControl() const override
         {
             return _hardware_flow_control;
         }
