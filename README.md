@@ -1,1 +1,1 @@
-# stm32h743iit6-flash
+# stm32h743iit6-serial
