@@ -63,10 +63,107 @@ void bsp::Serial::InitializeDma()
     }
 }
 
-void bsp::Serial::InitializeUart(SerialOptions const &options)
+void bsp::Serial::InitializeUart()
 {
     _uart_handle.Instance = USART1;
-    _uart_handle.Init = options;
+
+    switch (_direction)
+    {
+    case bsp::serial_property::Direction::RX:
+        {
+            _uart_handle.Init.Mode = UART_MODE_RX;
+            break;
+        }
+    case bsp::serial_property::Direction::TX:
+        {
+            _uart_handle.Init.Mode = UART_MODE_TX;
+            break;
+        }
+    default:
+    case bsp::serial_property::Direction::RX_TX:
+        {
+            _uart_handle.Init.Mode = UART_MODE_TX_RX;
+            break;
+        }
+    }
+
+    _uart_handle.Init.BaudRate = _baud_rate;
+
+    switch (_data_bits)
+    {
+    default:
+    case 8:
+        {
+            _uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
+            break;
+        }
+    case 9:
+        {
+            _uart_handle.Init.WordLength = UART_WORDLENGTH_9B;
+            break;
+        }
+    }
+
+    switch (_parity)
+    {
+    default:
+    case bsp::serial_property::Parity::None:
+        {
+            _uart_handle.Init.Parity = UART_PARITY_NONE;
+            break;
+        }
+    case bsp::serial_property::Parity::Even:
+        {
+            _uart_handle.Init.Parity = UART_PARITY_EVEN;
+            break;
+        }
+    case bsp::serial_property::Parity::Odd:
+        {
+            _uart_handle.Init.Parity = UART_PARITY_ODD;
+            break;
+        }
+    }
+
+    switch (_stop_bits)
+    {
+    default:
+    case bsp::serial_property::StopBits::One:
+        {
+            _uart_handle.Init.StopBits = UART_STOPBITS_1;
+            break;
+        }
+    case bsp::serial_property::StopBits::Tow:
+        {
+            _uart_handle.Init.StopBits = UART_STOPBITS_2;
+            break;
+        }
+    }
+
+    switch (_hardware_flow_control)
+    {
+    default:
+    case bsp::serial_property::HardwareFlowControl::None:
+        {
+            _uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+            break;
+        }
+    case bsp::serial_property::HardwareFlowControl::RTS:
+        {
+            _uart_handle.Init.HwFlowCtl = UART_HWCONTROL_RTS;
+            break;
+        }
+    case bsp::serial_property::HardwareFlowControl::CTS:
+        {
+            _uart_handle.Init.HwFlowCtl = UART_HWCONTROL_CTS;
+            break;
+        }
+    case bsp::serial_property::HardwareFlowControl::RTS_CTS:
+        {
+            _uart_handle.Init.HwFlowCtl = UART_HWCONTROL_RTS_CTS;
+            break;
+        }
+    }
+
     _uart_handle.MspInitCallback = nullptr;
     HAL_UART_Init(&_uart_handle);
 
@@ -79,7 +176,7 @@ void bsp::Serial::InitializeUart(SerialOptions const &options)
     _uart_handle.ErrorCallback = OnReadTimeout;
 
     // 超时在串口初始化后设置才有效
-    SetReadTimeoutByBaudCount(options.CalculateFramesBaudCount(2));
+    SetReadTimeoutByBaudCount(FramesBaudCount(2));
 }
 
 void bsp::Serial::InitializeInterrupt()
@@ -222,8 +319,20 @@ bsp::Serial &bsp::Serial::Instance()
     return g.Instance();
 }
 
-void bsp::Serial::Open(bsp::ISerialOptions const &options)
+void bsp::Serial::Open(bsp::serial_property::Direction direction,
+                       bsp::serial_property::BaudRate const &baud_rate,
+                       bsp::serial_property::DataBits const &data_bits,
+                       bsp::serial_property::Parity parity,
+                       bsp::serial_property::StopBits stop_bits,
+                       bsp::serial_property::HardwareFlowControl hardware_flow_control)
 {
+    _direction = direction;
+    _baud_rate = baud_rate.Value();
+    _data_bits = data_bits.Value();
+    _parity = parity;
+    _stop_bits = stop_bits;
+    _hardware_flow_control = hardware_flow_control;
+
     if (_have_begun)
     {
         return;
@@ -239,6 +348,6 @@ void bsp::Serial::Open(bsp::ISerialOptions const &options)
     _sending_completion_signal->Release();
     InitializeGpio();
     InitializeDma();
-    InitializeUart(static_cast<SerialOptions const &>(options));
+    InitializeUart();
     InitializeInterrupt();
 }

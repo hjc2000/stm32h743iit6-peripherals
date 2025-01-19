@@ -5,7 +5,7 @@
 #include <bsp-interface/di/interrupt.h>
 #include <bsp-interface/di/task.h>
 #include <bsp-interface/serial/ISerial.h>
-#include <SerialOptions.h>
+#include <hal.h>
 
 namespace bsp
 {
@@ -24,10 +24,17 @@ namespace bsp
         bsp::IDmaChannel *_rx_dma_channel = nullptr;
         bsp::IDmaChannel *_tx_dma_channel = nullptr;
 
+        bsp::serial_property::Direction _direction;
+        uint32_t _baud_rate;
+        uint8_t _data_bits;
+        bsp::serial_property::Parity _parity;
+        bsp::serial_property::StopBits _stop_bits;
+        bsp::serial_property::HardwareFlowControl _hardware_flow_control;
+
 #pragma region 初始化
         void InitializeGpio();
         void InitializeDma();
-        void InitializeUart(SerialOptions const &options);
+        void InitializeUart();
         void InitializeInterrupt();
 #pragma endregion
 
@@ -73,8 +80,64 @@ namespace bsp
         void Close() override;
 #pragma endregion
 
-        /// @brief 打开串口
-        /// @param options
-        void Open(bsp::ISerialOptions const &options) override;
+        /// @brief 打开串口。
+        /// @param direction 串口数据方向。可以选择只发、只收、收发。
+        /// @param baud_rate 波特率。
+        /// @param data_bits 数据位位数。
+        /// @param parity 奇偶校验。
+        /// @param stop_bits 停止位位数。
+        /// @param hardware_flow_control 硬件流控。
+        virtual void Open(bsp::serial_property::Direction direction,
+                          bsp::serial_property::BaudRate const &baud_rate,
+                          bsp::serial_property::DataBits const &data_bits,
+                          bsp::serial_property::Parity parity,
+                          bsp::serial_property::StopBits stop_bits,
+                          bsp::serial_property::HardwareFlowControl hardware_flow_control) override;
+
+#pragma region 串口属性
+
+        /// @brief 数据传输方向
+        /// @return
+        virtual bsp::serial_property::Direction Direction() override
+        {
+            return _direction;
+        }
+
+        /// @brief 波特率。
+        /// @return
+        virtual uint32_t BaudRate() const override
+        {
+            return _baud_rate;
+        }
+
+        /// @brief 数据位的个数。
+        /// @return
+        virtual uint8_t DataBits() const override
+        {
+            return _data_bits;
+        }
+
+        /// @brief 校验位。
+        /// @return
+        virtual bsp::serial_property::Parity Parity() const override
+        {
+            return _parity;
+        }
+
+        /// @brief 停止位个数。
+        /// @return
+        virtual bsp::serial_property::StopBits StopBits() const override
+        {
+            return _stop_bits;
+        }
+
+        /// @brief 硬件流控。
+        /// @return
+        virtual bsp::serial_property::HardwareFlowControl HardwareFlowControl() const override
+        {
+            return _hardware_flow_control;
+        }
+
+#pragma endregion
     };
 } // namespace bsp
