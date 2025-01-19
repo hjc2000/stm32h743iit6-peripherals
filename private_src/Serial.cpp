@@ -164,6 +164,17 @@ void bsp::Serial::InitializeUart()
         }
     }
 
+    // 16 倍过采样。每一个位被采样 16 次，最后可能是根据平均值来确定它的电平。
+    _uart_handle.Init.OverSampling = UART_OVERSAMPLING_16;
+
+    /**
+     * 每一次采样是使用 1 位的 ADC 采样还是使用 3 位的 ADC 采样。
+     * UART_ONE_BIT_SAMPLE_DISABLE 表示使用 3 位的 ADC 采样。
+     */
+    _uart_handle.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+
+    // 对 PCLK 的分频系数。
+    _uart_handle.Init.ClockPrescaler = UART_PRESCALER_DIV1;
     _uart_handle.MspInitCallback = nullptr;
     HAL_UART_Init(&_uart_handle);
 
