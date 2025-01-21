@@ -21,8 +21,8 @@ namespace bsp
         std::shared_ptr<bsp::IBinarySemaphore> _receiving_completion_signal = bsp::di::task::CreateBinarySemaphore();
         std::shared_ptr<base::IMutex> _read_lock = base::di::CreateMutex();
 
-        bsp::IDmaChannel *_rx_dma_channel = nullptr;
-        bsp::IDmaChannel *_tx_dma_channel = nullptr;
+        bsp::dma::IDmaChannel *_rx_dma_channel = nullptr;
+        bsp::dma::IDmaChannel *_tx_dma_channel = nullptr;
 
         bsp::serial::property::Direction _direction;
         uint32_t _baud_rate;

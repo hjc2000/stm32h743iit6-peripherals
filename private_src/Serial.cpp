@@ -34,32 +34,28 @@ void bsp::Serial::InitializeDma()
 {
     // 初始化发送 DMA
     {
-        auto options = DICreate_DmaOptions();
-        options->SetDirection(bsp::IDmaOptions_Direction::MemoryToPeripheral);
-        options->SetMemoryDataAlignment(1);
-        options->SetMemoryIncrement(true);
-        options->SetPeripheralDataAlignment(1);
-        options->SetPeripheralIncrement(false);
-        options->SetPriority(bsp::IDmaOptions_Priority::Medium);
-        options->SetRequest("usart1_tx");
-
         _tx_dma_channel = DI_DmaChannelCollection().Get("dma1_stream0");
-        _tx_dma_channel->Open(*options, &_uart_handle);
+
+        _tx_dma_channel->OpenAsMemoryToPeripheralMode(&_uart_handle,
+                                                      bsp::dma::property::PeripheralIncrement{false},
+                                                      bsp::dma::property::MemoryIncrement{true},
+                                                      bsp::dma::property::PeripheralDataAlignment{1},
+                                                      bsp::dma::property::MemoryDataAlignment{1},
+                                                      bsp::dma::property::Priority::Medium,
+                                                      "usart1_tx");
     }
 
     // 初始化接收 DMA
     {
-        auto options = DICreate_DmaOptions();
-        options->SetDirection(bsp::IDmaOptions_Direction::PeripheralToMemory);
-        options->SetMemoryDataAlignment(1);
-        options->SetMemoryIncrement(true);
-        options->SetPeripheralDataAlignment(1);
-        options->SetPeripheralIncrement(false);
-        options->SetPriority(bsp::IDmaOptions_Priority::Medium);
-        options->SetRequest("usart1_rx");
-
         _rx_dma_channel = DI_DmaChannelCollection().Get("dma1_stream1");
-        _rx_dma_channel->Open(*options, &_uart_handle);
+
+        _rx_dma_channel->OpenAsPeripheralToMemoryMode(&_uart_handle,
+                                                      bsp::dma::property::PeripheralIncrement{false},
+                                                      bsp::dma::property::MemoryIncrement{true},
+                                                      bsp::dma::property::PeripheralDataAlignment{1},
+                                                      bsp::dma::property::MemoryDataAlignment{1},
+                                                      bsp::dma::property::Priority::Medium,
+                                                      "usart1_rx");
     }
 }
 
