@@ -65,17 +65,13 @@ namespace bsp
         /// 状态变量。所以为了提高效率，每次调用 Read 时传入的 buffer 适当大一些，
         /// 并且 count 大一些。
         ///
-        /// @param buffer
-        /// @param offset
-        /// @param count
+        /// @param span
         /// @return
-        int32_t Read(uint8_t *buffer, int32_t offset, int32_t count) override;
+        virtual int32_t Read(base::Span const &span) override;
 
         /// @brief 调用后临时启动 DMA 进行一次发送。
-        /// @param buffer
-        /// @param offset
-        /// @param count
-        void Write(uint8_t const *buffer, int32_t offset, int32_t count) override;
+        /// @param span
+        virtual void Write(base::ReadOnlySpan const &span) override;
 
         void Close() override;
 #pragma endregion

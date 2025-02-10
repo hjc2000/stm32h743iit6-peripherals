@@ -239,9 +239,9 @@ void bsp::Serial::OnReadTimeout(UART_HandleTypeDef *huart)
 
 #pragma region Stream
 
-int32_t bsp::Serial::Read(uint8_t *buffer, int32_t offset, int32_t count)
+int32_t bsp::Serial::Read(base::Span const &span)
 {
-    if (count > UINT16_MAX)
+    if (span.Size() > UINT16_MAX)
     {
         throw std::invalid_argument{"count 太大"};
     }
@@ -254,7 +254,7 @@ int32_t bsp::Serial::Read(uint8_t *buffer, int32_t offset, int32_t count)
 
             // HAL_UART_Receive_DMA
             // HAL_UARTEx_ReceiveToIdle_DMA
-            HAL_UART_Receive_DMA(&_uart_handle, buffer + offset, count);
+            HAL_UART_Receive_DMA(&_uart_handle, span.Buffer(), span.Size());
 
             /*
              * 通过赋值为空指针，把传输半满回调给禁用，不然接收的数据较长，超过缓冲区一半时，
@@ -273,12 +273,12 @@ int32_t bsp::Serial::Read(uint8_t *buffer, int32_t offset, int32_t count)
     }
 }
 
-void bsp::Serial::Write(uint8_t const *buffer, int32_t offset, int32_t count)
+void bsp::Serial::Write(base::ReadOnlySpan const &span)
 {
     _sending_completion_signal->Acquire();
     HAL_StatusTypeDef ret = HAL_UART_Transmit_DMA(&_uart_handle,
-                                                  buffer + offset,
-                                                  count);
+                                                  span.Buffer(),
+                                                  span.Size());
 
     if (ret != HAL_StatusTypeDef::HAL_OK)
     {
