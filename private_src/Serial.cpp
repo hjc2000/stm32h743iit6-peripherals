@@ -1,12 +1,15 @@
 #include "Serial.h"
+#include "base/peripheral/ISerial.h"
 #include "bsp-interface/di/dma.h"
+#include <base/container/Dictionary.h>
 #include <bsp-interface/di/gpio.h>
 #include <bsp-interface/di/interrupt.h>
 #include <bsp-interface/TaskSingletonGetter.h>
 #include <FreeRTOS.h>
+#include <Serial.h>
 #include <task.h>
 
-#pragma region 初始化
+/* #region 初始化 */
 
 void bsp::Serial::InitializeGpio()
 {
@@ -212,14 +215,27 @@ void bsp::Serial::InitializeInterrupt()
 	bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn), 10);
 }
 
-#pragma endregion
+/* #endregion */
+
+void bsp::Serial::SetReadTimeoutByBaudCount(uint32_t value)
+{
+	if (value > 0)
+	{
+		HAL_UART_ReceiverTimeout_Config(&_uart_handle, value);
+		HAL_UART_EnableReceiverTimeout(&_uart_handle);
+	}
+	else
+	{
+		HAL_UART_DisableReceiverTimeout(&_uart_handle);
+	}
+}
 
 int32_t bsp::Serial::HaveRead()
 {
 	return _uart_handle.RxXferSize - _rx_dma_channel->RemainingUntransmittedBytes();
 }
 
-#pragma region 被中断处理函数回调的函数
+/* #region 被中断处理函数回调的函数 */
 
 void bsp::Serial::OnReceiveEventCallback(UART_HandleTypeDef *huart, uint16_t pos)
 {
@@ -236,9 +252,9 @@ void bsp::Serial::OnReadTimeout(UART_HandleTypeDef *huart)
 	Serial::Instance()._receiving_completion_signal->ReleaseFromISR();
 }
 
-#pragma endregion
+/* #endregion */
 
-#pragma region Stream
+/* #region 读写冲关 */
 
 int32_t bsp::Serial::Read(base::Span const &span)
 {
@@ -296,20 +312,7 @@ void bsp::Serial::Close()
 	_is_open = false;
 }
 
-#pragma endregion
-
-void bsp::Serial::SetReadTimeoutByBaudCount(uint32_t value)
-{
-	if (value > 0)
-	{
-		HAL_UART_ReceiverTimeout_Config(&_uart_handle, value);
-		HAL_UART_EnableReceiverTimeout(&_uart_handle);
-	}
-	else
-	{
-		HAL_UART_DisableReceiverTimeout(&_uart_handle);
-	}
-}
+/* #endregion */
 
 bsp::Serial &bsp::Serial::Instance()
 {
@@ -358,4 +361,45 @@ void bsp::Serial::Open(base::serial::Direction direction,
 	InitializeDma();
 	InitializeUart();
 	InitializeInterrupt();
+}
+
+namespace
+{
+	class Collection
+	{
+	private:
+		void Add(base::serial::ISerial *o)
+		{
+			_dic.Add(o->Name(), o);
+		}
+
+	public:
+		Collection()
+		{
+			Add(&bsp::Serial::Instance());
+		}
+
+		base::Dictionary<std::string, base::serial::ISerial *> _dic{};
+	};
+
+	class Getter :
+		public bsp::TaskSingletonGetter<Collection>
+	{
+	public:
+		std::unique_ptr<Collection> Create() override
+		{
+			return std::unique_ptr<Collection>{new Collection{}};
+		}
+	};
+} // namespace
+
+base::serial::ISerial &base::serial::MainSerial()
+{
+	return bsp::Serial::Instance();
+}
+
+base::IDictionary<std::string, base::serial::ISerial *> const &base::serial::SerialCollection()
+{
+	Getter g;
+	return g.Instance()._dic;
 }
