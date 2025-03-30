@@ -61,6 +61,80 @@ namespace bsp
 			return "serial";
 		}
 
+		///
+		/// @brief 打开串口。
+		///
+		/// @param direction 串口数据方向。可以选择只发、只收、收发。
+		/// @param baud_rate 波特率。
+		/// @param data_bits 数据位位数。
+		/// @param parity 奇偶校验。
+		/// @param stop_bits 停止位位数。
+		/// @param hardware_flow_control 硬件流控。
+		///
+		virtual void Open(base::serial::Direction direction,
+						  base::serial::BaudRate const &baud_rate,
+						  base::serial::DataBits const &data_bits,
+						  base::serial::Parity parity,
+						  base::serial::StopBits stop_bits,
+						  base::serial::HardwareFlowControl hardware_flow_control) override;
+
+		///
+		/// @brief 串口已经打开。
+		///
+		/// @return true 已经打开。
+		/// @return false 还没打开。
+		///
+		virtual bool IsOpen() const override
+		{
+			return _is_open;
+		}
+
+		/* #region 串口属性 */
+
+		/// @brief 数据传输方向
+		/// @return
+		virtual base::serial::Direction Direction() const override
+		{
+			return _direction;
+		}
+
+		/// @brief 波特率。
+		/// @return
+		virtual uint32_t BaudRate() const override
+		{
+			return _baud_rate;
+		}
+
+		/// @brief 数据位的个数。
+		/// @return
+		virtual uint8_t DataBits() const override
+		{
+			return _data_bits;
+		}
+
+		/// @brief 校验位。
+		/// @return
+		virtual base::serial::Parity Parity() const override
+		{
+			return _parity;
+		}
+
+		/// @brief 停止位个数。
+		/// @return
+		virtual base::serial::StopBits StopBits() const override
+		{
+			return _stop_bits;
+		}
+
+		/// @brief 硬件流控。
+		/// @return
+		virtual base::serial::HardwareFlowControl HardwareFlowControl() const override
+		{
+			return _hardware_flow_control;
+		}
+
+		/* #endregion */
+
 		/* #region 流属性 */
 
 		///
@@ -203,80 +277,6 @@ namespace bsp
 		/// @note 因为本接口是串口接口，所以关闭流也等于关闭串口。
 		///
 		virtual void Close() override;
-
-		/* #endregion */
-
-		///
-		/// @brief 打开串口。
-		///
-		/// @param direction 串口数据方向。可以选择只发、只收、收发。
-		/// @param baud_rate 波特率。
-		/// @param data_bits 数据位位数。
-		/// @param parity 奇偶校验。
-		/// @param stop_bits 停止位位数。
-		/// @param hardware_flow_control 硬件流控。
-		///
-		virtual void Open(base::serial::Direction direction,
-						  base::serial::BaudRate const &baud_rate,
-						  base::serial::DataBits const &data_bits,
-						  base::serial::Parity parity,
-						  base::serial::StopBits stop_bits,
-						  base::serial::HardwareFlowControl hardware_flow_control) override;
-
-		///
-		/// @brief 串口已经打开。
-		///
-		/// @return true 已经打开。
-		/// @return false 还没打开。
-		///
-		virtual bool IsOpen() const override
-		{
-			return _is_open;
-		}
-
-		/* #region 串口属性 */
-
-		/// @brief 数据传输方向
-		/// @return
-		virtual base::serial::Direction Direction() const override
-		{
-			return _direction;
-		}
-
-		/// @brief 波特率。
-		/// @return
-		virtual uint32_t BaudRate() const override
-		{
-			return _baud_rate;
-		}
-
-		/// @brief 数据位的个数。
-		/// @return
-		virtual uint8_t DataBits() const override
-		{
-			return _data_bits;
-		}
-
-		/// @brief 校验位。
-		/// @return
-		virtual base::serial::Parity Parity() const override
-		{
-			return _parity;
-		}
-
-		/// @brief 停止位个数。
-		/// @return
-		virtual base::serial::StopBits StopBits() const override
-		{
-			return _stop_bits;
-		}
-
-		/// @brief 硬件流控。
-		/// @return
-		virtual base::serial::HardwareFlowControl HardwareFlowControl() const override
-		{
-			return _hardware_flow_control;
-		}
 
 		/* #endregion */
 	};
