@@ -1,9 +1,7 @@
-#include <bsp-interface/di/serial.h>
+#include "base/peripheral/ISerial.h"
 #include <Serial.h>
 
-/// @brief 主串口。
-/// @return
-bsp::serial::ISerial &bsp::di::serial::Serial()
+base::serial::ISerial &base::serial::MainSerial()
 {
-    return bsp::Serial::Instance();
+	return bsp::Serial::Instance();
 }
