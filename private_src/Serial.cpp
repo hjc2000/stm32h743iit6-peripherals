@@ -1,13 +1,12 @@
 #include "Serial.h"
+#include "base/container/Dictionary.h"
 #include "base/peripheral/ISerial.h"
 #include "bsp-interface/di/dma.h"
-#include <base/container/Dictionary.h>
-#include <bsp-interface/di/gpio.h>
-#include <bsp-interface/di/interrupt.h>
-#include <bsp-interface/TaskSingletonGetter.h>
-#include <FreeRTOS.h>
-#include <Serial.h>
-#include <task.h>
+#include "bsp-interface/di/gpio.h"
+#include "bsp-interface/di/interrupt.h"
+#include "bsp-interface/TaskSingletonGetter.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 /* #region 初始化 */
 
