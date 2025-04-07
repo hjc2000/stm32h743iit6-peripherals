@@ -13,21 +13,7 @@ namespace bsp
 		GpioPinPB1() = default;
 
 	public:
-		static_function GpioPinPB1 &Instance()
-		{
-			class Getter :
-				public bsp::TaskSingletonGetter<GpioPinPB1>
-			{
-			public:
-				std::unique_ptr<GpioPinPB1> Create() override
-				{
-					return std::unique_ptr<GpioPinPB1>{new GpioPinPB1{}};
-				}
-			};
-
-			Getter o;
-			return o.Instance();
-		}
+		static_function GpioPinPB1 &Instance();
 
 		GPIO_TypeDef *Port() override;
 		uint32_t Pin() override;
