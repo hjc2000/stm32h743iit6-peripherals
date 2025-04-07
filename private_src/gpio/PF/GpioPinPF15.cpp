@@ -1,20 +1,25 @@
 #include "GpioPinPF15.h"
 #include <hal.h>
 
-bsp::GpioPinPF15 &bsp::GpioPinPF15::Instance()
+namespace
 {
-	class Getter :
-		public bsp::TaskSingletonGetter<GpioPinPF15>
+	class Init
 	{
 	public:
-		std::unique_ptr<GpioPinPF15> Create() override
+		Init()
 		{
-			return std::unique_ptr<GpioPinPF15>{new GpioPinPF15{}};
+			bsp::GpioPinPF15::Instance();
 		}
 	};
 
-	Getter o;
-	return o.Instance();
+	Init volatile _init{};
+
+} // namespace
+
+bsp::GpioPinPF15 &bsp::GpioPinPF15::Instance()
+{
+	static GpioPinPF15 o{};
+	return o;
 }
 
 GPIO_TypeDef *bsp::GpioPinPF15::Port()

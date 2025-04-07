@@ -1,20 +1,25 @@
 #include "GpioPinPF13.h"
 #include <hal.h>
 
-bsp::GpioPinPF13 &bsp::GpioPinPF13::Instance()
+namespace
 {
-	class Getter :
-		public bsp::TaskSingletonGetter<GpioPinPF13>
+	class Init
 	{
 	public:
-		std::unique_ptr<GpioPinPF13> Create() override
+		Init()
 		{
-			return std::unique_ptr<GpioPinPF13>{new GpioPinPF13{}};
+			bsp::GpioPinPF13::Instance();
 		}
 	};
 
-	Getter o;
-	return o.Instance();
+	Init volatile _init{};
+
+} // namespace
+
+bsp::GpioPinPF13 &bsp::GpioPinPF13::Instance()
+{
+	static GpioPinPF13 o{};
+	return o;
 }
 
 GPIO_TypeDef *bsp::GpioPinPF13::Port()
