@@ -1,20 +1,13 @@
 #include "GpioPinPD0.h"
+#include "base/define.h"
 #include <hal.h>
+
+PREINIT(bsp::GpioPinPD0::Instance)
 
 bsp::GpioPinPD0 &bsp::GpioPinPD0::Instance()
 {
-	class Getter :
-		public bsp::TaskSingletonGetter<GpioPinPD0>
-	{
-	public:
-		std::unique_ptr<GpioPinPD0> Create() override
-		{
-			return std::unique_ptr<GpioPinPD0>{new GpioPinPD0{}};
-		}
-	};
-
-	Getter o;
-	return o.Instance();
+	static GpioPinPD0 o{};
+	return o;
 }
 
 GPIO_TypeDef *bsp::GpioPinPD0::Port()
