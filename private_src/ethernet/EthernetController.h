@@ -62,7 +62,7 @@ namespace bsp
 		/// @param duplex_mode
 		/// @param speed
 		void Start(bsp::EthernetDuplexMode duplex_mode,
-				   base::Bps const &speed) override;
+				   base::bps const &speed) override;
 
 		/// @brief 发送。
 		/// @param spans

@@ -298,7 +298,7 @@ void bsp::EthernetController::WritePHYRegister(uint32_t register_index, uint32_t
 	}
 }
 
-void bsp::EthernetController::Start(bsp::EthernetDuplexMode duplex_mode, base::Bps const &speed)
+void bsp::EthernetController::Start(bsp::EthernetDuplexMode duplex_mode, base::bps const &speed)
 {
 	{
 		ETH_MACConfigTypeDef def{};
