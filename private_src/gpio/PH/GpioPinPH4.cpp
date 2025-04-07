@@ -1,20 +1,25 @@
 #include "GpioPinPH4.h"
 #include <hal.h>
 
-bsp::GpioPinPH4 &bsp::GpioPinPH4::Instance()
+namespace
 {
-	class Getter :
-		public bsp::TaskSingletonGetter<GpioPinPH4>
+	class Init
 	{
 	public:
-		std::unique_ptr<GpioPinPH4> Create() override
+		Init()
 		{
-			return std::unique_ptr<GpioPinPH4>{new GpioPinPH4{}};
+			bsp::GpioPinPH4::Instance();
 		}
 	};
 
-	Getter o;
-	return o.Instance();
+	Init volatile _gpio4_hjc_init{};
+
+} // namespace
+
+bsp::GpioPinPH4 &bsp::GpioPinPH4::Instance()
+{
+	static GpioPinPH4 o{};
+	return o;
 }
 
 GPIO_TypeDef *bsp::GpioPinPH4::Port()
