@@ -1,7 +1,7 @@
 #include "SysTickClock.h"
+#include "base/define.h"
 #include "base/task/delay.h"
 #include <bsp-interface/di/interrupt.h>
-#include <bsp-interface/TaskSingletonGetter.h>
 
 extern "C"
 {
@@ -34,20 +34,12 @@ void bsp::SysTickClock::AddSystemTime()
 	_system_time += elapsed_period;
 }
 
+PREINIT(bsp::SysTickClock::Instance);
+
 bsp::SysTickClock &bsp::SysTickClock::Instance()
 {
-	class Getter :
-		public bsp::TaskSingletonGetter<SysTickClock>
-	{
-	public:
-		std::unique_ptr<SysTickClock> Create() override
-		{
-			return std::unique_ptr<SysTickClock>{new SysTickClock{}};
-		}
-	};
-
-	Getter g;
-	return g.Instance();
+	static SysTickClock o{};
+	return o;
 }
 
 uint32_t bsp::SysTickClock::Frequency() const

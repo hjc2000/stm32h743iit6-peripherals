@@ -12,21 +12,7 @@ namespace bsp
 		GpioPinPH3() = default;
 
 	public:
-		static_function GpioPinPH3 &Instance()
-		{
-			class Getter :
-				public bsp::TaskSingletonGetter<GpioPinPH3>
-			{
-			public:
-				std::unique_ptr<GpioPinPH3> Create() override
-				{
-					return std::unique_ptr<GpioPinPH3>{new GpioPinPH3{}};
-				}
-			};
-
-			Getter o;
-			return o.Instance();
-		}
+		static_function GpioPinPH3 &Instance();
 
 		GPIO_TypeDef *Port() override;
 		uint32_t Pin() override;
