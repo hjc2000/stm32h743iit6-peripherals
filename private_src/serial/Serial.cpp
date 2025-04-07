@@ -1,12 +1,9 @@
 #include "Serial.h"
-#include "base/container/Dictionary.h"
+#include "base/define.h"
 #include "base/peripheral/ISerial.h"
 #include "bsp-interface/di/dma.h"
 #include "bsp-interface/di/gpio.h"
 #include "bsp-interface/di/interrupt.h"
-#include "bsp-interface/TaskSingletonGetter.h"
-#include "FreeRTOS.h"
-#include "task.h"
 
 /* #region 初始化 */
 
@@ -313,20 +310,12 @@ void bsp::Serial::Close()
 
 /* #endregion */
 
+PREINIT(bsp::Serial::Instance);
+
 bsp::Serial &bsp::Serial::Instance()
 {
-	class Getter :
-		public bsp::TaskSingletonGetter<Serial>
-	{
-	public:
-		std::unique_ptr<Serial> Create() override
-		{
-			return std::unique_ptr<Serial>{new bsp::Serial{}};
-		}
-	};
-
-	Getter g;
-	return g.Instance();
+	static bsp::Serial o{};
+	return o;
 }
 
 void bsp::Serial::Open(base::serial::Direction direction,
@@ -360,45 +349,4 @@ void bsp::Serial::Open(base::serial::Direction direction,
 	InitializeDma();
 	InitializeUart();
 	InitializeInterrupt();
-}
-
-namespace
-{
-	class Collection
-	{
-	private:
-		void Add(base::serial::ISerial *o)
-		{
-			_dic.Add(o->Name(), o);
-		}
-
-	public:
-		Collection()
-		{
-			Add(&bsp::Serial::Instance());
-		}
-
-		base::Dictionary<std::string, base::serial::ISerial *> _dic{};
-	};
-
-	class Getter :
-		public bsp::TaskSingletonGetter<Collection>
-	{
-	public:
-		std::unique_ptr<Collection> Create() override
-		{
-			return std::unique_ptr<Collection>{new Collection{}};
-		}
-	};
-} // namespace
-
-base::serial::ISerial &base::serial::MainSerial()
-{
-	return bsp::Serial::Instance();
-}
-
-base::IDictionary<std::string, base::serial::ISerial *> const &base::serial::SerialCollection()
-{
-	Getter g;
-	return g.Instance()._dic;
 }
