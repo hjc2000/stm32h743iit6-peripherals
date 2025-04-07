@@ -1,20 +1,13 @@
 #include "GpioPinPF4.h"
+#include "base/define.h"
 #include <hal.h>
+
+PREINIT(bsp::GpioPinPF4::Instance)
 
 bsp::GpioPinPF4 &bsp::GpioPinPF4::Instance()
 {
-	class Getter :
-		public bsp::TaskSingletonGetter<GpioPinPF4>
-	{
-	public:
-		std::unique_ptr<GpioPinPF4> Create() override
-		{
-			return std::unique_ptr<GpioPinPF4>{new GpioPinPF4{}};
-		}
-	};
-
-	Getter o;
-	return o.Instance();
+	static GpioPinPF4 o{};
+	return o;
 }
 
 GPIO_TypeDef *bsp::GpioPinPF4::Port()

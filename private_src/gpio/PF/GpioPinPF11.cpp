@@ -1,20 +1,13 @@
 #include "GpioPinPF11.h"
+#include "base/define.h"
 #include <hal.h>
+
+PREINIT(bsp::GpioPinPF11::Instance)
 
 bsp::GpioPinPF11 &bsp::GpioPinPF11::Instance()
 {
-	class Getter :
-		public bsp::TaskSingletonGetter<GpioPinPF11>
-	{
-	public:
-		std::unique_ptr<GpioPinPF11> Create() override
-		{
-			return std::unique_ptr<GpioPinPF11>{new GpioPinPF11{}};
-		}
-	};
-
-	Getter o;
-	return o.Instance();
+	static GpioPinPF11 o{};
+	return o;
 }
 
 GPIO_TypeDef *bsp::GpioPinPF11::Port()
