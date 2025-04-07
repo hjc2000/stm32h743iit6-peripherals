@@ -12,7 +12,7 @@ namespace
 		}
 	};
 
-	Init volatile _gpio4_hjc_init{};
+	Init volatile _ph4_hjc_init{};
 
 } // namespace
 
