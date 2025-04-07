@@ -1,6 +1,6 @@
+#include "base/define.h"
 #include <base/container/Dictionary.h>
 #include <bsp-interface/di/clock.h>
-#include <bsp-interface/TaskSingletonGetter.h>
 #include <D1Pclk1ClockSignal.h>
 #include <D3Pclk1ClockSignal.h>
 #include <HclkClockSignal.h>
@@ -10,10 +10,10 @@
 
 namespace
 {
-	class Initializer
+	class DictionaryProvider
 	{
 	public:
-		Initializer()
+		DictionaryProvider()
 		{
 			_dic.Add(bsp::SysclkClockSignal::Instance().Name(), &bsp::SysclkClockSignal::Instance());
 			_dic.Add(bsp::HclkClockSignal::Instance().Name(), &bsp::HclkClockSignal::Instance());
@@ -26,20 +26,12 @@ namespace
 		base::Dictionary<std::string, bsp::IClockSignal *> _dic{};
 	};
 
-	/// @brief 单例获取器
-	class Getter :
-		public bsp::TaskSingletonGetter<Initializer>
-	{
-	public:
-		std::unique_ptr<Initializer> Create() override
-		{
-			return std::unique_ptr<Initializer>{new Initializer{}};
-		}
-	};
 } // namespace
+
+PREINIT(bsp::di::clock::ClockSignalCollection);
 
 base::IDictionary<std::string, bsp::IClockSignal *> const &bsp::di::clock::ClockSignalCollection()
 {
-	Getter g;
-	return g.Instance()._dic;
+	static DictionaryProvider o{};
+	return o._dic;
 }
