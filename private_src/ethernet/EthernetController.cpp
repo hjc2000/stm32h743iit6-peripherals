@@ -1,8 +1,8 @@
 #include "EthernetController.h"
+#include "base/define.h"
 #include "bsp-interface/di/cache.h"
 #include "bsp-interface/di/console.h"
 #include "bsp-interface/di/interrupt.h"
-#include "bsp-interface/TaskSingletonGetter.h"
 #include "hal.h"
 
 #define ETH_CLK_GPIO_PORT GPIOA
@@ -182,20 +182,12 @@ base::IEnumerable<base::ReadOnlySpan> const &bsp::EthernetController::ReceiveMul
 	}
 }
 
+PREINIT(bsp::EthernetController::Instance);
+
 bsp::EthernetController &bsp::EthernetController::Instance()
 {
-	class Getter :
-		public bsp::TaskSingletonGetter<EthernetController>
-	{
-	public:
-		std::unique_ptr<EthernetController> Create() override
-		{
-			return std::unique_ptr<EthernetController>{new EthernetController{}};
-		}
-	};
-
-	Getter g;
-	return g.Instance();
+	static EthernetController o{};
+	return o;
 }
 
 std::string bsp::EthernetController::Name() const
