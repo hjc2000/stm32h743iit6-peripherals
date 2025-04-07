@@ -1,3 +1,4 @@
+#include "base/define.h"
 #include <base/container/Dictionary.h>
 #include <bsp-interface/di/clock.h>
 #include <HseClockSource.h>
@@ -17,18 +18,9 @@ namespace
 		base::Dictionary<std::string, bsp::IClockSource *> _dic{};
 	};
 
-	class Init
-	{
-	public:
-		Init()
-		{
-			bsp::di::clock::ClockSourceCollection();
-		}
-	};
-
-	Init volatile _dic_hjc_init{};
-
 } // namespace
+
+PREINIT(bsp::di::clock::ClockSourceCollection)
 
 base::IDictionary<std::string, bsp::IClockSource *> const &bsp::di::clock::ClockSourceCollection()
 {

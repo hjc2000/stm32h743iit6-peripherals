@@ -1,20 +1,8 @@
 #include "GpioPinPH2.h"
+#include "base/define.h"
 #include <hal.h>
 
-namespace
-{
-	class Init
-	{
-	public:
-		Init()
-		{
-			bsp::GpioPinPH2::Instance();
-		}
-	};
-
-	Init volatile _ph2_hjc_init{};
-
-} // namespace
+PREINIT(bsp::GpioPinPH2::Instance)
 
 bsp::GpioPinPH2 &bsp::GpioPinPH2::Instance()
 {

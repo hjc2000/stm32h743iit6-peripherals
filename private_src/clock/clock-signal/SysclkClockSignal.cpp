@@ -1,20 +1,8 @@
 #include "SysclkClockSignal.h"
+#include "base/define.h"
 #include <base/unit/Hz.h>
 
-namespace
-{
-	class Init
-	{
-	public:
-		Init()
-		{
-			bsp::SysclkClockSignal::Instance();
-		}
-	};
-
-	Init volatile _sysclk_hjc_init{};
-
-} // namespace
+PREINIT(bsp::SysclkClockSignal::Instance)
 
 bsp::SysclkClockSignal &bsp::SysclkClockSignal::Instance()
 {

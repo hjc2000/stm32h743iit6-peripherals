@@ -1,20 +1,8 @@
 #include "D1Pclk1ClockSignal.h"
+#include "base/define.h"
 #include <base/unit/Hz.h>
 
-namespace
-{
-	class Init
-	{
-	public:
-		Init()
-		{
-			bsp::D1Pclk1ClockSignal::Instance();
-		}
-	};
-
-	Init volatile _d1pclk1_hjc_init{};
-
-} // namespace
+PREINIT(bsp::D1Pclk1ClockSignal::Instance)
 
 bsp::D1Pclk1ClockSignal &bsp::D1Pclk1ClockSignal::Instance()
 {

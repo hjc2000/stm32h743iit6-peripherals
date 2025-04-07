@@ -1,20 +1,8 @@
 #include "PllClockSource.h"
+#include "base/define.h"
 #include <bsp-interface/di/clock.h>
 
-namespace
-{
-	class Init
-	{
-	public:
-		Init()
-		{
-			bsp::PllClockSource::Instance();
-		}
-	};
-
-	Init volatile _init{};
-
-} // namespace
+PREINIT(bsp::PllClockSource::Instance)
 
 bsp::PllClockSource &bsp::PllClockSource::Instance()
 {

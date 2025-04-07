@@ -1,20 +1,8 @@
 #include "GpioPinPF15.h"
+#include "base/define.h"
 #include <hal.h>
 
-namespace
-{
-	class Init
-	{
-	public:
-		Init()
-		{
-			bsp::GpioPinPF15::Instance();
-		}
-	};
-
-	Init volatile _init{};
-
-} // namespace
+PREINIT(bsp::GpioPinPF15::Instance)
 
 bsp::GpioPinPF15 &bsp::GpioPinPF15::Instance()
 {

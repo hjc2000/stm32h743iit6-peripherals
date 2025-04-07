@@ -1,19 +1,7 @@
 #include "HseClockSource.h"
+#include "base/define.h"
 
-namespace
-{
-	class Init
-	{
-	public:
-		Init()
-		{
-			bsp::HseClockSource::Instance();
-		}
-	};
-
-	Init volatile _hse_clk_hjc_init{};
-
-} // namespace
+PREINIT(bsp::HseClockSource::Instance)
 
 bsp::HseClockSource &bsp::HseClockSource::Instance()
 {
