@@ -1,20 +1,13 @@
 #include "GpioPinPF2.h"
+#include "base/define.h"
 #include <hal.h>
+
+PREINIT(bsp::GpioPinPF2::Instance)
 
 bsp::GpioPinPF2 &bsp::GpioPinPF2::Instance()
 {
-	class Getter :
-		public bsp::TaskSingletonGetter<GpioPinPF2>
-	{
-	public:
-		std::unique_ptr<GpioPinPF2> Create() override
-		{
-			return std::unique_ptr<GpioPinPF2>{new GpioPinPF2{}};
-		}
-	};
-
-	Getter o;
-	return o.Instance();
+	static GpioPinPF2 o{};
+	return o;
 }
 
 GPIO_TypeDef *bsp::GpioPinPF2::Port()
