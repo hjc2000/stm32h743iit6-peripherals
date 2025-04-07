@@ -1,7 +1,6 @@
 #include "Exti.h"
 #include "base/define.h"
 #include <bsp-interface/di/interrupt.h>
-#include <bsp-interface/TaskSingletonGetter.h>
 #include <stdexcept>
 
 hal::Exti::Exti()
