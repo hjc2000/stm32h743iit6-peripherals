@@ -1,20 +1,12 @@
 #include "GpioPinPD8.h"
 #include <hal.h>
 
+PREINIT(bsp::GpioPinPD8::Instance)
+
 bsp::GpioPinPD8 &bsp::GpioPinPD8::Instance()
 {
-	class Getter :
-		public bsp::TaskSingletonGetter<GpioPinPD8>
-	{
-	public:
-		std::unique_ptr<GpioPinPD8> Create() override
-		{
-			return std::unique_ptr<GpioPinPD8>{new GpioPinPD8{}};
-		}
-	};
-
-	Getter o;
-	return o.Instance();
+	static GpioPinPD8 o{};
+	return o;
 }
 
 GPIO_TypeDef *bsp::GpioPinPD8::Port()

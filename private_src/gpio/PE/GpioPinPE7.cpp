@@ -1,20 +1,13 @@
 #include "GpioPinPE7.h"
+#include "base/define.h"
 #include <hal.h>
+
+PREINIT(bsp::GpioPinPE7::Instance);
 
 bsp::GpioPinPE7 &bsp::GpioPinPE7::Instance()
 {
-	class Getter :
-		public bsp::TaskSingletonGetter<GpioPinPE7>
-	{
-	public:
-		std::unique_ptr<GpioPinPE7> Create() override
-		{
-			return std::unique_ptr<GpioPinPE7>{new GpioPinPE7{}};
-		}
-	};
-
-	Getter o;
-	return o.Instance();
+	static GpioPinPE7 o{};
+	return o;
 }
 
 GPIO_TypeDef *bsp::GpioPinPE7::Port()
