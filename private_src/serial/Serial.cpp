@@ -1,6 +1,7 @@
 #include "Serial.h"
 #include "base/define.h"
 #include "base/peripheral/ISerial.h"
+#include "base/string/define.h"
 #include "bsp-interface/di/dma.h"
 #include "bsp-interface/di/gpio.h"
 #include "bsp-interface/di/interrupt.h"
@@ -269,12 +270,8 @@ int32_t bsp::Serial::Read(base::Span const &span)
 			// HAL_UARTEx_ReceiveToIdle_DMA
 			HAL_UART_Receive_DMA(&_uart_handle, span.Buffer(), span.Size());
 
-			/*
-			 * 通过赋值为空指针，把传输半满回调给禁用，不然接收的数据较长，超过缓冲区一半时，
-			 * 即使是一次性接收的，UART 也会回调 OnReceiveEventCallback 两次。
-			 *
-			 * 这个操作需要在临界区中，并且 DMA 的中断要处于 freertos 的管理范围内，否则无效。
-			 */
+			// 通过赋值为空指针，把传输半满回调给禁用，不然接收的数据较长，超过缓冲区一半时，
+			// 即使是一次性接收的，UART 也会回调 OnReceiveEventCallback 两次。
 			_uart_handle.hdmarx->XferHalfCpltCallback = nullptr;
 		}
 
@@ -289,13 +286,14 @@ int32_t bsp::Serial::Read(base::Span const &span)
 void bsp::Serial::Write(base::ReadOnlySpan const &span)
 {
 	_sending_completion_signal->Acquire();
+
 	HAL_StatusTypeDef ret = HAL_UART_Transmit_DMA(&_uart_handle,
 												  span.Buffer(),
 												  span.Size());
 
 	if (ret != HAL_StatusTypeDef::HAL_OK)
 	{
-		throw std::runtime_error{"发送失败"};
+		throw std::runtime_error{CODE_POS_STR + "发送失败"};
 	}
 }
 
