@@ -129,7 +129,7 @@ void bsp::Serial::InitializeUart()
 			_uart_handle.Init.StopBits = UART_STOPBITS_1;
 			break;
 		}
-	case base::serial::StopBits::Tow:
+	case base::serial::StopBits::Two:
 		{
 			_uart_handle.Init.StopBits = UART_STOPBITS_2;
 			break;
