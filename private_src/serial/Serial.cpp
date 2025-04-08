@@ -325,19 +325,19 @@ void bsp::Serial::Open(base::serial::Direction direction,
 					   base::serial::StopBits stop_bits,
 					   base::serial::HardwareFlowControl hardware_flow_control)
 {
-	_direction = direction;
-	_baud_rate = baud_rate.Value();
-	_data_bits = data_bits.Value();
-	_parity = parity;
-	_stop_bits = stop_bits;
-	_hardware_flow_control = hardware_flow_control;
-
 	if (_is_open)
 	{
 		return;
 	}
 
 	_is_open = true;
+
+	_direction = direction;
+	_baud_rate = baud_rate.Value();
+	_data_bits = data_bits.Value();
+	_parity = parity;
+	_stop_bits = stop_bits;
+	_hardware_flow_control = hardware_flow_control;
 
 	/*
 	 * 先立刻释放一次信号量，等会 Write 方法被调用时直接通过，不被阻塞。
