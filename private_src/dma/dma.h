@@ -1,10 +1,18 @@
 #pragma once
+#include "base/peripheral/IDma.h"
 #include "hal.h"
 
 namespace bsp
 {
 	namespace dma
 	{
+		void SetDmaProperty(DMA_HandleTypeDef &handle,
+							base::dma::PeripheralIncrement peripheral_increment,
+							base::dma::MemoryIncrement memory_increment,
+							base::dma::PeripheralDataAlignment const &peripheral_data_alignment,
+							base::dma::MemoryDataAlignment const &memory_data_alignment,
+							base::dma::Priority priority);
+
 		///
 		/// @brief 获取 DMA 本次启动后剩余的未传输的字节数。
 		///
