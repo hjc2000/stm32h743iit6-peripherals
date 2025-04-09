@@ -54,11 +54,11 @@ namespace bsp
 			}
 		};
 
-		class Dma1Stream1_ :
+		class Dma1Stream1 :
 			public base::dma::IDma
 		{
 		private:
-			Dma1Stream1_()
+			Dma1Stream1()
 			{
 				_context._handle.Instance = DMA1_Stream1;
 			}
@@ -66,7 +66,7 @@ namespace bsp
 			base::dma::DmaContext _context{};
 
 		public:
-			static Dma1Stream1_ &Instance();
+			static Dma1Stream1 &Instance();
 
 			virtual base::dma::DmaContext &Context() override
 			{

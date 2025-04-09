@@ -176,11 +176,11 @@ bsp::dma::Dma1Stream0 &bsp::dma::Dma1Stream0::Instance()
 	return o;
 }
 
-PREINIT(bsp::dma::Dma1Stream1_::Instance)
+PREINIT(bsp::dma::Dma1Stream1::Instance)
 
-bsp::dma::Dma1Stream1_ &bsp::dma::Dma1Stream1_::Instance()
+bsp::dma::Dma1Stream1 &bsp::dma::Dma1Stream1::Instance()
 {
-	static Dma1Stream1_ o;
+	static Dma1Stream1 o;
 	return o;
 }
 
