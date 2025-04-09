@@ -45,17 +45,13 @@ void bsp::Serial::InitializeDma()
 											base::dma::Priority::Medium);
 
 	// 初始化接收 DMA
-	{
-		_rx_dma_channel = DI_DmaChannelCollection().Get("dma1_stream1");
-
-		_rx_dma_channel->OpenAsPeripheralToMemoryMode(&_context._uart_handle,
-													  base::dma::PeripheralIncrement::DoNotIncrease,
-													  base::dma::MemoryIncrement::Increase,
-													  base::dma::PeripheralDataAlignment{1},
-													  base::dma::MemoryDataAlignment{1},
-													  base::dma::Priority::Medium,
-													  "usart1_rx");
-	}
+	base::dma::OpenAsPeripheralToMemoryMode(&bsp::dma::Dma1Stream1_::Instance(),
+											this,
+											base::dma::PeripheralIncrement::DoNotIncrease,
+											base::dma::MemoryIncrement::Increase,
+											base::dma::PeripheralDataAlignment{1},
+											base::dma::MemoryDataAlignment{1},
+											base::dma::Priority::Medium);
 }
 
 void bsp::Serial::InitializeUart()
@@ -227,7 +223,8 @@ void bsp::Serial::SetReadTimeoutByBaudCount(uint32_t value)
 
 int32_t bsp::Serial::HaveRead()
 {
-	return _context._uart_handle.RxXferSize - _rx_dma_channel->RemainingUntransmittedBytes();
+	return _context._uart_handle.RxXferSize -
+		   base::dma::RemainingUntransmittedBytes(&bsp::dma::Dma1Stream1_::Instance());
 }
 
 /* #region 被中断处理函数回调的函数 */

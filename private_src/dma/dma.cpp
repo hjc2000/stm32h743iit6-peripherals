@@ -176,6 +176,14 @@ bsp::dma::Dma1Stream0_ &bsp::dma::Dma1Stream0_::Instance()
 	return o;
 }
 
+PREINIT(bsp::dma::Dma1Stream1_::Instance)
+
+bsp::dma::Dma1Stream1_ &bsp::dma::Dma1Stream1_::Instance()
+{
+	static Dma1Stream1_ o;
+	return o;
+}
+
 void bsp::dma::EnableClock(DMA_HandleTypeDef &handle)
 {
 	if (handle.Instance == DMA1_Stream0 ||

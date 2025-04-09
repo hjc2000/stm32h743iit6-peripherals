@@ -54,5 +54,25 @@ namespace bsp
 			}
 		};
 
+		class Dma1Stream1_ :
+			public base::dma::IDma
+		{
+		private:
+			Dma1Stream1_()
+			{
+				_context._handle.Instance = DMA1_Stream1;
+			}
+
+			base::dma::DmaContext _context{};
+
+		public:
+			static Dma1Stream1_ &Instance();
+
+			virtual base::dma::DmaContext &Context() override
+			{
+				return _context;
+			}
+		};
+
 	} // namespace dma
 } // namespace bsp
