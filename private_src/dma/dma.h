@@ -2,6 +2,12 @@
 #include "base/peripheral/IDma.h"
 #include "hal.h"
 
+class base::dma::DmaContext
+{
+public:
+	DMA_HandleTypeDef _handle{};
+};
+
 namespace bsp
 {
 	namespace dma
@@ -25,6 +31,25 @@ namespace bsp
 		{
 			return __HAL_DMA_GET_COUNTER(&handle);
 		}
+
+		class Dma1Stream0_ :
+			public base::dma::IDma
+		{
+		private:
+			base::dma::DmaContext _context{};
+
+		public:
+			Dma1Stream0_()
+			{
+				__HAL_RCC_DMA1_CLK_ENABLE();
+				_context._handle.Instance = DMA1_Stream0;
+			}
+
+			virtual base::dma::DmaContext *Context() override
+			{
+				return &_context;
+			}
+		};
 
 	} // namespace dma
 } // namespace bsp

@@ -105,3 +105,29 @@ void bsp::dma::SetDmaProperty(DMA_HandleTypeDef &handle,
 		}
 	}
 }
+
+void base::dma::OpenAsPeripheralToMemoryMode(base::dma::IDma *dma,
+											 base::serial::ISerial *parent,
+											 base::dma::PeripheralIncrement peripheral_increment,
+											 base::dma::MemoryIncrement memory_increment,
+											 base::dma::PeripheralDataAlignment const &peripheral_data_alignment,
+											 base::dma::MemoryDataAlignment const &memory_data_alignment,
+											 base::dma::Priority priority)
+{
+	dma->Context()->_handle.Init.Direction = DMA_PERIPH_TO_MEMORY;
+
+	bsp::dma::SetDmaProperty(dma->Context()->_handle,
+							 peripheral_increment,
+							 memory_increment,
+							 peripheral_data_alignment,
+							 memory_data_alignment,
+							 priority);
+
+	HAL_DMA_Init(&dma->Context()->_handle);
+}
+
+int32_t base::dma::RemainingUntransmittedBytes(base::dma::IDma *dma)
+{
+	DMA_HandleTypeDef *handle = reinterpret_cast<DMA_HandleTypeDef *>(&dma->Context()->_handle);
+	return __HAL_DMA_GET_COUNTER(handle);
+}
