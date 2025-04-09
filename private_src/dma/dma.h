@@ -45,9 +45,9 @@ namespace bsp
 				_context._handle.Instance = DMA1_Stream0;
 			}
 
-			virtual base::dma::DmaContext *Context() override
+			virtual base::dma::DmaContext &Context() override
 			{
-				return &_context;
+				return _context;
 			}
 		};
 
