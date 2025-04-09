@@ -33,7 +33,7 @@ void bsp::DmaStream::LinkDmaToUartRx(UART_HandleTypeDef &uart)
 }
 
 void bsp::DmaStream::InitializeDmaProperty(bsp::dma::PeripheralIncrement peripheral_increment,
-										   bsp::dma::MemoryIncrement const &memory_increment,
+										   bsp::dma::MemoryIncrement memory_increment,
 										   bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
 										   bsp::dma::MemoryDataAlignment const &memory_data_alignment,
 										   bsp::dma::Priority priority,
@@ -54,7 +54,14 @@ void bsp::DmaStream::InitializeDmaProperty(bsp::dma::PeripheralIncrement periphe
 		_dma_handle.Init.PeriphInc = DMA_PINC_DISABLE;
 	}
 
-	_dma_handle.Init.MemInc = memory_increment.Value() ? DMA_MINC_ENABLE : DMA_MINC_DISABLE;
+	if (memory_increment == bsp::dma::MemoryIncrement::Increase)
+	{
+		_dma_handle.Init.MemInc = DMA_MINC_ENABLE;
+	}
+	else
+	{
+		_dma_handle.Init.MemInc = DMA_MINC_DISABLE;
+	}
 
 	switch (peripheral_data_alignment.Value())
 	{

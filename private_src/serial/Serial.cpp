@@ -38,8 +38,8 @@ void bsp::Serial::InitializeDma()
 		_tx_dma_channel = DI_DmaChannelCollection().Get("dma1_stream0");
 
 		_tx_dma_channel->OpenAsMemoryToPeripheralMode(&_uart_handle,
-													  bsp::dma::PeripheralIncrement{false},
-													  bsp::dma::MemoryIncrement{true},
+													  bsp::dma::PeripheralIncrement::DoNotIncrease,
+													  bsp::dma::MemoryIncrement::Increase,
 													  bsp::dma::PeripheralDataAlignment{1},
 													  bsp::dma::MemoryDataAlignment{1},
 													  bsp::dma::Priority::Medium,
@@ -51,8 +51,8 @@ void bsp::Serial::InitializeDma()
 		_rx_dma_channel = DI_DmaChannelCollection().Get("dma1_stream1");
 
 		_rx_dma_channel->OpenAsPeripheralToMemoryMode(&_uart_handle,
-													  bsp::dma::PeripheralIncrement{false},
-													  bsp::dma::MemoryIncrement{true},
+													  bsp::dma::PeripheralIncrement::DoNotIncrease,
+													  bsp::dma::MemoryIncrement::Increase,
 													  bsp::dma::PeripheralDataAlignment{1},
 													  bsp::dma::MemoryDataAlignment{1},
 													  bsp::dma::Priority::Medium,
