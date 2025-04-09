@@ -32,11 +32,11 @@ void bsp::DmaStream::LinkDmaToUartRx(UART_HandleTypeDef &uart)
 }
 
 void bsp::DmaStream::InitializeDmaProperty(
-	bsp::dma::property::PeripheralIncrement const &peripheral_increment,
-	bsp::dma::property::MemoryIncrement const &memory_increment,
-	bsp::dma::property::PeripheralDataAlignment const &peripheral_data_alignment,
-	bsp::dma::property::MemoryDataAlignment const &memory_data_alignment,
-	bsp::dma::property::Priority priority,
+	bsp::dma::PeripheralIncrement const &peripheral_increment,
+	bsp::dma::MemoryIncrement const &memory_increment,
+	bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
+	bsp::dma::MemoryDataAlignment const &memory_data_alignment,
+	bsp::dma::Priority priority,
 	std::string const &request)
 {
 	_dma_handle.Init.Mode = DMA_NORMAL;
@@ -95,22 +95,22 @@ void bsp::DmaStream::InitializeDmaProperty(
 
 	switch (priority)
 	{
-	case bsp::dma::property::Priority::Low:
+	case bsp::dma::Priority::Low:
 		{
 			_dma_handle.Init.Priority = DMA_PRIORITY_LOW;
 			break;
 		}
-	case bsp::dma::property::Priority::Medium:
+	case bsp::dma::Priority::Medium:
 		{
 			_dma_handle.Init.Priority = DMA_PRIORITY_MEDIUM;
 			break;
 		}
-	case bsp::dma::property::Priority::High:
+	case bsp::dma::Priority::High:
 		{
 			_dma_handle.Init.Priority = DMA_PRIORITY_HIGH;
 			break;
 		}
-	case bsp::dma::property::Priority::VeryHigh:
+	case bsp::dma::Priority::VeryHigh:
 		{
 			_dma_handle.Init.Priority = DMA_PRIORITY_VERY_HIGH;
 			break;
