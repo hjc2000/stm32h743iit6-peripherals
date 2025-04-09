@@ -1,5 +1,6 @@
 #include "GpioPinPA10.h"
 #include "base/define.h"
+#include "EnableClock.h"
 
 PREINIT(bsp::GpioPinPA10::Instance);
 
@@ -33,7 +34,7 @@ void bsp::GpioPinPA10::OpenAsAlternateFunctionMode(std::string function_name,
 		throw std::runtime_error{PinName() + " 已经打开"};
 	}
 
-	EnableClock();
+	bsp::EnableClock(Port());
 	GPIO_InitTypeDef def{};
 
 	if (function_name == "usart1")

@@ -31,7 +31,7 @@ void bsp::GpioPinPA9::OpenAsAlternateFunctionMode(std::string function_name, bsp
 		throw std::runtime_error{PinName() + " 已经打开"};
 	}
 
-	EnableClock();
+	bsp::EnableClock(Port());
 	GPIO_InitTypeDef def{};
 
 	if (function_name == "usart1")

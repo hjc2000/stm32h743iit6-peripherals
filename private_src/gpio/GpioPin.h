@@ -1,4 +1,5 @@
 #pragma once
+#include "EnableClock.h"
 #include <base/define.h>
 #include <bsp-interface/di/gpio.h>
 #include <bsp-interface/di/interrupt.h>
@@ -34,9 +35,6 @@ namespace bsp
 		virtual void OpenAsOutputMode(bsp::IGpioPinPullMode pull_mode, bsp::IGpioPinDriver driver_mode) override;
 
 		void Close() override;
-
-		/// @brief 使能时钟
-		void EnableClock();
 
 		bool ReadPin() override;
 		void WritePin(bool value) override;
