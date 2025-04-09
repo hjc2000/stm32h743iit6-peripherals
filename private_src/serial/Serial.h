@@ -4,9 +4,6 @@
 #include "base/string/define.h"
 #include "base/task/IBinarySemaphore.h"
 #include "base/task/IMutex.h"
-#include "bsp-interface/di/dma.h"
-#include "bsp-interface/di/interrupt.h"
-#include "bsp-interface/di/task.h"
 #include "hal.h"
 #include <stdexcept>
 
