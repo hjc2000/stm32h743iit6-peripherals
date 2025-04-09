@@ -36,22 +36,10 @@ void bsp::Serial::InitializeGpio()
 void bsp::Serial::InitializeDma()
 {
 	// 初始化发送 DMA
-	base::dma::OpenAsMemoryToPeripheralMode(&bsp::dma::Dma1Stream0::Instance(),
-											this,
-											base::dma::PeripheralIncrement::DoNotIncrease,
-											base::dma::MemoryIncrement::Increase,
-											base::dma::PeripheralDataAlignment{1},
-											base::dma::MemoryDataAlignment{1},
-											base::dma::Priority::Medium);
+	base::dma::OpenForSerialSending(&bsp::dma::Dma1Stream0::Instance(), this);
 
 	// 初始化接收 DMA
-	base::dma::OpenAsPeripheralToMemoryMode(&bsp::dma::Dma1Stream1::Instance(),
-											this,
-											base::dma::PeripheralIncrement::DoNotIncrease,
-											base::dma::MemoryIncrement::Increase,
-											base::dma::PeripheralDataAlignment{1},
-											base::dma::MemoryDataAlignment{1},
-											base::dma::Priority::Medium);
+	base::dma::OpenForSerialReceiving(&bsp::dma::Dma1Stream1::Instance(), this);
 }
 
 void bsp::Serial::InitializeUart()

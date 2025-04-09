@@ -124,54 +124,42 @@ namespace
 
 /* #region 全局的 DMA 打开函数 */
 
-void base::dma::OpenAsPeripheralToMemoryMode(base::dma::IDma *dma,
-											 base::serial::ISerial *parent,
-											 base::dma::PeripheralIncrement peripheral_increment,
-											 base::dma::MemoryIncrement memory_increment,
-											 base::dma::PeripheralDataAlignment const &peripheral_data_alignment,
-											 base::dma::MemoryDataAlignment const &memory_data_alignment,
-											 base::dma::Priority priority)
+void base::dma::OpenForSerialReceiving(base::dma::IDma *dma, base::serial::ISerial *serial)
 {
 	EnableClock(dma->Context()._handle);
 	dma->Context()._handle.Init.Direction = DMA_PERIPH_TO_MEMORY;
 	dma->Context()._handle.Init.Request = DMA_REQUEST_USART1_RX;
 
 	SetDmaProperty(dma->Context()._handle,
-				   peripheral_increment,
-				   memory_increment,
-				   peripheral_data_alignment,
-				   memory_data_alignment,
-				   priority);
+				   base::dma::PeripheralIncrement::DoNotIncrease,
+				   base::dma::MemoryIncrement::Increase,
+				   base::dma::PeripheralDataAlignment{1},
+				   base::dma::MemoryDataAlignment{1},
+				   base::dma::Priority::Medium);
 
 	HAL_DMA_Init(&dma->Context()._handle);
 
-	parent->Context()._uart_handle.hdmarx = &dma->Context()._handle;
-	dma->Context()._handle.Parent = &parent->Context()._uart_handle;
+	serial->Context()._uart_handle.hdmarx = &dma->Context()._handle;
+	dma->Context()._handle.Parent = &serial->Context()._uart_handle;
 }
 
-void base::dma::OpenAsMemoryToPeripheralMode(base::dma::IDma *dma,
-											 base::serial::ISerial *parent,
-											 base::dma::PeripheralIncrement peripheral_increment,
-											 base::dma::MemoryIncrement memory_increment,
-											 base::dma::PeripheralDataAlignment const &peripheral_data_alignment,
-											 base::dma::MemoryDataAlignment const &memory_data_alignment,
-											 base::dma::Priority priority)
+void base::dma::OpenForSerialSending(base::dma::IDma *dma, base::serial::ISerial *serial)
 {
 	EnableClock(dma->Context()._handle);
 	dma->Context()._handle.Init.Direction = DMA_MEMORY_TO_PERIPH;
 	dma->Context()._handle.Init.Request = DMA_REQUEST_USART1_TX;
 
 	SetDmaProperty(dma->Context()._handle,
-				   peripheral_increment,
-				   memory_increment,
-				   peripheral_data_alignment,
-				   memory_data_alignment,
-				   priority);
+				   base::dma::PeripheralIncrement::DoNotIncrease,
+				   base::dma::MemoryIncrement::Increase,
+				   base::dma::PeripheralDataAlignment{1},
+				   base::dma::MemoryDataAlignment{1},
+				   base::dma::Priority::Medium);
 
 	HAL_DMA_Init(&dma->Context()._handle);
 
-	parent->Context()._uart_handle.hdmatx = &dma->Context()._handle;
-	dma->Context()._handle.Parent = &parent->Context()._uart_handle;
+	serial->Context()._uart_handle.hdmatx = &dma->Context()._handle;
+	dma->Context()._handle.Parent = &serial->Context()._uart_handle;
 }
 
 /* #endregion */
