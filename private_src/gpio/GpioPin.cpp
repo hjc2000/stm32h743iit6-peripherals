@@ -1,6 +1,5 @@
 #include "GpioPin.h"
 #include "bsp-interface/di/interrupt.h"
-#include "EnableClock.h"
 
 void bsp::GpioPin::OpenAsInputMode(bsp::IGpioPinPullMode pull_mode, bsp::IGpioPinTriggerEdge trigger_edge)
 {

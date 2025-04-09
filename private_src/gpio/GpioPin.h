@@ -1,5 +1,5 @@
 #pragma once
-#include "EnableClock.h"
+#include "gpio.h"
 #include <base/define.h>
 #include <bsp-interface/di/gpio.h>
 #include <bsp-interface/di/interrupt.h>

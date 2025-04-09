@@ -1,6 +1,5 @@
 #include "GpioPinPA10.h"
 #include "base/define.h"
-#include "EnableClock.h"
 
 PREINIT(bsp::GpioPinPA10::Instance);
 
