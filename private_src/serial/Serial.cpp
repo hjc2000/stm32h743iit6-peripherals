@@ -1,10 +1,12 @@
 #include "Serial.h"
 #include "base/define.h"
+#include "base/peripheral/IDma.h"
 #include "base/peripheral/ISerial.h"
 #include "base/string/define.h"
 #include "bsp-interface/di/dma.h"
 #include "bsp-interface/di/gpio.h"
 #include "bsp-interface/di/interrupt.h"
+#include "dma.h"
 
 /* #region 初始化 */
 
@@ -34,17 +36,13 @@ void bsp::Serial::InitializeGpio()
 void bsp::Serial::InitializeDma()
 {
 	// 初始化发送 DMA
-	{
-		_tx_dma_channel = DI_DmaChannelCollection().Get("dma1_stream0");
-
-		_tx_dma_channel->OpenAsMemoryToPeripheralMode(&_context._uart_handle,
-													  base::dma::PeripheralIncrement::DoNotIncrease,
-													  base::dma::MemoryIncrement::Increase,
-													  base::dma::PeripheralDataAlignment{1},
-													  base::dma::MemoryDataAlignment{1},
-													  base::dma::Priority::Medium,
-													  "usart1_tx");
-	}
+	base::dma::OpenAsMemoryToPeripheralMode(&bsp::dma::Dma1Stream0_::Instance(),
+											this,
+											base::dma::PeripheralIncrement::DoNotIncrease,
+											base::dma::MemoryIncrement::Increase,
+											base::dma::PeripheralDataAlignment{1},
+											base::dma::MemoryDataAlignment{1},
+											base::dma::Priority::Medium);
 
 	// 初始化接收 DMA
 	{

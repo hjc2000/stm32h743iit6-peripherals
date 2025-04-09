@@ -31,7 +31,6 @@ namespace bsp
 		std::shared_ptr<base::IMutex> _read_lock = base::CreateIMutex();
 
 		bsp::dma::IDmaChannel *_rx_dma_channel = nullptr;
-		bsp::dma::IDmaChannel *_tx_dma_channel = nullptr;
 
 		base::serial::Direction _direction;
 		uint32_t _baud_rate;

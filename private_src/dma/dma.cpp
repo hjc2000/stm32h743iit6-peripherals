@@ -108,6 +108,8 @@ void bsp::dma::SetDmaProperty(DMA_HandleTypeDef &handle,
 	}
 }
 
+/* #region 全局的 DMA 打开函数 */
+
 void base::dma::OpenAsPeripheralToMemoryMode(base::dma::IDma *dma,
 											 base::serial::ISerial *parent,
 											 base::dma::PeripheralIncrement peripheral_increment,
@@ -118,6 +120,7 @@ void base::dma::OpenAsPeripheralToMemoryMode(base::dma::IDma *dma,
 {
 	bsp::dma::EnableClock(dma->Context()._handle);
 	dma->Context()._handle.Init.Direction = DMA_PERIPH_TO_MEMORY;
+	dma->Context()._handle.Init.Request = DMA_REQUEST_USART1_RX;
 
 	bsp::dma::SetDmaProperty(dma->Context()._handle,
 							 peripheral_increment,
@@ -142,6 +145,7 @@ void base::dma::OpenAsMemoryToPeripheralMode(base::dma::IDma *dma,
 {
 	bsp::dma::EnableClock(dma->Context()._handle);
 	dma->Context()._handle.Init.Direction = DMA_MEMORY_TO_PERIPH;
+	dma->Context()._handle.Init.Request = DMA_REQUEST_USART1_TX;
 
 	bsp::dma::SetDmaProperty(dma->Context()._handle,
 							 peripheral_increment,
@@ -155,6 +159,8 @@ void base::dma::OpenAsMemoryToPeripheralMode(base::dma::IDma *dma,
 	parent->Context()._uart_handle.hdmatx = &dma->Context()._handle;
 	dma->Context()._handle.Parent = &parent->Context()._uart_handle;
 }
+
+/* #endregion */
 
 int32_t base::dma::RemainingUntransmittedBytes(base::dma::IDma *dma)
 {
