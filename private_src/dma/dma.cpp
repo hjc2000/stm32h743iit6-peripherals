@@ -168,11 +168,11 @@ int32_t base::dma::RemainingUntransmittedBytes(base::dma::IDma *dma)
 	return __HAL_DMA_GET_COUNTER(handle);
 }
 
-PREINIT(bsp::dma::Dma1Stream0_::Instance)
+PREINIT(bsp::dma::Dma1Stream0::Instance)
 
-bsp::dma::Dma1Stream0_ &bsp::dma::Dma1Stream0_::Instance()
+bsp::dma::Dma1Stream0 &bsp::dma::Dma1Stream0::Instance()
 {
-	static Dma1Stream0_ o;
+	static Dma1Stream0 o;
 	return o;
 }
 

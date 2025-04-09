@@ -36,7 +36,7 @@ void bsp::Serial::InitializeGpio()
 void bsp::Serial::InitializeDma()
 {
 	// 初始化发送 DMA
-	base::dma::OpenAsMemoryToPeripheralMode(&bsp::dma::Dma1Stream0_::Instance(),
+	base::dma::OpenAsMemoryToPeripheralMode(&bsp::dma::Dma1Stream0::Instance(),
 											this,
 											base::dma::PeripheralIncrement::DoNotIncrease,
 											base::dma::MemoryIncrement::Increase,

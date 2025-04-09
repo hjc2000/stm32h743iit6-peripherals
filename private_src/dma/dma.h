@@ -34,11 +34,11 @@ namespace bsp
 
 		void EnableClock(DMA_HandleTypeDef &handle);
 
-		class Dma1Stream0_ :
+		class Dma1Stream0 :
 			public base::dma::IDma
 		{
 		private:
-			Dma1Stream0_()
+			Dma1Stream0()
 			{
 				_context._handle.Instance = DMA1_Stream0;
 			}
@@ -46,7 +46,7 @@ namespace bsp
 			base::dma::DmaContext _context{};
 
 		public:
-			static Dma1Stream0_ &Instance();
+			static Dma1Stream0 &Instance();
 
 			virtual base::dma::DmaContext &Context() override
 			{
