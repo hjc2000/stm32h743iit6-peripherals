@@ -1,4 +1,5 @@
 #pragma once
+#include "base/peripheral/IDma.h"
 #include <bsp-interface/di/interrupt.h>
 #include <DmaStream.h>
 
@@ -26,11 +27,11 @@ namespace bsp
 		/// @param priority
 		/// @param request
 		virtual void OpenAsPeripheralToMemoryMode(void *parent,
-												  bsp::dma::PeripheralIncrement peripheral_increment,
-												  bsp::dma::MemoryIncrement memory_increment,
-												  bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
-												  bsp::dma::MemoryDataAlignment const &memory_data_alignment,
-												  bsp::dma::Priority priority,
+												  base::dma::PeripheralIncrement peripheral_increment,
+												  base::dma::MemoryIncrement memory_increment,
+												  base::dma::PeripheralDataAlignment const &peripheral_data_alignment,
+												  base::dma::MemoryDataAlignment const &memory_data_alignment,
+												  base::dma::Priority priority,
 												  std::string const &request) override;
 
 		/// @brief 打开 DMA，模式为将数据从内存拷贝到外设。
@@ -42,11 +43,11 @@ namespace bsp
 		/// @param priority
 		/// @param request
 		virtual void OpenAsMemoryToPeripheralMode(void *parent,
-												  bsp::dma::PeripheralIncrement peripheral_increment,
-												  bsp::dma::MemoryIncrement memory_increment,
-												  bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
-												  bsp::dma::MemoryDataAlignment const &memory_data_alignment,
-												  bsp::dma::Priority priority,
+												  base::dma::PeripheralIncrement peripheral_increment,
+												  base::dma::MemoryIncrement memory_increment,
+												  base::dma::PeripheralDataAlignment const &peripheral_data_alignment,
+												  base::dma::MemoryDataAlignment const &memory_data_alignment,
+												  base::dma::Priority priority,
 												  std::string const &request) override;
 
 		/// @brief 打开 DMA，模式为将数据从内存拷贝到内存。
@@ -58,11 +59,11 @@ namespace bsp
 		/// @param priority
 		/// @param request
 		virtual void OpenAsMomoryToMemoryMode(void *parent,
-											  bsp::dma::PeripheralIncrement peripheral_increment,
-											  bsp::dma::MemoryIncrement memory_increment,
-											  bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
-											  bsp::dma::MemoryDataAlignment const &memory_data_alignment,
-											  bsp::dma::Priority priority,
+											  base::dma::PeripheralIncrement peripheral_increment,
+											  base::dma::MemoryIncrement memory_increment,
+											  base::dma::PeripheralDataAlignment const &peripheral_data_alignment,
+											  base::dma::MemoryDataAlignment const &memory_data_alignment,
+											  base::dma::Priority priority,
 											  std::string const &request) override;
 
 		virtual bool IsOpen() const override

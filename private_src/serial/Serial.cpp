@@ -38,11 +38,11 @@ void bsp::Serial::InitializeDma()
 		_tx_dma_channel = DI_DmaChannelCollection().Get("dma1_stream0");
 
 		_tx_dma_channel->OpenAsMemoryToPeripheralMode(&_uart_handle,
-													  bsp::dma::PeripheralIncrement::DoNotIncrease,
-													  bsp::dma::MemoryIncrement::Increase,
-													  bsp::dma::PeripheralDataAlignment{1},
-													  bsp::dma::MemoryDataAlignment{1},
-													  bsp::dma::Priority::Medium,
+													  base::dma::PeripheralIncrement::DoNotIncrease,
+													  base::dma::MemoryIncrement::Increase,
+													  base::dma::PeripheralDataAlignment{1},
+													  base::dma::MemoryDataAlignment{1},
+													  base::dma::Priority::Medium,
 													  "usart1_tx");
 	}
 
@@ -51,11 +51,11 @@ void bsp::Serial::InitializeDma()
 		_rx_dma_channel = DI_DmaChannelCollection().Get("dma1_stream1");
 
 		_rx_dma_channel->OpenAsPeripheralToMemoryMode(&_uart_handle,
-													  bsp::dma::PeripheralIncrement::DoNotIncrease,
-													  bsp::dma::MemoryIncrement::Increase,
-													  bsp::dma::PeripheralDataAlignment{1},
-													  bsp::dma::MemoryDataAlignment{1},
-													  bsp::dma::Priority::Medium,
+													  base::dma::PeripheralIncrement::DoNotIncrease,
+													  base::dma::MemoryIncrement::Increase,
+													  base::dma::PeripheralDataAlignment{1},
+													  base::dma::MemoryDataAlignment{1},
+													  base::dma::Priority::Medium,
 													  "usart1_rx");
 	}
 }

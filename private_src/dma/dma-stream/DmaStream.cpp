@@ -1,6 +1,5 @@
 #include "DmaStream.h"
 #include "base/define.h"
-#include "bsp-interface/dma/IDmaChannel.h"
 #include <base/string/define.h>
 #include <stdexcept>
 
@@ -32,11 +31,11 @@ void bsp::DmaStream::LinkDmaToUartRx(UART_HandleTypeDef &uart)
 	_dma_handle.Parent = &uart;
 }
 
-void bsp::DmaStream::InitializeDmaProperty(bsp::dma::PeripheralIncrement peripheral_increment,
-										   bsp::dma::MemoryIncrement memory_increment,
-										   bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
-										   bsp::dma::MemoryDataAlignment const &memory_data_alignment,
-										   bsp::dma::Priority priority,
+void bsp::DmaStream::InitializeDmaProperty(base::dma::PeripheralIncrement peripheral_increment,
+										   base::dma::MemoryIncrement memory_increment,
+										   base::dma::PeripheralDataAlignment const &peripheral_data_alignment,
+										   base::dma::MemoryDataAlignment const &memory_data_alignment,
+										   base::dma::Priority priority,
 										   std::string const &request)
 {
 	_dma_handle.Init.Mode = DMA_NORMAL;
@@ -45,7 +44,7 @@ void bsp::DmaStream::InitializeDmaProperty(bsp::dma::PeripheralIncrement periphe
 	_dma_handle.Init.MemBurst = DMA_MBURST_SINGLE;
 	_dma_handle.Init.PeriphBurst = DMA_PBURST_SINGLE;
 
-	if (peripheral_increment == bsp::dma::PeripheralIncrement::Increase)
+	if (peripheral_increment == base::dma::PeripheralIncrement::Increase)
 	{
 		_dma_handle.Init.PeriphInc = DMA_PINC_ENABLE;
 	}
@@ -54,7 +53,7 @@ void bsp::DmaStream::InitializeDmaProperty(bsp::dma::PeripheralIncrement periphe
 		_dma_handle.Init.PeriphInc = DMA_PINC_DISABLE;
 	}
 
-	if (memory_increment == bsp::dma::MemoryIncrement::Increase)
+	if (memory_increment == base::dma::MemoryIncrement::Increase)
 	{
 		_dma_handle.Init.MemInc = DMA_MINC_ENABLE;
 	}
@@ -111,22 +110,22 @@ void bsp::DmaStream::InitializeDmaProperty(bsp::dma::PeripheralIncrement periphe
 
 	switch (priority)
 	{
-	case bsp::dma::Priority::Low:
+	case base::dma::Priority::Low:
 		{
 			_dma_handle.Init.Priority = DMA_PRIORITY_LOW;
 			break;
 		}
-	case bsp::dma::Priority::Medium:
+	case base::dma::Priority::Medium:
 		{
 			_dma_handle.Init.Priority = DMA_PRIORITY_MEDIUM;
 			break;
 		}
-	case bsp::dma::Priority::High:
+	case base::dma::Priority::High:
 		{
 			_dma_handle.Init.Priority = DMA_PRIORITY_HIGH;
 			break;
 		}
-	case bsp::dma::Priority::VeryHigh:
+	case base::dma::Priority::VeryHigh:
 		{
 			_dma_handle.Init.Priority = DMA_PRIORITY_VERY_HIGH;
 			break;
