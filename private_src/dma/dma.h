@@ -32,18 +32,21 @@ namespace bsp
 			return __HAL_DMA_GET_COUNTER(&handle);
 		}
 
+		void EnableClock(DMA_HandleTypeDef &handle);
+
 		class Dma1Stream0_ :
 			public base::dma::IDma
 		{
 		private:
+			Dma1Stream0_()
+			{
+				_context._handle.Instance = DMA1_Stream0;
+			}
+
 			base::dma::DmaContext _context{};
 
 		public:
-			Dma1Stream0_()
-			{
-				__HAL_RCC_DMA1_CLK_ENABLE();
-				_context._handle.Instance = DMA1_Stream0;
-			}
+			static Dma1Stream0_ &Instance();
 
 			virtual base::dma::DmaContext &Context() override
 			{

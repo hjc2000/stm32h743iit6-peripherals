@@ -1,4 +1,6 @@
 #include "dma.h"
+#include "base/define.h"
+#include "Serial.h"
 
 void bsp::dma::SetDmaProperty(DMA_HandleTypeDef &handle,
 							  base::dma::PeripheralIncrement peripheral_increment,
@@ -114,6 +116,7 @@ void base::dma::OpenAsPeripheralToMemoryMode(base::dma::IDma *dma,
 											 base::dma::MemoryDataAlignment const &memory_data_alignment,
 											 base::dma::Priority priority)
 {
+	bsp::dma::EnableClock(dma->Context()._handle);
 	dma->Context()._handle.Init.Direction = DMA_PERIPH_TO_MEMORY;
 
 	bsp::dma::SetDmaProperty(dma->Context()._handle,
@@ -124,10 +127,54 @@ void base::dma::OpenAsPeripheralToMemoryMode(base::dma::IDma *dma,
 							 priority);
 
 	HAL_DMA_Init(&dma->Context()._handle);
+
+	parent->Context()._uart_handle.hdmarx = &dma->Context()._handle;
+	dma->Context()._handle.Parent = &parent->Context()._uart_handle;
+}
+
+void base::dma::OpenAsMemoryToPeripheralMode(base::dma::IDma *dma,
+											 base::serial::ISerial *parent,
+											 base::dma::PeripheralIncrement peripheral_increment,
+											 base::dma::MemoryIncrement memory_increment,
+											 base::dma::PeripheralDataAlignment const &peripheral_data_alignment,
+											 base::dma::MemoryDataAlignment const &memory_data_alignment,
+											 base::dma::Priority priority)
+{
+	bsp::dma::EnableClock(dma->Context()._handle);
+	dma->Context()._handle.Init.Direction = DMA_MEMORY_TO_PERIPH;
+
+	bsp::dma::SetDmaProperty(dma->Context()._handle,
+							 peripheral_increment,
+							 memory_increment,
+							 peripheral_data_alignment,
+							 memory_data_alignment,
+							 priority);
+
+	HAL_DMA_Init(&dma->Context()._handle);
+
+	parent->Context()._uart_handle.hdmatx = &dma->Context()._handle;
+	dma->Context()._handle.Parent = &parent->Context()._uart_handle;
 }
 
 int32_t base::dma::RemainingUntransmittedBytes(base::dma::IDma *dma)
 {
 	DMA_HandleTypeDef *handle = reinterpret_cast<DMA_HandleTypeDef *>(&dma->Context()._handle);
 	return __HAL_DMA_GET_COUNTER(handle);
+}
+
+PREINIT(bsp::dma::Dma1Stream0_::Instance)
+
+bsp::dma::Dma1Stream0_ &bsp::dma::Dma1Stream0_::Instance()
+{
+	static Dma1Stream0_ o;
+	return o;
+}
+
+void bsp::dma::EnableClock(DMA_HandleTypeDef &handle)
+{
+	if (handle.Instance == DMA1_Stream0 ||
+		handle.Instance == DMA1_Stream1)
+	{
+		__HAL_RCC_DMA1_CLK_ENABLE();
+	}
 }
