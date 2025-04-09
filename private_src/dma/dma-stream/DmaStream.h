@@ -15,7 +15,7 @@ namespace bsp
 	protected:
 		DMA_HandleTypeDef _dma_handle{};
 
-		void InitializeDmaProperty(bsp::dma::PeripheralIncrement const &peripheral_increment,
+		void InitializeDmaProperty(bsp::dma::PeripheralIncrement peripheral_increment,
 								   bsp::dma::MemoryIncrement const &memory_increment,
 								   bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
 								   bsp::dma::MemoryDataAlignment const &memory_data_alignment,

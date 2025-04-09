@@ -26,7 +26,7 @@ namespace bsp
 		/// @param priority
 		/// @param request
 		virtual void OpenAsPeripheralToMemoryMode(void *parent,
-												  bsp::dma::PeripheralIncrement const &peripheral_increment,
+												  bsp::dma::PeripheralIncrement peripheral_increment,
 												  bsp::dma::MemoryIncrement const &memory_increment,
 												  bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
 												  bsp::dma::MemoryDataAlignment const &memory_data_alignment,
@@ -42,7 +42,7 @@ namespace bsp
 		/// @param priority
 		/// @param request
 		virtual void OpenAsMemoryToPeripheralMode(void *parent,
-												  bsp::dma::PeripheralIncrement const &peripheral_increment,
+												  bsp::dma::PeripheralIncrement peripheral_increment,
 												  bsp::dma::MemoryIncrement const &memory_increment,
 												  bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
 												  bsp::dma::MemoryDataAlignment const &memory_data_alignment,
@@ -58,7 +58,7 @@ namespace bsp
 		/// @param priority
 		/// @param request
 		virtual void OpenAsMomoryToMemoryMode(void *parent,
-											  bsp::dma::PeripheralIncrement const &peripheral_increment,
+											  bsp::dma::PeripheralIncrement peripheral_increment,
 											  bsp::dma::MemoryIncrement const &memory_increment,
 											  bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
 											  bsp::dma::MemoryDataAlignment const &memory_data_alignment,

@@ -26,12 +26,12 @@ namespace bsp
 		/// @param priority
 		/// @param request
 		virtual void OpenAsPeripheralToMemoryMode(void *parent,
-												  bsp::dma::PeripheralIncrement const &peripheral_increment,
+												  bsp::dma::PeripheralIncrement peripheral_increment,
 												  bsp::dma::MemoryIncrement const &memory_increment,
 												  bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
 												  bsp::dma::MemoryDataAlignment const &memory_data_alignment,
 												  bsp::dma::Priority priority,
-												  std::string const &request);
+												  std::string const &request) override;
 
 		/// @brief 打开 DMA，模式为将数据从内存拷贝到外设。
 		/// @param parent DMA 要被连接到的父设备的句柄。例如对于 HAL 库的 USART，就是 UART_HandleTypeDef。
@@ -42,12 +42,12 @@ namespace bsp
 		/// @param priority
 		/// @param request
 		virtual void OpenAsMemoryToPeripheralMode(void *parent,
-												  bsp::dma::PeripheralIncrement const &peripheral_increment,
+												  bsp::dma::PeripheralIncrement peripheral_increment,
 												  bsp::dma::MemoryIncrement const &memory_increment,
 												  bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
 												  bsp::dma::MemoryDataAlignment const &memory_data_alignment,
 												  bsp::dma::Priority priority,
-												  std::string const &request);
+												  std::string const &request) override;
 
 		/// @brief 打开 DMA，模式为将数据从内存拷贝到内存。
 		/// @param parent DMA 要被连接到的父设备的句柄。例如对于 HAL 库的 USART，就是 UART_HandleTypeDef。
@@ -58,12 +58,12 @@ namespace bsp
 		/// @param priority
 		/// @param request
 		virtual void OpenAsMomoryToMemoryMode(void *parent,
-											  bsp::dma::PeripheralIncrement const &peripheral_increment,
+											  bsp::dma::PeripheralIncrement peripheral_increment,
 											  bsp::dma::MemoryIncrement const &memory_increment,
 											  bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
 											  bsp::dma::MemoryDataAlignment const &memory_data_alignment,
 											  bsp::dma::Priority priority,
-											  std::string const &request);
+											  std::string const &request) override;
 
 		bool IsOpen() const override
 		{

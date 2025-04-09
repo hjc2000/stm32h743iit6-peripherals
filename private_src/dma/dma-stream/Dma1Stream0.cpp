@@ -15,7 +15,7 @@ std::string bsp::Dma1Stream0::Name() const
 }
 
 void bsp::Dma1Stream0::OpenAsPeripheralToMemoryMode(void *parent,
-													bsp::dma::PeripheralIncrement const &peripheral_increment,
+													bsp::dma::PeripheralIncrement peripheral_increment,
 													bsp::dma::MemoryIncrement const &memory_increment,
 													bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
 													bsp::dma::MemoryDataAlignment const &memory_data_alignment,
@@ -45,14 +45,13 @@ void bsp::Dma1Stream0::OpenAsPeripheralToMemoryMode(void *parent,
 	LinkDmaToParent(parent);
 }
 
-void bsp::Dma1Stream0::OpenAsMemoryToPeripheralMode(
-	void *parent,
-	bsp::dma::PeripheralIncrement const &peripheral_increment,
-	bsp::dma::MemoryIncrement const &memory_increment,
-	bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
-	bsp::dma::MemoryDataAlignment const &memory_data_alignment,
-	bsp::dma::Priority priority,
-	std::string const &request)
+void bsp::Dma1Stream0::OpenAsMemoryToPeripheralMode(void *parent,
+													bsp::dma::PeripheralIncrement peripheral_increment,
+													bsp::dma::MemoryIncrement const &memory_increment,
+													bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
+													bsp::dma::MemoryDataAlignment const &memory_data_alignment,
+													bsp::dma::Priority priority,
+													std::string const &request)
 {
 	if (_is_open)
 	{
@@ -77,14 +76,13 @@ void bsp::Dma1Stream0::OpenAsMemoryToPeripheralMode(
 	LinkDmaToParent(parent);
 }
 
-void bsp::Dma1Stream0::OpenAsMomoryToMemoryMode(
-	void *parent,
-	bsp::dma::PeripheralIncrement const &peripheral_increment,
-	bsp::dma::MemoryIncrement const &memory_increment,
-	bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
-	bsp::dma::MemoryDataAlignment const &memory_data_alignment,
-	bsp::dma::Priority priority,
-	std::string const &request)
+void bsp::Dma1Stream0::OpenAsMomoryToMemoryMode(void *parent,
+												bsp::dma::PeripheralIncrement peripheral_increment,
+												bsp::dma::MemoryIncrement const &memory_increment,
+												bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
+												bsp::dma::MemoryDataAlignment const &memory_data_alignment,
+												bsp::dma::Priority priority,
+												std::string const &request)
 {
 	if (_is_open)
 	{

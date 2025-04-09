@@ -1,5 +1,6 @@
 #include "DmaStream.h"
 #include "base/define.h"
+#include "bsp-interface/dma/IDmaChannel.h"
 #include <base/string/define.h>
 #include <stdexcept>
 
@@ -31,20 +32,28 @@ void bsp::DmaStream::LinkDmaToUartRx(UART_HandleTypeDef &uart)
 	_dma_handle.Parent = &uart;
 }
 
-void bsp::DmaStream::InitializeDmaProperty(
-	bsp::dma::PeripheralIncrement const &peripheral_increment,
-	bsp::dma::MemoryIncrement const &memory_increment,
-	bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
-	bsp::dma::MemoryDataAlignment const &memory_data_alignment,
-	bsp::dma::Priority priority,
-	std::string const &request)
+void bsp::DmaStream::InitializeDmaProperty(bsp::dma::PeripheralIncrement peripheral_increment,
+										   bsp::dma::MemoryIncrement const &memory_increment,
+										   bsp::dma::PeripheralDataAlignment const &peripheral_data_alignment,
+										   bsp::dma::MemoryDataAlignment const &memory_data_alignment,
+										   bsp::dma::Priority priority,
+										   std::string const &request)
 {
 	_dma_handle.Init.Mode = DMA_NORMAL;
 	_dma_handle.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
 	_dma_handle.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
 	_dma_handle.Init.MemBurst = DMA_MBURST_SINGLE;
 	_dma_handle.Init.PeriphBurst = DMA_PBURST_SINGLE;
-	_dma_handle.Init.PeriphInc = peripheral_increment.Value() ? DMA_PINC_ENABLE : DMA_PINC_DISABLE;
+
+	if (peripheral_increment == bsp::dma::PeripheralIncrement::Increase)
+	{
+		_dma_handle.Init.PeriphInc = DMA_PINC_ENABLE;
+	}
+	else
+	{
+		_dma_handle.Init.PeriphInc = DMA_PINC_DISABLE;
+	}
+
 	_dma_handle.Init.MemInc = memory_increment.Value() ? DMA_MINC_ENABLE : DMA_MINC_DISABLE;
 
 	switch (peripheral_data_alignment.Value())
