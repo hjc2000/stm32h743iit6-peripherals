@@ -3,10 +3,10 @@
 #include "base/peripheral/IDma.h"
 #include "base/peripheral/ISerial.h"
 #include "base/string/define.h"
-#include "bsp-interface/di/dma.h"
 #include "bsp-interface/di/gpio.h"
 #include "bsp-interface/di/interrupt.h"
-#include "dma.h"
+#include "Dma1Stream0.h"
+#include "Dma1Stream1.h"
 
 /* #region 初始化 */
 
