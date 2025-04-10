@@ -4,6 +4,7 @@
 #include "base/peripheral/gpio_parameter.h"
 #include "base/string/define.h"
 #include "base/task/IMutex.h"
+#include "stm32h7xx_hal_gpio.h"
 #include <array>
 #include <bitset>
 #include <cstdint>
@@ -66,6 +67,12 @@ namespace
 
 	/* #endregion */
 
+	///
+	/// @brief 将端口枚举转为 HAL 库的端口实例指针。
+	///
+	/// @param value
+	/// @return constexpr GPIO_TypeDef*
+	///
 	constexpr GPIO_TypeDef *ToPort(base::gpio::PortEnum value)
 	{
 		switch (value)
@@ -109,7 +116,90 @@ namespace
 		}
 	}
 
+	///
+	/// @brief 将引脚号转为 HAL 库的引脚宏定义。
+	///
+	/// @param pin
+	/// @return constexpr uint32_t
+	///
+	constexpr uint32_t ToPinDefineValue(uint32_t pin)
+	{
+		switch (pin)
+		{
+		case 0:
+			{
+				return GPIO_PIN_0;
+			}
+		case 1:
+			{
+				return GPIO_PIN_1;
+			}
+		case 2:
+			{
+				return GPIO_PIN_2;
+			}
+		case 3:
+			{
+				return GPIO_PIN_3;
+			}
+		case 4:
+			{
+				return GPIO_PIN_4;
+			}
+		case 5:
+			{
+				return GPIO_PIN_5;
+			}
+		case 6:
+			{
+				return GPIO_PIN_6;
+			}
+		case 7:
+			{
+				return GPIO_PIN_7;
+			}
+		case 8:
+			{
+				return GPIO_PIN_8;
+			}
+		case 9:
+			{
+				return GPIO_PIN_9;
+			}
+		case 10:
+			{
+				return GPIO_PIN_10;
+			}
+		case 11:
+			{
+				return GPIO_PIN_11;
+			}
+		case 12:
+			{
+				return GPIO_PIN_12;
+			}
+		case 13:
+			{
+				return GPIO_PIN_13;
+			}
+		case 14:
+			{
+				return GPIO_PIN_14;
+			}
+		case 15:
+			{
+				return GPIO_PIN_15;
+			}
+		default:
+			{
+				throw std::invalid_argument{CODE_POS_STR + "非法引脚号。"};
+			}
+		}
+	}
+
 } // namespace
+
+/* #region 初始化帮助方法 */
 
 void base::gpio::gpio_pin_handle::enable_clock()
 {
@@ -147,6 +237,38 @@ void base::gpio::gpio_pin_handle::enable_clock()
 	}
 }
 
+uint32_t base::gpio::gpio_pin_handle::get_alternate_function_define_value(base::gpio::AlternateFunction af)
+{
+	switch (af)
+	{
+	case base::gpio::AlternateFunction::UART1:
+		{
+			if (_port == GPIOA)
+			{
+				if (_pin == 9)
+				{
+					return GPIO_AF7_USART1;
+				}
+
+				if (_pin == 10)
+				{
+					return GPIO_AF7_USART1;
+				}
+			}
+
+			break;
+		}
+	default:
+		{
+			break;
+		}
+	}
+
+	throw std::runtime_error{CODE_POS_STR + "不支持的复用功能。"};
+}
+
+/* #endregion */
+
 base::gpio::gpio_pin_handle::gpio_pin_handle(base::gpio::PortEnum port, uint32_t pin)
 {
 	_port_enum = port;
@@ -160,7 +282,7 @@ base::gpio::gpio_pin_handle::~gpio_pin_handle()
 	UsageStateManager::Instance().SetAsUnused(_port_enum, _pin);
 }
 
-/* #region 初始化函数 */
+/* #region 初始化方法 */
 
 void base::gpio::gpio_pin_handle::initialize_as_input_mode(base::gpio::PullMode pull_mode,
 														   base::gpio::TriggerEdge trigger_edge)
@@ -213,7 +335,7 @@ void base::gpio::gpio_pin_handle::initialize_as_input_mode(base::gpio::PullMode 
 	}
 
 	def.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	def.Pin = _pin;
+	def.Pin = ToPinDefineValue(_pin);
 	HAL_GPIO_Init(_port, &def);
 }
 
@@ -261,7 +383,7 @@ void base::gpio::gpio_pin_handle::initialize_as_output_mode(base::gpio::PullMode
 	}
 
 	def.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	def.Pin = _pin;
+	def.Pin = ToPinDefineValue(_pin);
 	HAL_GPIO_Init(_port, &def);
 }
 
@@ -270,6 +392,50 @@ void base::gpio::gpio_pin_handle::initialize_as_alternate_function_mode(base::gp
 																		base::gpio::DriveMode drive_mode)
 {
 	enable_clock();
+	GPIO_InitTypeDef def{};
+	def.Alternate = get_alternate_function_define_value(af);
+
+	switch (pull_mode)
+	{
+	default:
+	case base::gpio::PullMode::NoPull:
+		{
+			def.Pull = GPIO_NOPULL;
+			break;
+		}
+	case base::gpio::PullMode::PullUp:
+		{
+			def.Pull = GPIO_PULLUP;
+			break;
+		}
+	case base::gpio::PullMode::PullDown:
+		{
+			def.Pull = GPIO_PULLDOWN;
+			break;
+		}
+	}
+
+	switch (drive_mode)
+	{
+	case base::gpio::DriveMode::PushPull:
+		{
+			def.Mode = GPIO_MODE_AF_PP;
+			break;
+		}
+	case base::gpio::DriveMode::OpenDrain:
+		{
+			def.Mode = GPIO_MODE_AF_OD;
+			break;
+		}
+	default:
+		{
+			throw std::invalid_argument{"不支持的 Driver"};
+		}
+	}
+
+	def.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+	def.Pin = ToPinDefineValue(_pin);
+	HAL_GPIO_Init(_port, &def);
 }
 
 /* #endregion */

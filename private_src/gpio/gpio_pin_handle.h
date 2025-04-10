@@ -10,11 +10,19 @@ private:
 	GPIO_TypeDef *_port = nullptr;
 	uint32_t _pin = 0;
 
+	/* #region 初始化帮助方法 */
+
 	void enable_clock();
+
+	uint32_t get_alternate_function_define_value(base::gpio::AlternateFunction af);
+
+	/* #endregion */
 
 public:
 	gpio_pin_handle(base::gpio::PortEnum port, uint32_t pin);
 	~gpio_pin_handle();
+
+	/* #region 初始化方法 */
 
 	void initialize_as_input_mode(base::gpio::PullMode pull_mode,
 								  base::gpio::TriggerEdge trigger_edge);
@@ -25,4 +33,6 @@ public:
 	void initialize_as_alternate_function_mode(base::gpio::AlternateFunction af,
 											   base::gpio::PullMode pull_mode,
 											   base::gpio::DriveMode drive_mode);
+
+	/* #endregion */
 };
