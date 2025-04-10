@@ -1,12 +1,9 @@
 #include "Serial.h"
 #include "base/define.h"
-#include "base/peripheral/IDma.h"
 #include "base/peripheral/ISerial.h"
 #include "base/string/define.h"
 #include "bsp-interface/di/gpio.h"
 #include "bsp-interface/di/interrupt.h"
-#include "Dma1Stream0.h"
-#include "Dma1Stream1.h"
 
 /* #region 初始化 */
 
@@ -35,12 +32,46 @@ void bsp::Serial::InitializeGpio()
 
 void bsp::Serial::InitializeRxDma()
 {
-	base::dma::OpenForSerialReceiving(&bsp::dma::Dma1Stream1::Instance(), this);
+	_rx_dma_handle.Instance = DMA1_Stream1;
+	__HAL_RCC_DMA1_CLK_ENABLE();
+	_rx_dma_handle.Init.Direction = DMA_PERIPH_TO_MEMORY;
+	_rx_dma_handle.Init.Request = DMA_REQUEST_USART1_RX;
+	_rx_dma_handle.Init.Mode = DMA_NORMAL;
+	_rx_dma_handle.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+	_rx_dma_handle.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+	_rx_dma_handle.Init.MemBurst = DMA_MBURST_SINGLE;
+	_rx_dma_handle.Init.PeriphBurst = DMA_PBURST_SINGLE;
+	_rx_dma_handle.Init.PeriphInc = DMA_PINC_DISABLE;
+	_rx_dma_handle.Init.MemInc = DMA_MINC_ENABLE;
+	_rx_dma_handle.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+	_rx_dma_handle.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+	_rx_dma_handle.Init.Priority = DMA_PRIORITY_MEDIUM;
+	HAL_DMA_Init(&_rx_dma_handle);
+
+	_context._uart_handle.hdmarx = &_rx_dma_handle;
+	_rx_dma_handle.Parent = &_context._uart_handle;
 }
 
 void bsp::Serial::InitializeTxDma()
 {
-	base::dma::OpenForSerialSending(&bsp::dma::Dma1Stream0::Instance(), this);
+	_tx_dma_handle.Instance = DMA1_Stream0;
+	__HAL_RCC_DMA1_CLK_ENABLE();
+	_tx_dma_handle.Init.Direction = DMA_MEMORY_TO_PERIPH;
+	_tx_dma_handle.Init.Request = DMA_REQUEST_USART1_TX;
+	_tx_dma_handle.Init.Mode = DMA_NORMAL;
+	_tx_dma_handle.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+	_tx_dma_handle.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+	_tx_dma_handle.Init.MemBurst = DMA_MBURST_SINGLE;
+	_tx_dma_handle.Init.PeriphBurst = DMA_PBURST_SINGLE;
+	_tx_dma_handle.Init.PeriphInc = DMA_PINC_DISABLE;
+	_tx_dma_handle.Init.MemInc = DMA_MINC_ENABLE;
+	_tx_dma_handle.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+	_tx_dma_handle.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+	_tx_dma_handle.Init.Priority = DMA_PRIORITY_MEDIUM;
+	HAL_DMA_Init(&_tx_dma_handle);
+
+	_context._uart_handle.hdmatx = &_tx_dma_handle;
+	_tx_dma_handle.Parent = &_context._uart_handle;
 }
 
 void bsp::Serial::InitializeUart()
@@ -212,8 +243,7 @@ void bsp::Serial::SetReadTimeoutByBaudCount(uint32_t value)
 
 int32_t bsp::Serial::HaveRead()
 {
-	return _context._uart_handle.RxXferSize -
-		   base::dma::RemainingUntransmittedBytes(&bsp::dma::Dma1Stream1::Instance());
+	return _context._uart_handle.RxXferSize - __HAL_DMA_GET_COUNTER(&_rx_dma_handle);
 }
 
 /* #region 被中断处理函数回调的函数 */

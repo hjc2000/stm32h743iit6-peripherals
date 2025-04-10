@@ -12,6 +12,11 @@ namespace
 						base::dma::MemoryDataAlignment const &memory_data_alignment,
 						base::dma::Priority priority)
 	{
+		handle.Init.Mode = DMA_NORMAL;
+		handle.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+		handle.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+		handle.Init.MemBurst = DMA_MBURST_SINGLE;
+		handle.Init.PeriphBurst = DMA_PBURST_SINGLE;
 
 		if (peripheral_increment == base::dma::PeripheralIncrement::Increase)
 		{
@@ -135,25 +140,6 @@ void base::dma::OpenForSerialReceiving(base::dma::IDma *dma, base::serial::ISeri
 	HAL_DMA_Init(&dma->Context()._handle);
 
 	serial->Context()._uart_handle.hdmarx = &dma->Context()._handle;
-	dma->Context()._handle.Parent = &serial->Context()._uart_handle;
-}
-
-void base::dma::OpenForSerialSending(base::dma::IDma *dma, base::serial::ISerial *serial)
-{
-	EnableClock(dma->Context()._handle);
-	dma->Context()._handle.Init.Direction = DMA_MEMORY_TO_PERIPH;
-	dma->Context()._handle.Init.Request = DMA_REQUEST_USART1_TX;
-
-	SetDmaProperty(dma->Context()._handle,
-				   base::dma::PeripheralIncrement::DoNotIncrease,
-				   base::dma::MemoryIncrement::Increase,
-				   base::dma::PeripheralDataAlignment{1},
-				   base::dma::MemoryDataAlignment{1},
-				   base::dma::Priority::Medium);
-
-	HAL_DMA_Init(&dma->Context()._handle);
-
-	serial->Context()._uart_handle.hdmatx = &dma->Context()._handle;
 	dma->Context()._handle.Parent = &serial->Context()._uart_handle;
 }
 
