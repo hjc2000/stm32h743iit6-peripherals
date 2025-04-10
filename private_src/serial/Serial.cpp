@@ -48,8 +48,8 @@ void bsp::Serial::InitializeRxDma()
 	_rx_dma_handle.Init.Priority = DMA_PRIORITY_MEDIUM;
 	HAL_DMA_Init(&_rx_dma_handle);
 
-	_context._uart_handle.hdmarx = &_rx_dma_handle;
-	_rx_dma_handle.Parent = &_context._uart_handle;
+	_uart_handle.hdmarx = &_rx_dma_handle;
+	_rx_dma_handle.Parent = &_uart_handle;
 }
 
 void bsp::Serial::InitializeTxDma()
@@ -70,47 +70,47 @@ void bsp::Serial::InitializeTxDma()
 	_tx_dma_handle.Init.Priority = DMA_PRIORITY_MEDIUM;
 	HAL_DMA_Init(&_tx_dma_handle);
 
-	_context._uart_handle.hdmatx = &_tx_dma_handle;
-	_tx_dma_handle.Parent = &_context._uart_handle;
+	_uart_handle.hdmatx = &_tx_dma_handle;
+	_tx_dma_handle.Parent = &_uart_handle;
 }
 
 void bsp::Serial::InitializeUart()
 {
-	_context._uart_handle.Instance = USART1;
+	_uart_handle.Instance = USART1;
 
 	switch (_direction)
 	{
 	case base::serial::Direction::RX:
 		{
-			_context._uart_handle.Init.Mode = UART_MODE_RX;
+			_uart_handle.Init.Mode = UART_MODE_RX;
 			break;
 		}
 	case base::serial::Direction::TX:
 		{
-			_context._uart_handle.Init.Mode = UART_MODE_TX;
+			_uart_handle.Init.Mode = UART_MODE_TX;
 			break;
 		}
 	default:
 	case base::serial::Direction::RX_TX:
 		{
-			_context._uart_handle.Init.Mode = UART_MODE_TX_RX;
+			_uart_handle.Init.Mode = UART_MODE_TX_RX;
 			break;
 		}
 	}
 
-	_context._uart_handle.Init.BaudRate = _baud_rate;
+	_uart_handle.Init.BaudRate = _baud_rate;
 
 	switch (_data_bits)
 	{
 	default:
 	case 8:
 		{
-			_context._uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
+			_uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
 			break;
 		}
 	case 9:
 		{
-			_context._uart_handle.Init.WordLength = UART_WORDLENGTH_9B;
+			_uart_handle.Init.WordLength = UART_WORDLENGTH_9B;
 			break;
 		}
 	}
@@ -120,17 +120,17 @@ void bsp::Serial::InitializeUart()
 	default:
 	case base::serial::Parity::None:
 		{
-			_context._uart_handle.Init.Parity = UART_PARITY_NONE;
+			_uart_handle.Init.Parity = UART_PARITY_NONE;
 			break;
 		}
 	case base::serial::Parity::Even:
 		{
-			_context._uart_handle.Init.Parity = UART_PARITY_EVEN;
+			_uart_handle.Init.Parity = UART_PARITY_EVEN;
 			break;
 		}
 	case base::serial::Parity::Odd:
 		{
-			_context._uart_handle.Init.Parity = UART_PARITY_ODD;
+			_uart_handle.Init.Parity = UART_PARITY_ODD;
 			break;
 		}
 	}
@@ -140,12 +140,12 @@ void bsp::Serial::InitializeUart()
 	default:
 	case base::serial::StopBits::One:
 		{
-			_context._uart_handle.Init.StopBits = UART_STOPBITS_1;
+			_uart_handle.Init.StopBits = UART_STOPBITS_1;
 			break;
 		}
 	case base::serial::StopBits::Two:
 		{
-			_context._uart_handle.Init.StopBits = UART_STOPBITS_2;
+			_uart_handle.Init.StopBits = UART_STOPBITS_2;
 			break;
 		}
 	}
@@ -155,47 +155,47 @@ void bsp::Serial::InitializeUart()
 	default:
 	case base::serial::HardwareFlowControl::None:
 		{
-			_context._uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+			_uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
 			break;
 		}
 	case base::serial::HardwareFlowControl::RTS:
 		{
-			_context._uart_handle.Init.HwFlowCtl = UART_HWCONTROL_RTS;
+			_uart_handle.Init.HwFlowCtl = UART_HWCONTROL_RTS;
 			break;
 		}
 	case base::serial::HardwareFlowControl::CTS:
 		{
-			_context._uart_handle.Init.HwFlowCtl = UART_HWCONTROL_CTS;
+			_uart_handle.Init.HwFlowCtl = UART_HWCONTROL_CTS;
 			break;
 		}
 	case base::serial::HardwareFlowControl::RTS_CTS:
 		{
-			_context._uart_handle.Init.HwFlowCtl = UART_HWCONTROL_RTS_CTS;
+			_uart_handle.Init.HwFlowCtl = UART_HWCONTROL_RTS_CTS;
 			break;
 		}
 	}
 
 	// 16 倍过采样。每一个位被采样 16 次，最后可能是根据平均值来确定它的电平。
-	_context._uart_handle.Init.OverSampling = UART_OVERSAMPLING_16;
+	_uart_handle.Init.OverSampling = UART_OVERSAMPLING_16;
 
 	/**
 	 * 每一次采样是使用 1 位的 ADC 采样还是使用 3 位的 ADC 采样。
 	 * UART_ONE_BIT_SAMPLE_DISABLE 表示使用 3 位的 ADC 采样。
 	 */
-	_context._uart_handle.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+	_uart_handle.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
 
 	// 对 PCLK 的分频系数。
-	_context._uart_handle.Init.ClockPrescaler = UART_PRESCALER_DIV1;
-	_context._uart_handle.MspInitCallback = nullptr;
-	HAL_UART_Init(&_context._uart_handle);
+	_uart_handle.Init.ClockPrescaler = UART_PRESCALER_DIV1;
+	_uart_handle.MspInitCallback = nullptr;
+	HAL_UART_Init(&_uart_handle);
 
 	/*
 	 * HAL_UART_Init 函数会把中断处理函数中回调的函数都设为默认的，所以必须在 HAL_UART_Init
 	 * 之后对函数指针赋值。
 	 */
-	_context._uart_handle.RxEventCallback = OnReceiveEventCallback;
-	_context._uart_handle.TxCpltCallback = OnSendCompleteCallback;
-	_context._uart_handle.ErrorCallback = OnReadTimeout;
+	_uart_handle.RxEventCallback = OnReceiveEventCallback;
+	_uart_handle.TxCpltCallback = OnSendCompleteCallback;
+	_uart_handle.ErrorCallback = OnReadTimeout;
 
 	// 超时在串口初始化后设置才有效
 	SetReadTimeoutByBaudCount(FramesBaudCount(2));
@@ -206,19 +206,19 @@ void bsp::Serial::InitializeInterrupt()
 	bsp::di::interrupt::IsrManager().AddIsr(static_cast<uint32_t>(IRQn_Type::USART1_IRQn),
 											[this]()
 											{
-												HAL_UART_IRQHandler(&_context._uart_handle);
+												HAL_UART_IRQHandler(&_uart_handle);
 											});
 
 	bsp::di::interrupt::IsrManager().AddIsr(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn),
 											[this]()
 											{
-												HAL_DMA_IRQHandler(_context._uart_handle.hdmatx);
+												HAL_DMA_IRQHandler(_uart_handle.hdmatx);
 											});
 
 	bsp::di::interrupt::IsrManager().AddIsr(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn),
 											[this]()
 											{
-												HAL_DMA_IRQHandler(_context._uart_handle.hdmarx);
+												HAL_DMA_IRQHandler(_uart_handle.hdmarx);
 											});
 
 	bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn), 10);
@@ -232,18 +232,18 @@ void bsp::Serial::SetReadTimeoutByBaudCount(uint32_t value)
 {
 	if (value > 0)
 	{
-		HAL_UART_ReceiverTimeout_Config(&_context._uart_handle, value);
-		HAL_UART_EnableReceiverTimeout(&_context._uart_handle);
+		HAL_UART_ReceiverTimeout_Config(&_uart_handle, value);
+		HAL_UART_EnableReceiverTimeout(&_uart_handle);
 	}
 	else
 	{
-		HAL_UART_DisableReceiverTimeout(&_context._uart_handle);
+		HAL_UART_DisableReceiverTimeout(&_uart_handle);
 	}
 }
 
 int32_t bsp::Serial::HaveRead()
 {
-	return _context._uart_handle.RxXferSize - __HAL_DMA_GET_COUNTER(&_rx_dma_handle);
+	return _uart_handle.RxXferSize - __HAL_DMA_GET_COUNTER(&_rx_dma_handle);
 }
 
 /* #region 被中断处理函数回调的函数 */
@@ -282,11 +282,11 @@ int32_t bsp::Serial::Read(base::Span const &span)
 
 			// HAL_UART_Receive_DMA
 			// HAL_UARTEx_ReceiveToIdle_DMA
-			HAL_UART_Receive_DMA(&_context._uart_handle, span.Buffer(), span.Size());
+			HAL_UART_Receive_DMA(&_uart_handle, span.Buffer(), span.Size());
 
 			// 通过赋值为空指针，把传输半满回调给禁用，不然接收的数据较长，超过缓冲区一半时，
 			// 即使是一次性接收的，UART 也会回调 OnReceiveEventCallback 两次。
-			_context._uart_handle.hdmarx->XferHalfCpltCallback = nullptr;
+			_uart_handle.hdmarx->XferHalfCpltCallback = nullptr;
 		}
 
 		_receiving_completion_signal->Acquire();
@@ -301,7 +301,7 @@ void bsp::Serial::Write(base::ReadOnlySpan const &span)
 {
 	_sending_completion_signal->Acquire();
 
-	HAL_StatusTypeDef ret = HAL_UART_Transmit_DMA(&_context._uart_handle,
+	HAL_StatusTypeDef ret = HAL_UART_Transmit_DMA(&_uart_handle,
 												  span.Buffer(),
 												  span.Size());
 
@@ -313,7 +313,7 @@ void bsp::Serial::Write(base::ReadOnlySpan const &span)
 
 void bsp::Serial::Close()
 {
-	HAL_UART_DMAStop(&_context._uart_handle);
+	HAL_UART_DMAStop(&_uart_handle);
 	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
 	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
 	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));

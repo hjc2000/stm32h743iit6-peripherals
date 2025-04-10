@@ -7,12 +7,6 @@
 #include "hal.h"
 #include <stdexcept>
 
-class base::serial::SerialContext
-{
-public:
-	UART_HandleTypeDef _uart_handle{};
-};
-
 namespace bsp
 {
 	class Serial :
@@ -22,7 +16,7 @@ namespace bsp
 		Serial() = default;
 
 		bool _is_open = false;
-		base::serial::SerialContext _context{};
+		UART_HandleTypeDef _uart_handle{};
 		std::shared_ptr<base::IBinarySemaphore> _sending_completion_signal = base::CreateIBinarySemaphore(false);
 		std::shared_ptr<base::IBinarySemaphore> _receiving_completion_signal = base::CreateIBinarySemaphore(false);
 		std::shared_ptr<base::IMutex> _read_lock = base::CreateIMutex();
@@ -57,11 +51,6 @@ namespace bsp
 
 	public:
 		static_function Serial &Instance();
-
-		virtual base::serial::SerialContext &Context() override
-		{
-			return _context;
-		}
 
 		virtual std::string Name() const override
 		{
