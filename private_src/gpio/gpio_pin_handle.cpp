@@ -440,6 +440,12 @@ void base::gpio::gpio_pin_handle::initialize_as_alternate_function_mode(base::gp
 
 /* #endregion */
 
+base::gpio::sp_gpio_pin_handle base::gpio::open(base::gpio::PortEnum port, uint32_t pin)
+{
+	base::gpio::sp_gpio_pin_handle handle{new base::gpio::gpio_pin_handle{port, pin}};
+	return handle;
+}
+
 /* #region 全局初始化函数 */
 
 void base::gpio::initialize_as_input_mode(base::gpio::sp_gpio_pin_handle const &h,
