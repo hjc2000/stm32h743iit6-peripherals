@@ -1,10 +1,13 @@
 #include "gpio_pin_handle.h"
 #include "base/define.h"
+#include "base/LockGuard.h"
 #include "base/peripheral/gpio_parameter.h"
 #include "base/string/define.h"
+#include "base/task/IMutex.h"
 #include <array>
 #include <bitset>
 #include <cstdint>
+#include <memory>
 #include <stdexcept>
 
 namespace
@@ -14,40 +17,58 @@ namespace
 		return static_cast<int>(base::gpio::PortEnum::PortP) + 1;
 	}
 
-	/* #region 使用状态管理 */
+	/* #region UsageStateManager */
 
-	std::array<std::bitset<16>, PortCount()> &PortsUsageStates()
+	class UsageStateManager
 	{
-		static std::array<std::bitset<16>, PortCount()> o{};
-		return o;
-	}
+	private:
+		UsageStateManager() = default;
 
-	PREINIT(PortsUsageStates)
+		std::array<std::bitset<16>, PortCount()> _states{};
+		std::shared_ptr<base::IMutex> _lock = base::CreateIMutex();
 
-	bool IsUsed(base::gpio::PortEnum port, uint32_t pin)
-	{
-		return PortsUsageStates()[static_cast<int>(port)][pin];
-	}
-
-	void SetAsUsed(base::gpio::PortEnum port, uint32_t pin)
-	{
-		if (static_cast<int>(port) >= PortCount())
+	public:
+		static UsageStateManager &Instance()
 		{
-			throw std::invalid_argument{CODE_POS_STR};
+			static UsageStateManager o;
+			return o;
 		}
 
-		PortsUsageStates()[static_cast<int>(port)][pin] = true;
-	}
-
-	void SetAsUnused(base::gpio::PortEnum port, uint32_t pin)
-	{
-		if (static_cast<int>(port) >= PortCount())
+		bool IsUsed(base::gpio::PortEnum port, uint32_t pin)
 		{
-			throw std::invalid_argument{CODE_POS_STR};
+			if (static_cast<int>(port) >= PortCount())
+			{
+				throw std::invalid_argument{CODE_POS_STR};
+			}
+
+			base::LockGuard g{*_lock};
+			return _states[static_cast<int>(port)][pin];
 		}
 
-		PortsUsageStates()[static_cast<int>(port)][pin] = false;
-	}
+		void SetAsUsed(base::gpio::PortEnum port, uint32_t pin)
+		{
+			if (static_cast<int>(port) >= PortCount())
+			{
+				throw std::invalid_argument{CODE_POS_STR};
+			}
+
+			base::LockGuard g{*_lock};
+			_states[static_cast<int>(port)][pin] = true;
+		}
+
+		void SetAsUnused(base::gpio::PortEnum port, uint32_t pin)
+		{
+			if (static_cast<int>(port) >= PortCount())
+			{
+				throw std::invalid_argument{CODE_POS_STR};
+			}
+
+			base::LockGuard g{*_lock};
+			_states[static_cast<int>(port)][pin] = false;
+		}
+	};
+
+	PREINIT(UsageStateManager::Instance)
 
 	/* #endregion */
 
@@ -102,12 +123,12 @@ base::gpio::gpio_pin_handle::gpio_pin_handle(base::gpio::PortEnum port,
 	_port_enum = port;
 	_port = ToPort(port);
 	_pin = pin;
-	SetAsUsed(port, pin);
+	UsageStateManager::Instance().SetAsUsed(port, pin);
 }
 
 base::gpio::gpio_pin_handle::~gpio_pin_handle()
 {
-	SetAsUnused(_port_enum, _pin);
+	UsageStateManager::Instance().SetAsUnused(_port_enum, _pin);
 }
 
 /* #region 打开函数 */
@@ -117,7 +138,7 @@ base::gpio::sp_gpio_pin_handle base::gpio::open_as_input_mode(base::gpio::PortEn
 															  base::gpio::PullMode pull_mode,
 															  base::gpio::TriggerEdge trigger_edge)
 {
-	if (IsUsed(port, pin))
+	if (UsageStateManager::Instance().IsUsed(port, pin))
 	{
 		throw std::runtime_error{CODE_POS_STR + "此设备被占用"};
 	}
