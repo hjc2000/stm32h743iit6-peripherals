@@ -26,7 +26,8 @@ namespace bsp
 		std::shared_ptr<base::IBinarySemaphore> _sending_completion_signal = base::CreateIBinarySemaphore(false);
 		std::shared_ptr<base::IBinarySemaphore> _receiving_completion_signal = base::CreateIBinarySemaphore(false);
 		std::shared_ptr<base::IMutex> _read_lock = base::CreateIMutex();
-
+		DMA_HandleTypeDef _rx_dma_handle{};
+		DMA_HandleTypeDef _tx_dma_handle{};
 		base::serial::Direction _direction;
 		uint32_t _baud_rate;
 		uint8_t _data_bits;
@@ -36,7 +37,8 @@ namespace bsp
 
 		/* #region 初始化 */
 		void InitializeGpio();
-		void InitializeDma();
+		void InitializeRxDma();
+		void InitializeTxDma();
 		void InitializeUart();
 		void InitializeInterrupt();
 		/* #endregion */

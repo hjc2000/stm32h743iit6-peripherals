@@ -12,11 +12,6 @@ namespace
 						base::dma::MemoryDataAlignment const &memory_data_alignment,
 						base::dma::Priority priority)
 	{
-		handle.Init.Mode = DMA_NORMAL;
-		handle.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-		handle.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
-		handle.Init.MemBurst = DMA_MBURST_SINGLE;
-		handle.Init.PeriphBurst = DMA_PBURST_SINGLE;
 
 		if (peripheral_increment == base::dma::PeripheralIncrement::Increase)
 		{

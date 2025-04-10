@@ -33,13 +33,14 @@ void bsp::Serial::InitializeGpio()
 	}
 }
 
-void bsp::Serial::InitializeDma()
+void bsp::Serial::InitializeRxDma()
 {
-	// 初始化发送 DMA
-	base::dma::OpenForSerialSending(&bsp::dma::Dma1Stream0::Instance(), this);
-
-	// 初始化接收 DMA
 	base::dma::OpenForSerialReceiving(&bsp::dma::Dma1Stream1::Instance(), this);
+}
+
+void bsp::Serial::InitializeTxDma()
+{
+	base::dma::OpenForSerialSending(&bsp::dma::Dma1Stream0::Instance(), this);
 }
 
 void bsp::Serial::InitializeUart()
@@ -327,7 +328,8 @@ void bsp::Serial::Open(base::serial::Direction direction,
 	 */
 	_sending_completion_signal->Release();
 	InitializeGpio();
-	InitializeDma();
+	InitializeRxDma();
+	InitializeTxDma();
 	InitializeUart();
 	InitializeInterrupt();
 }
