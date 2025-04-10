@@ -5,8 +5,6 @@
 
 #include "PA/GpioPinPA0.h"
 #include "PA/GpioPinPA1.h"
-#include "PA/GpioPinPA10.h"
-#include "PA/GpioPinPA9.h"
 
 /* #endregion */
 
@@ -119,8 +117,6 @@ namespace
 
 			AddPin(bsp::GpioPinPA0::Instance());
 			AddPin(bsp::GpioPinPA1::Instance());
-			AddPin(bsp::GpioPinPA9::Instance());
-			AddPin(bsp::GpioPinPA10::Instance());
 
 			/* #endregion */
 

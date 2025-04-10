@@ -1,5 +1,7 @@
 #pragma once
 #include "base/define.h"
+#include "base/peripheral/gpio_parameter.h"
+#include "base/peripheral/GpioPin.h"
 #include "base/peripheral/ISerial.h"
 #include "base/string/define.h"
 #include "base/task/IBinarySemaphore.h"
@@ -22,6 +24,8 @@ namespace bsp
 		std::shared_ptr<base::IMutex> _read_lock = base::CreateIMutex();
 		DMA_HandleTypeDef _rx_dma_handle{};
 		DMA_HandleTypeDef _tx_dma_handle{};
+		base::gpio::GpioPin _pa9{base::gpio::PortEnum::PortA, 9};
+		base::gpio::GpioPin _pa10{base::gpio::PortEnum::PortA, 10};
 		base::serial::Direction _direction;
 		uint32_t _baud_rate;
 		uint8_t _data_bits;
