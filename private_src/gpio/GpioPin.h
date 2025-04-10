@@ -1,5 +1,5 @@
 #pragma once
-#include "gpio.h"
+#include "gpio.h" // IWYU pragma: export
 #include <base/define.h>
 #include <bsp-interface/di/gpio.h>
 #include <bsp-interface/di/interrupt.h>
