@@ -274,6 +274,7 @@ base::gpio::gpio_pin_handle::gpio_pin_handle(base::gpio::PortEnum port, uint32_t
 	_port_enum = port;
 	_port = ToPort(port);
 	_pin = pin;
+	_pin_define = ToPinDefineValue(pin);
 	UsageStateManager::Instance().SetAsUsed(port, pin);
 }
 
@@ -335,7 +336,7 @@ void base::gpio::gpio_pin_handle::initialize_as_input_mode(base::gpio::PullMode 
 	}
 
 	def.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	def.Pin = ToPinDefineValue(_pin);
+	def.Pin = _pin_define;
 	HAL_GPIO_Init(_port, &def);
 }
 
@@ -383,7 +384,7 @@ void base::gpio::gpio_pin_handle::initialize_as_output_mode(base::gpio::PullMode
 	}
 
 	def.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	def.Pin = ToPinDefineValue(_pin);
+	def.Pin = _pin_define;
 	HAL_GPIO_Init(_port, &def);
 }
 
@@ -434,11 +435,50 @@ void base::gpio::gpio_pin_handle::initialize_as_alternate_function_mode(base::gp
 	}
 
 	def.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	def.Pin = ToPinDefineValue(_pin);
+	def.Pin = _pin_define;
 	HAL_GPIO_Init(_port, &def);
 }
 
 /* #endregion */
+
+/* #region 读写引脚方法 */
+
+bool base::gpio::gpio_pin_handle::read_pin()
+{
+	GPIO_PinState pin_state = HAL_GPIO_ReadPin(_port, _pin_define);
+	if (pin_state == GPIO_PinState::GPIO_PIN_SET)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void base::gpio::gpio_pin_handle::write_pin(bool value)
+{
+	GPIO_PinState state = value ? GPIO_PinState::GPIO_PIN_SET : GPIO_PinState::GPIO_PIN_RESET;
+	HAL_GPIO_WritePin(_port, _pin_define, state);
+}
+
+void base::gpio::gpio_pin_handle::toggle_pin()
+{
+	HAL_GPIO_TogglePin(_port, _pin_define);
+}
+
+/* #endregion */
+
+//
+// 上方是 gpio_pin_handle 类的实现。
+//
+//
+//
+//
+//
+//
+//
+//
+// 下面开始是全局的接口函数
+//
 
 base::gpio::sp_gpio_pin_handle base::gpio::open(base::gpio::PortEnum port, uint32_t pin)
 {
@@ -474,9 +514,24 @@ void base::gpio::initialize_as_alternate_function_mode(base::gpio::sp_gpio_pin_h
 
 std::string base::gpio::pin_name(base::gpio::sp_gpio_pin_handle const &h);
 
-bool base::gpio::read_pin(base::gpio::sp_gpio_pin_handle const &h);
-void base::gpio::write_pin(base::gpio::sp_gpio_pin_handle const &h, bool value);
-void base::gpio::toggle_pin(base::gpio::sp_gpio_pin_handle const &h);
+/* #region 全局读写引脚函数 */
+
+bool base::gpio::read_pin(base::gpio::sp_gpio_pin_handle const &h)
+{
+	return h->read_pin();
+}
+
+void base::gpio::write_pin(base::gpio::sp_gpio_pin_handle const &h, bool value)
+{
+	h->write_pin(value);
+}
+
+void base::gpio::toggle_pin(base::gpio::sp_gpio_pin_handle const &h)
+{
+	h->toggle_pin();
+}
+
+/* #endregion */
 
 ///
 /// @brief 注册中断回调函数。

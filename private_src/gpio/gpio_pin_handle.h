@@ -9,6 +9,7 @@ private:
 	base::gpio::PortEnum _port_enum{};
 	GPIO_TypeDef *_port = nullptr;
 	uint32_t _pin = 0;
+	uint32_t _pin_define = 0;
 
 	/* #region 初始化帮助方法 */
 
@@ -35,4 +36,8 @@ public:
 											   base::gpio::DriveMode drive_mode);
 
 	/* #endregion */
+
+	bool read_pin();
+	void write_pin(bool value);
+	void toggle_pin();
 };
