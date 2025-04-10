@@ -11,7 +11,7 @@ namespace
 	class DictionaryProvider
 	{
 	private:
-		void Add(base::serial::ISerial *o)
+		void Add(base::AutoPtr<base::serial::ISerial> o)
 		{
 			_dic.Add(o->Name(), o);
 		}
@@ -22,14 +22,14 @@ namespace
 			Add(&bsp::Serial::Instance());
 		}
 
-		base::Dictionary<std::string, base::serial::ISerial *> _dic{};
+		base::Dictionary<std::string, base::AutoPtr<base::serial::ISerial>> _dic{};
 	};
 
 } // namespace
 
 PREINIT(base::serial::SerialCollection);
 
-base::IDictionary<std::string, base::serial::ISerial *> const &base::serial::SerialCollection()
+base::IDictionary<std::string, base::AutoPtr<base::serial::ISerial>> const &base::serial::SerialCollection()
 {
 	static DictionaryProvider o{};
 	return o._dic;
