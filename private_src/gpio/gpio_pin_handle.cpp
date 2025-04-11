@@ -252,11 +252,9 @@ uint32_t base::gpio::gpio_pin_handle::get_alternate_function_define_value(base::
 		}
 	default:
 		{
-			break;
+			return 0;
 		}
 	}
-
-	throw std::runtime_error{CODE_POS_STR + "不支持的复用功能。"};
 }
 
 /* #endregion */
