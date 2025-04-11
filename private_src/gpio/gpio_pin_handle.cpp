@@ -244,20 +244,11 @@ uint32_t base::gpio::gpio_pin_handle::get_alternate_function_define_value(base::
 	{
 	case base::gpio::AlternateFunction::UART:
 		{
-			if (_port == GPIOA)
-			{
-				if (_pin == 9)
-				{
-					return GPIO_AF7_USART1;
-				}
-
-				if (_pin == 10)
-				{
-					return GPIO_AF7_USART1;
-				}
-			}
-
-			break;
+			return GPIO_AF7_USART1;
+		}
+	case base::gpio::AlternateFunction::SDRAM:
+		{
+			return GPIO_AF12_FMC;
 		}
 	default:
 		{
