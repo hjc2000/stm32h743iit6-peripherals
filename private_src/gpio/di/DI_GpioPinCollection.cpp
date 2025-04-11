@@ -26,14 +26,11 @@
 
 /* #region PD */
 
-#include "PD/GpioPinPD10.h"
 #include "PD/GpioPinPD11.h"
 #include "PD/GpioPinPD14.h"
 #include "PD/GpioPinPD15.h"
 #include "PD/GpioPinPD4.h"
 #include "PD/GpioPinPD5.h"
-#include "PD/GpioPinPD8.h"
-#include "PD/GpioPinPD9.h"
 
 /* #endregion */
 
@@ -135,9 +132,6 @@ namespace
 
 			AddPin(bsp::GpioPinPD4::Instance());
 			AddPin(bsp::GpioPinPD5::Instance());
-			AddPin(bsp::GpioPinPD8::Instance());
-			AddPin(bsp::GpioPinPD9::Instance());
-			AddPin(bsp::GpioPinPD10::Instance());
 			AddPin(bsp::GpioPinPD11::Instance());
 			AddPin(bsp::GpioPinPD14::Instance());
 			AddPin(bsp::GpioPinPD15::Instance());
