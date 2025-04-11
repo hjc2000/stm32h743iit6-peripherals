@@ -2,7 +2,6 @@
 #include "base/define.h"
 #include "base/peripheral/ISerial.h"
 #include "base/string/define.h"
-#include "bsp-interface/di/gpio.h"
 #include "bsp-interface/di/interrupt.h"
 
 /* #region 初始化 */
@@ -12,18 +11,14 @@ void bsp::Serial::InitializeGpio()
 	__HAL_RCC_USART1_CLK_ENABLE();
 
 	// 发送引脚 PA9
-	{
-		_pa9.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::UART,
-											   base::gpio::PullMode::PullUp,
-											   base::gpio::DriveMode::PushPull);
-	}
+	_pa9.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::UART,
+										   base::gpio::PullMode::PullUp,
+										   base::gpio::DriveMode::PushPull);
 
 	// 接收引脚 PA10
-	{
-		_pa10.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::UART,
-												base::gpio::PullMode::PullUp,
-												base::gpio::DriveMode::PushPull);
-	}
+	_pa10.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::UART,
+											base::gpio::PullMode::PullUp,
+											base::gpio::DriveMode::PushPull);
 }
 
 void bsp::Serial::InitializeRxDma()
