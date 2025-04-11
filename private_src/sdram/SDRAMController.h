@@ -1,4 +1,6 @@
 #pragma once
+#include "base/peripheral/gpio_parameter.h"
+#include "base/peripheral/GpioPin.h"
 #include <base/define.h>
 #include <bsp-interface/di/sdram.h>
 #include <hal.h>
@@ -13,6 +15,7 @@ namespace bsp
 		SDRAMController() = default;
 
 		SDRAM_HandleTypeDef _handle{};
+		base::gpio::GpioPin _pc0{base::gpio::PortEnum::PortC, 0};
 		std::shared_ptr<bsp::sdram::ISDRAMTiming> _timing;
 
 		uint8_t mpu_set_protection(uint32_t baseaddr,

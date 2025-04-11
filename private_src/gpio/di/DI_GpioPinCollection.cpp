@@ -19,7 +19,6 @@
 
 /* #region PC */
 
-#include "PC/GpioPinPC0.h"
 #include "PC/GpioPinPC1.h"
 #include "PC/GpioPinPC2.h"
 #include "PC/GpioPinPC3.h"
@@ -131,7 +130,6 @@ namespace
 
 			/* #region PC */
 
-			AddPin(bsp::GpioPinPC0::Instance());
 			AddPin(bsp::GpioPinPC1::Instance());
 			AddPin(bsp::GpioPinPC2::Instance());
 			AddPin(bsp::GpioPinPC3::Instance());
