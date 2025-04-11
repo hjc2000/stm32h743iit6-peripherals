@@ -43,17 +43,11 @@
 
 /* #region PF */
 
-#include "PF/GpioPinPF0.h"
-#include "PF/GpioPinPF1.h"
 #include "PF/GpioPinPF11.h"
 #include "PF/GpioPinPF12.h"
 #include "PF/GpioPinPF13.h"
 #include "PF/GpioPinPF14.h"
 #include "PF/GpioPinPF15.h"
-#include "PF/GpioPinPF2.h"
-#include "PF/GpioPinPF3.h"
-#include "PF/GpioPinPF4.h"
-#include "PF/GpioPinPF5.h"
 
 /* #endregion */
 
@@ -134,12 +128,6 @@ namespace
 
 			/* #region PF */
 
-			AddPin(bsp::GpioPinPF0::Instance());
-			AddPin(bsp::GpioPinPF1::Instance());
-			AddPin(bsp::GpioPinPF2::Instance());
-			AddPin(bsp::GpioPinPF3::Instance());
-			AddPin(bsp::GpioPinPF4::Instance());
-			AddPin(bsp::GpioPinPF5::Instance());
 			AddPin(bsp::GpioPinPF11::Instance());
 			AddPin(bsp::GpioPinPF12::Instance());
 			AddPin(bsp::GpioPinPF13::Instance());
