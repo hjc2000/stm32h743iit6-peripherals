@@ -7,7 +7,7 @@ void bsp::SDRAMController::InitializeGPIO()
 {
 	for (auto &pin : _pins)
 	{
-		pin.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::SDRAM,
+		pin.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::SDRAM1,
 											  base::gpio::PullMode::PullUp,
 											  base::gpio::DriveMode::PushPull);
 	}

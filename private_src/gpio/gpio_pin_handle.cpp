@@ -242,15 +242,15 @@ uint32_t base::gpio::gpio_pin_handle::get_alternate_function_define_value(base::
 {
 	switch (af)
 	{
-	case base::gpio::AlternateFunction::UART:
+	case base::gpio::AlternateFunction::UART1:
 		{
 			return GPIO_AF7_USART1;
 		}
-	case base::gpio::AlternateFunction::SDRAM:
+	case base::gpio::AlternateFunction::SDRAM1:
 		{
 			return GPIO_AF12_FMC;
 		}
-	case base::gpio::AlternateFunction::TIMER:
+	case base::gpio::AlternateFunction::TIMER3:
 		{
 			return GPIO_AF2_TIM3;
 		}

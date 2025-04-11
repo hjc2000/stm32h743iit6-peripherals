@@ -1,6 +1,5 @@
 #include "Serial.h"
 #include "base/define.h"
-#include "base/peripheral/ISerial.h"
 #include "base/string/define.h"
 #include "bsp-interface/di/interrupt.h"
 
@@ -11,12 +10,12 @@ void bsp::Serial::InitializeGpio()
 	__HAL_RCC_USART1_CLK_ENABLE();
 
 	// 发送引脚 PA9
-	_pa9.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::UART,
+	_pa9.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::UART1,
 										   base::gpio::PullMode::PullUp,
 										   base::gpio::DriveMode::PushPull);
 
 	// 接收引脚 PA10
-	_pa10.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::UART,
+	_pa10.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::UART1,
 											base::gpio::PullMode::PullUp,
 											base::gpio::DriveMode::PushPull);
 }
