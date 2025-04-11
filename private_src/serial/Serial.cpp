@@ -13,14 +13,14 @@ void bsp::Serial::InitializeGpio()
 
 	// 发送引脚 PA9
 	{
-		_pa9.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::UART1,
+		_pa9.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::UART,
 											   base::gpio::PullMode::PullUp,
 											   base::gpio::DriveMode::PushPull);
 	}
 
 	// 接收引脚 PA10
 	{
-		_pa10.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::UART1,
+		_pa10.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::UART,
 												base::gpio::PullMode::PullUp,
 												base::gpio::DriveMode::PushPull);
 	}

@@ -241,7 +241,7 @@ uint32_t base::gpio::gpio_pin_handle::get_alternate_function_define_value(base::
 {
 	switch (af)
 	{
-	case base::gpio::AlternateFunction::UART1:
+	case base::gpio::AlternateFunction::UART:
 		{
 			if (_port == GPIOA)
 			{
