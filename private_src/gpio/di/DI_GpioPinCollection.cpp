@@ -34,12 +34,6 @@
 
 /* #region PE */
 
-#include "PE/GpioPinPE10.h"
-#include "PE/GpioPinPE11.h"
-#include "PE/GpioPinPE12.h"
-#include "PE/GpioPinPE13.h"
-#include "PE/GpioPinPE14.h"
-#include "PE/GpioPinPE15.h"
 #include "PE/GpioPinPE2.h"
 #include "PE/GpioPinPE3.h"
 #include "PE/GpioPinPE4.h"
@@ -135,12 +129,6 @@ namespace
 			AddPin(bsp::GpioPinPE3::Instance());
 			AddPin(bsp::GpioPinPE4::Instance());
 			AddPin(bsp::GpioPinPE5::Instance());
-			AddPin(bsp::GpioPinPE10::Instance());
-			AddPin(bsp::GpioPinPE11::Instance());
-			AddPin(bsp::GpioPinPE12::Instance());
-			AddPin(bsp::GpioPinPE13::Instance());
-			AddPin(bsp::GpioPinPE14::Instance());
-			AddPin(bsp::GpioPinPE15::Instance());
 
 			/* #endregion */
 

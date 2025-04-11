@@ -13,7 +13,6 @@ void bsp::SDRAMController::InitializeGPIO()
 	}
 
 	char const *pin_names[] = {
-		"PE10", "PE11", "PE12", "PE13", "PE14", "PE15",
 		"PF0", "PF1", "PF2", "PF3", "PF4", "PF5", "PF11", "PF12", "PF13", "PF14", "PF15",
 		"PG0", "PG1", "PG2", "PG4", "PG5", "PG8", "PG15"};
 
