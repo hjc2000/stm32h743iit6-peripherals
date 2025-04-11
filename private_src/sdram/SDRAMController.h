@@ -50,6 +50,9 @@ namespace bsp
 			base::gpio::GpioPin{base::gpio::PortEnum::PortF, 13},
 			base::gpio::GpioPin{base::gpio::PortEnum::PortF, 14},
 			base::gpio::GpioPin{base::gpio::PortEnum::PortF, 15},
+			base::gpio::GpioPin{base::gpio::PortEnum::PortG, 0},
+			base::gpio::GpioPin{base::gpio::PortEnum::PortG, 1},
+			base::gpio::GpioPin{base::gpio::PortEnum::PortG, 2},
 		};
 
 		std::shared_ptr<bsp::sdram::ISDRAMTiming> _timing;
