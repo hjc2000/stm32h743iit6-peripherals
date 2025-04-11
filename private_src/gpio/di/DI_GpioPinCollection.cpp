@@ -27,8 +27,6 @@
 /* #region PD */
 
 #include "PD/GpioPinPD11.h"
-#include "PD/GpioPinPD14.h"
-#include "PD/GpioPinPD15.h"
 #include "PD/GpioPinPD4.h"
 #include "PD/GpioPinPD5.h"
 
@@ -36,8 +34,6 @@
 
 /* #region PE */
 
-#include "PE/GpioPinPE0.h"
-#include "PE/GpioPinPE1.h"
 #include "PE/GpioPinPE10.h"
 #include "PE/GpioPinPE11.h"
 #include "PE/GpioPinPE12.h"
@@ -48,9 +44,6 @@
 #include "PE/GpioPinPE3.h"
 #include "PE/GpioPinPE4.h"
 #include "PE/GpioPinPE5.h"
-#include "PE/GpioPinPE7.h"
-#include "PE/GpioPinPE8.h"
-#include "PE/GpioPinPE9.h"
 
 /* #endregion */
 
@@ -133,22 +126,15 @@ namespace
 			AddPin(bsp::GpioPinPD4::Instance());
 			AddPin(bsp::GpioPinPD5::Instance());
 			AddPin(bsp::GpioPinPD11::Instance());
-			AddPin(bsp::GpioPinPD14::Instance());
-			AddPin(bsp::GpioPinPD15::Instance());
 
 			/* #endregion */
 
 			/* #region PE */
 
-			AddPin(bsp::GpioPinPE0::Instance());
-			AddPin(bsp::GpioPinPE1::Instance());
 			AddPin(bsp::GpioPinPE2::Instance());
 			AddPin(bsp::GpioPinPE3::Instance());
 			AddPin(bsp::GpioPinPE4::Instance());
 			AddPin(bsp::GpioPinPE5::Instance());
-			AddPin(bsp::GpioPinPE7::Instance());
-			AddPin(bsp::GpioPinPE8::Instance());
-			AddPin(bsp::GpioPinPE9::Instance());
 			AddPin(bsp::GpioPinPE10::Instance());
 			AddPin(bsp::GpioPinPE11::Instance());
 			AddPin(bsp::GpioPinPE12::Instance());
