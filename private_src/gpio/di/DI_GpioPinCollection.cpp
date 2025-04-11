@@ -41,16 +41,6 @@
 
 /* #endregion */
 
-/* #region PF */
-
-#include "PF/GpioPinPF11.h"
-#include "PF/GpioPinPF12.h"
-#include "PF/GpioPinPF13.h"
-#include "PF/GpioPinPF14.h"
-#include "PF/GpioPinPF15.h"
-
-/* #endregion */
-
 /* #region PG */
 
 #include "PG/GpioPinPG0.h"
@@ -123,16 +113,6 @@ namespace
 			AddPin(bsp::GpioPinPE3::Instance());
 			AddPin(bsp::GpioPinPE4::Instance());
 			AddPin(bsp::GpioPinPE5::Instance());
-
-			/* #endregion */
-
-			/* #region PF */
-
-			AddPin(bsp::GpioPinPF11::Instance());
-			AddPin(bsp::GpioPinPF12::Instance());
-			AddPin(bsp::GpioPinPF13::Instance());
-			AddPin(bsp::GpioPinPF14::Instance());
-			AddPin(bsp::GpioPinPF15::Instance());
 
 			/* #endregion */
 
