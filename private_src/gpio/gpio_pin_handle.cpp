@@ -250,6 +250,10 @@ uint32_t base::gpio::gpio_pin_handle::get_alternate_function_define_value(base::
 		{
 			return GPIO_AF12_FMC;
 		}
+	case base::gpio::AlternateFunction::TIMER:
+		{
+			return GPIO_AF2_TIM3;
+		}
 	default:
 		{
 			return 0;

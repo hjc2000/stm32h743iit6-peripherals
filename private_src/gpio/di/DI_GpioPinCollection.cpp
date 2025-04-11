@@ -10,8 +10,6 @@
 
 /* #region PB */
 
-#include "PB/GpioPinPB0.h"
-#include "PB/GpioPinPB1.h"
 #include "PB/GpioPinPB12.h"
 #include "PB/GpioPinPB5.h"
 
@@ -78,8 +76,6 @@ namespace
 
 			/* #region PB */
 
-			AddPin(bsp::GpioPinPB0::Instance());
-			AddPin(bsp::GpioPinPB1::Instance());
 			AddPin(bsp::GpioPinPB5::Instance());
 			AddPin(bsp::GpioPinPB12::Instance());
 
