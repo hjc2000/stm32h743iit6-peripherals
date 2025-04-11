@@ -26,8 +26,6 @@
 
 /* #region PD */
 
-#include "PD/GpioPinPD0.h"
-#include "PD/GpioPinPD1.h"
 #include "PD/GpioPinPD10.h"
 #include "PD/GpioPinPD11.h"
 #include "PD/GpioPinPD14.h"
@@ -135,8 +133,6 @@ namespace
 
 			/* #region PD */
 
-			AddPin(bsp::GpioPinPD0::Instance());
-			AddPin(bsp::GpioPinPD1::Instance());
 			AddPin(bsp::GpioPinPD4::Instance());
 			AddPin(bsp::GpioPinPD5::Instance());
 			AddPin(bsp::GpioPinPD8::Instance());
