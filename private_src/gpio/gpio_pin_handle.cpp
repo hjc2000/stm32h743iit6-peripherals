@@ -4,6 +4,7 @@
 #include "base/peripheral/gpio_parameter.h"
 #include "base/string/define.h"
 #include "base/task/IMutex.h"
+#include "bsp-interface/di/interrupt.h"
 #include "stm32h7xx_hal_gpio.h"
 #include <array>
 #include <bitset>
@@ -467,6 +468,20 @@ void base::gpio::gpio_pin_handle::toggle_pin()
 
 /* #endregion */
 
+/* #region 中断回调 */
+
+void base::gpio::gpio_pin_handle::register_interrupt_callback(std::function<void()> const &callback_func)
+{
+	bsp::di::interrupt::ExtiManager().Register(_pin, callback_func);
+}
+
+void base::gpio::gpio_pin_handle::unregister_interrupt_callback()
+{
+	bsp::di::interrupt::ExtiManager().Unregister(_pin);
+}
+
+/* #endregion */
+
 //
 // 上方是 gpio_pin_handle 类的实现。
 //
@@ -533,17 +548,17 @@ void base::gpio::toggle_pin(base::gpio::sp_gpio_pin_handle const &h)
 
 /* #endregion */
 
-///
-/// @brief 注册中断回调函数。
-///
-/// @param h
-/// @param callback_func
-///
-void base::gpio::register_interrupt_callback(base::gpio::sp_gpio_pin_handle const &h, std::function<void()> callback_func);
+/* #region 中断回调 */
 
-///
-/// @brief 取消注册中断回调函数。
-///
-/// @param h
-///
-void base::gpio::unregister_interrupt_callback(base::gpio::sp_gpio_pin_handle const &h);
+void base::gpio::register_interrupt_callback(base::gpio::sp_gpio_pin_handle const &h,
+											 std::function<void()> const &callback_func)
+{
+	h->register_interrupt_callback(callback_func);
+}
+
+void base::gpio::unregister_interrupt_callback(base::gpio::sp_gpio_pin_handle const &h)
+{
+	h->unregister_interrupt_callback();
+}
+
+/* #endregion */
