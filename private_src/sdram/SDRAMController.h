@@ -4,6 +4,7 @@
 #include <base/define.h>
 #include <bsp-interface/di/sdram.h>
 #include <hal.h>
+#include <vector>
 
 namespace bsp
 {
@@ -15,7 +16,15 @@ namespace bsp
 		SDRAMController() = default;
 
 		SDRAM_HandleTypeDef _handle{};
-		base::gpio::GpioPin _pc0{base::gpio::PortEnum::PortC, 0};
+
+		std::vector<base::gpio::GpioPin> _pins{
+			base::gpio::GpioPin{base::gpio::PortEnum::PortC, 0},
+			base::gpio::GpioPin{base::gpio::PortEnum::PortC, 2},
+			base::gpio::GpioPin{base::gpio::PortEnum::PortC, 3},
+			base::gpio::GpioPin{base::gpio::PortEnum::PortD, 0},
+			base::gpio::GpioPin{base::gpio::PortEnum::PortD, 1},
+		};
+
 		std::shared_ptr<bsp::sdram::ISDRAMTiming> _timing;
 
 		uint8_t mpu_set_protection(uint32_t baseaddr,
