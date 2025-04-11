@@ -44,10 +44,6 @@
 /* #region PG */
 
 #include "PG/GpioPinPG12.h"
-#include "PG/GpioPinPG15.h"
-#include "PG/GpioPinPG4.h"
-#include "PG/GpioPinPG5.h"
-#include "PG/GpioPinPG8.h"
 
 /* #endregion */
 
@@ -115,11 +111,7 @@ namespace
 
 			/* #region PG */
 
-			AddPin(bsp::GpioPinPG4::Instance());
-			AddPin(bsp::GpioPinPG5::Instance());
-			AddPin(bsp::GpioPinPG8::Instance());
 			AddPin(bsp::GpioPinPG12::Instance());
-			AddPin(bsp::GpioPinPG15::Instance());
 
 			/* #endregion */
 

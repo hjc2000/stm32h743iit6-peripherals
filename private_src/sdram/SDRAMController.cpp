@@ -11,18 +11,6 @@ void bsp::SDRAMController::InitializeGPIO()
 											  base::gpio::PullMode::PullUp,
 											  base::gpio::DriveMode::PushPull);
 	}
-
-	char const *pin_names[] = {
-		"PG4", "PG5", "PG8", "PG15"};
-
-	for (char const *pin_name : pin_names)
-	{
-		bsp::IGpioPin *pin = DI_GpioPinCollection().Get(pin_name);
-
-		pin->OpenAsAlternateFunctionMode("fmc",
-										 bsp::IGpioPinPullMode::PullUp,
-										 bsp::IGpioPinDriver::PushPull);
-	}
 }
 
 void bsp::SDRAMController::StartAutoSendingAutoRefreshCommand(bsp::sdram::ISDRAMTiming const &timing)
