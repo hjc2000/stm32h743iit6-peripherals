@@ -1,3 +1,4 @@
+#include "base/RentedPtrFactory.h"
 #include "serial_handle.h" // IWYU pragma: keep
 
 ///
@@ -8,7 +9,10 @@
 ///
 /// @return base::serial::sp_serial_handle
 ///
-base::serial::sp_serial_handle open(int serial_id);
+base::serial::sp_serial_handle open(int serial_id)
+{
+	return base::RentedPtrFactory::Create(&base::serial::serial_handle::Instance());
+}
 
 ///
 /// @brief 启动串口。
@@ -27,17 +31,17 @@ void start(base::serial::sp_serial_handle const &h,
 		   base::serial::DataBits const &data_bits,
 		   base::serial::Parity parity,
 		   base::serial::StopBits stop_bits,
-		   base::serial::HardwareFlowControl hardware_flow_control);
+		   base::serial::HardwareFlowControl hardware_flow_control)
+{
+	h->Start(direction,
+			 baud_rate,
+			 data_bits,
+			 parity,
+			 stop_bits,
+			 hardware_flow_control);
+}
 
 /* #region 串口属性 */
-
-///
-/// @brief 获取串口名称。
-///
-/// @param h
-/// @return std::string
-///
-std::string name(base::serial::sp_serial_handle const &h);
 
 ///
 /// @brief 数据传输方向。
@@ -45,7 +49,10 @@ std::string name(base::serial::sp_serial_handle const &h);
 /// @param h
 /// @return base::serial::Direction
 ///
-base::serial::Direction direction(base::serial::sp_serial_handle const &h);
+base::serial::Direction direction(base::serial::sp_serial_handle const &h)
+{
+	return h->Direction();
+}
 
 ///
 /// @brief 波特率。
@@ -53,7 +60,10 @@ base::serial::Direction direction(base::serial::sp_serial_handle const &h);
 /// @param h
 /// @return uint32_t
 ///
-uint32_t baud_rate(base::serial::sp_serial_handle const &h);
+uint32_t baud_rate(base::serial::sp_serial_handle const &h)
+{
+	return h->BaudRate();
+}
 
 ///
 /// @brief 数据位的个数。
@@ -61,7 +71,10 @@ uint32_t baud_rate(base::serial::sp_serial_handle const &h);
 /// @param h
 /// @return uint8_t
 ///
-uint8_t data_bits(base::serial::sp_serial_handle const &h);
+uint8_t data_bits(base::serial::sp_serial_handle const &h)
+{
+	return h->DataBits();
+}
 
 ///
 /// @brief 校验位。
@@ -69,7 +82,10 @@ uint8_t data_bits(base::serial::sp_serial_handle const &h);
 /// @param h
 /// @return base::serial::Parity
 ///
-base::serial::Parity parity(base::serial::sp_serial_handle const &h);
+base::serial::Parity parity(base::serial::sp_serial_handle const &h)
+{
+	return h->Parity();
+}
 
 ///
 /// @brief 停止位个数。
@@ -77,7 +93,10 @@ base::serial::Parity parity(base::serial::sp_serial_handle const &h);
 /// @param h
 /// @return base::serial::StopBits
 ///
-base::serial::StopBits stop_bits(base::serial::sp_serial_handle const &h);
+base::serial::StopBits stop_bits(base::serial::sp_serial_handle const &h)
+{
+	return h->StopBits();
+}
 
 ///
 /// @brief 硬件流控。
@@ -85,7 +104,10 @@ base::serial::StopBits stop_bits(base::serial::sp_serial_handle const &h);
 /// @param h
 /// @return base::serial::HardwareFlowControl
 ///
-base::serial::HardwareFlowControl hardware_flow_control(base::serial::sp_serial_handle const &h);
+base::serial::HardwareFlowControl hardware_flow_control(base::serial::sp_serial_handle const &h)
+{
+	return h->HardwareFlowControl();
+}
 
 ///
 /// @brief 检查串口能否读。
@@ -94,7 +116,10 @@ base::serial::HardwareFlowControl hardware_flow_control(base::serial::sp_serial_
 /// @return true
 /// @return false
 ///
-bool can_read(base::serial::sp_serial_handle const &h);
+bool can_read(base::serial::sp_serial_handle const &h)
+{
+	return h->CanRead();
+}
 
 ///
 /// @brief 检查串口能否写。
@@ -103,7 +128,10 @@ bool can_read(base::serial::sp_serial_handle const &h);
 /// @return true
 /// @return false
 ///
-bool can_write(base::serial::sp_serial_handle const &h);
+bool can_write(base::serial::sp_serial_handle const &h)
+{
+	return h->CanWrite();
+}
 
 /* #endregion */
 
@@ -116,7 +144,10 @@ bool can_write(base::serial::sp_serial_handle const &h);
 /// @return int32_t 成功读取的字节数。永远不应该返回 0. 应该将本函数实现为等同 Stream
 /// 的 Read 方法。
 ///
-int32_t read(base::serial::sp_serial_handle const &h, base::Span const &span);
+int32_t read(base::serial::sp_serial_handle const &h, base::Span const &span)
+{
+	return h->Read(span);
+}
 
 ///
 /// @brief 向串口写入数据。
@@ -124,11 +155,16 @@ int32_t read(base::serial::sp_serial_handle const &h, base::Span const &span);
 /// @param h
 /// @param span
 ///
-void write(base::serial::sp_serial_handle const &h, base::ReadOnlySpan const &span);
+void write(base::serial::sp_serial_handle const &h, base::ReadOnlySpan const &span)
+{
+	h->Write(span);
+}
 
 ///
 /// @brief 冲洗串口。
 ///
 /// @param h
 ///
-void flush(base::serial::sp_serial_handle const &h);
+void flush(base::serial::sp_serial_handle const &h)
+{
+}
