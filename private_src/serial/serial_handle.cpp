@@ -1,8 +1,12 @@
 #include "serial_handle.h"
-#include "base/define.h"
 #include "base/peripheral/serial/serial_handle.h"
 #include "base/string/define.h"
 #include "bsp-interface/di/interrupt.h"
+
+namespace
+{
+	base::serial::serial_handle *_instance = nullptr;
+}
 
 /* #region 初始化 */
 
@@ -241,17 +245,17 @@ int32_t base::serial::serial_handle::HaveRead()
 
 void base::serial::serial_handle::OnReceiveEventCallback(UART_HandleTypeDef *huart, uint16_t pos)
 {
-	base::serial::serial_handle::Instance()._receiving_completion_signal->ReleaseFromISR();
+	_instance->_receiving_completion_signal->ReleaseFromISR();
 }
 
 void base::serial::serial_handle::OnSendCompleteCallback(UART_HandleTypeDef *huart)
 {
-	base::serial::serial_handle::Instance()._sending_completion_signal->ReleaseFromISR();
+	_instance->_sending_completion_signal->ReleaseFromISR();
 }
 
 void base::serial::serial_handle::OnReadTimeout(UART_HandleTypeDef *huart)
 {
-	serial_handle::Instance()._receiving_completion_signal->ReleaseFromISR();
+	_instance->_receiving_completion_signal->ReleaseFromISR();
 }
 
 /* #endregion */
@@ -312,14 +316,6 @@ void base::serial::serial_handle::Close()
 
 /* #endregion */
 
-PREINIT(base::serial::serial_handle::Instance);
-
-base::serial::serial_handle &base::serial::serial_handle::Instance()
-{
-	static base::serial::serial_handle o{};
-	return o;
-}
-
 void base::serial::serial_handle::Start(base::serial::Direction direction,
 										base::serial::BaudRate const &baud_rate,
 										base::serial::DataBits const &data_bits,
@@ -345,4 +341,9 @@ void base::serial::serial_handle::Start(base::serial::Direction direction,
 	InitializeTxDma();
 	InitializeUart();
 	InitializeInterrupt();
+}
+
+base::serial::serial_handle::serial_handle()
+{
+	_instance = this;
 }

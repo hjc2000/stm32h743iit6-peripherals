@@ -11,9 +11,7 @@
 
 class base::serial::serial_handle
 {
-private:
-	serial_handle() = default;
-
+public:
 	UART_HandleTypeDef _uart_handle{};
 	std::shared_ptr<base::IBinarySemaphore> _sending_completion_signal = base::CreateIBinarySemaphore(false);
 	std::shared_ptr<base::IBinarySemaphore> _receiving_completion_signal = base::CreateIBinarySemaphore(false);
@@ -49,8 +47,7 @@ private:
 
 	void SetReadTimeoutByBaudCount(uint32_t value);
 
-public:
-	static_function serial_handle &Instance();
+	serial_handle();
 
 	///
 	/// @brief 打开串口。
