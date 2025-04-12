@@ -13,9 +13,9 @@ void bsp::SDRAMController::InitializeGPIO()
 	}
 }
 
-void bsp::SDRAMController::StartAutoSendingAutoRefreshCommand(bsp::sdram::ISDRAMTiming const &timing)
+void bsp::SDRAMController::StartAutoSendingAutoRefreshCommand(base::sdram::sdram_timing const &timing)
 {
-	int refresh_count = timing.T_AutoRefreshCommand_CLK_Count() - 50;
+	int refresh_count = timing.auto_refresh_command_clock_count() - 50;
 	if (refresh_count < 50)
 	{
 		throw std::runtime_error{"FMC 的频率过低导致几乎一直都要处于发送自动刷新命令的状态。"};
@@ -32,7 +32,7 @@ bsp::SDRAMController &bsp::SDRAMController::Instance()
 	return o;
 }
 
-void bsp::SDRAMController::OpenAsReadBurstMode(bsp::sdram::ISDRAMTimingProvider const &timing_provider,
+void bsp::SDRAMController::OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
 											   bsp::sdram::property::BankCount const &bank_count,
 											   bsp::sdram::property::RowBitCount const &row_bit_count,
 											   bsp::sdram::property::ColumnBitCount const &column_bit_count,
@@ -157,7 +157,7 @@ void bsp::SDRAMController::OpenAsReadBurstMode(bsp::sdram::ISDRAMTimingProvider 
 		int hclk_div = 2;
 		_handle.Init.SDClockPeriod = FMC_SDRAM_CLOCK_PERIOD_2;
 
-		if (hclk_freq / hclk_div > timing_provider.MaxClkFrequency())
+		if (hclk_freq / hclk_div > timing_provider.MaxClockFrequency())
 		{
 			hclk_div = 3;
 			_handle.Init.SDClockPeriod = FMC_SDRAM_CLOCK_PERIOD_3;
@@ -166,7 +166,7 @@ void bsp::SDRAMController::OpenAsReadBurstMode(bsp::sdram::ISDRAMTimingProvider 
 		_timing = timing_provider.GetTiming(base::MHz{hclk_freq / hclk_div});
 	}
 
-	switch (_timing->CASLatency())
+	switch (_timing.cas_latency())
 	{
 	case 1:
 		{
@@ -190,17 +190,17 @@ void bsp::SDRAMController::OpenAsReadBurstMode(bsp::sdram::ISDRAMTimingProvider 
 	}
 
 	FMC_SDRAM_TimingTypeDef timing_def{};
-	timing_def.LoadToActiveDelay = _timing->T_RSC_CLK_Count();
-	timing_def.ExitSelfRefreshDelay = _timing->T_XSR_CLK_Count();
-	timing_def.SelfRefreshTime = _timing->T_RAS_CLK_Count();
-	timing_def.RowCycleDelay = _timing->T_RC_CLK_Count();
-	timing_def.WriteRecoveryTime = _timing->T_WR_CLK_Count();
-	timing_def.RPDelay = _timing->T_RP_CLK_Count();
-	timing_def.RCDDelay = _timing->T_RCD_CLK_Count();
+	timing_def.LoadToActiveDelay = _timing.t_rsc_clock_count();
+	timing_def.ExitSelfRefreshDelay = _timing.t_xsr_clock_count();
+	timing_def.SelfRefreshTime = _timing.t_ras_clock_count();
+	timing_def.RowCycleDelay = _timing.t_rc_clock_count();
+	timing_def.WriteRecoveryTime = _timing.t_wr_clock_count();
+	timing_def.RPDelay = _timing.t_rp_clock_count();
+	timing_def.RCDDelay = _timing.t_rcd_clock_count();
 
 	HAL_SDRAM_Init(&_handle, &timing_def);
 	PowerUp();
-	StartAutoSendingAutoRefreshCommand(*_timing);
+	StartAutoSendingAutoRefreshCommand(_timing);
 }
 
 void bsp::SDRAMController::PowerUp()
@@ -259,12 +259,7 @@ void bsp::SDRAMController::WriteModeRegister(uint32_t value)
 	}
 }
 
-bsp::sdram::ISDRAMTiming const &bsp::SDRAMController::Timing() const
+base::sdram::sdram_timing const &bsp::SDRAMController::Timing() const
 {
-	if (_timing == nullptr)
-	{
-		throw std::runtime_error{"要先打开 SDRAM 控制器才能获取所使用的时序。"};
-	}
-
-	return *_timing;
+	return _timing;
 }

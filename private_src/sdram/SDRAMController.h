@@ -1,6 +1,7 @@
 #pragma once
 #include "base/peripheral/gpio_parameter.h"
 #include "base/peripheral/GpioPin.h"
+#include "base/peripheral/sdram/sdram_timing.h"
 #include <base/define.h>
 #include <bsp-interface/di/sdram.h>
 #include <hal.h>
@@ -59,7 +60,7 @@ namespace bsp
 			base::gpio::GpioPin{base::gpio::PortEnum::PortG, 15},
 		};
 
-		std::shared_ptr<bsp::sdram::ISDRAMTiming> _timing;
+		base::sdram::sdram_timing _timing{};
 
 		uint8_t mpu_set_protection(uint32_t baseaddr,
 								   uint32_t size,
@@ -94,7 +95,7 @@ namespace bsp
 
 		/// @brief 开始自动发送 “自动刷新” 命令。
 		/// @param timing
-		void StartAutoSendingAutoRefreshCommand(bsp::sdram::ISDRAMTiming const &timing);
+		void StartAutoSendingAutoRefreshCommand(base::sdram::sdram_timing const &timing);
 
 	public:
 		static_function SDRAMController &Instance();
@@ -106,7 +107,7 @@ namespace bsp
 		/// @param column_bit_count
 		/// @param data_width
 		/// @param read_burst_length
-		virtual void OpenAsReadBurstMode(bsp::sdram::ISDRAMTimingProvider const &timing_provider,
+		virtual void OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
 										 bsp::sdram::property::BankCount const &bank_count,
 										 bsp::sdram::property::RowBitCount const &row_bit_count,
 										 bsp::sdram::property::ColumnBitCount const &column_bit_count,
@@ -128,7 +129,7 @@ namespace bsp
 
 		/// @brief 控制器被打开后所使用的时序。
 		/// @return
-		virtual bsp::sdram::ISDRAMTiming const &Timing() const override;
+		virtual base::sdram::sdram_timing const &Timing() const override;
 
 		/// @brief 此 SDRAM 控制器所管理的内存段的起始地址。打开 SDRAM 后，对着这个地址开始往后的内存区域
 		/// 读写数据即可读写 SDRAM 的内容。
