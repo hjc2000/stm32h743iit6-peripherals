@@ -17,7 +17,6 @@ namespace bsp
 	private:
 		Serial() = default;
 
-		bool _is_open = false;
 		UART_HandleTypeDef _uart_handle{};
 		std::shared_ptr<base::IBinarySemaphore> _sending_completion_signal = base::CreateIBinarySemaphore(false);
 		std::shared_ptr<base::IBinarySemaphore> _receiving_completion_signal = base::CreateIBinarySemaphore(false);
@@ -56,11 +55,6 @@ namespace bsp
 	public:
 		static_function Serial &Instance();
 
-		virtual std::string Name() const override
-		{
-			return "serial";
-		}
-
 		///
 		/// @brief 打开串口。
 		///
@@ -71,23 +65,12 @@ namespace bsp
 		/// @param stop_bits 停止位位数。
 		/// @param hardware_flow_control 硬件流控。
 		///
-		virtual void Open(base::serial::Direction direction,
-						  base::serial::BaudRate const &baud_rate,
-						  base::serial::DataBits const &data_bits,
-						  base::serial::Parity parity,
-						  base::serial::StopBits stop_bits,
-						  base::serial::HardwareFlowControl hardware_flow_control) override;
-
-		///
-		/// @brief 串口已经打开。
-		///
-		/// @return true 已经打开。
-		/// @return false 还没打开。
-		///
-		virtual bool IsOpen() const override
-		{
-			return _is_open;
-		}
+		virtual void Start(base::serial::Direction direction,
+						   base::serial::BaudRate const &baud_rate,
+						   base::serial::DataBits const &data_bits,
+						   base::serial::Parity parity,
+						   base::serial::StopBits stop_bits,
+						   base::serial::HardwareFlowControl hardware_flow_control) override;
 
 		/* #region 串口属性 */
 

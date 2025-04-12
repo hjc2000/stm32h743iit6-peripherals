@@ -13,7 +13,7 @@ namespace
 	private:
 		void Add(base::AutoPtr<base::serial::ISerial> o)
 		{
-			_dic.Add(o->Name(), o);
+			_dic.Add("serial", o);
 		}
 
 	public:

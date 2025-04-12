@@ -307,7 +307,6 @@ void bsp::Serial::Close()
 	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
 	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
 	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
-	_is_open = false;
 }
 
 /* #endregion */
@@ -320,20 +319,13 @@ bsp::Serial &bsp::Serial::Instance()
 	return o;
 }
 
-void bsp::Serial::Open(base::serial::Direction direction,
-					   base::serial::BaudRate const &baud_rate,
-					   base::serial::DataBits const &data_bits,
-					   base::serial::Parity parity,
-					   base::serial::StopBits stop_bits,
-					   base::serial::HardwareFlowControl hardware_flow_control)
+void bsp::Serial::Start(base::serial::Direction direction,
+						base::serial::BaudRate const &baud_rate,
+						base::serial::DataBits const &data_bits,
+						base::serial::Parity parity,
+						base::serial::StopBits stop_bits,
+						base::serial::HardwareFlowControl hardware_flow_control)
 {
-	if (_is_open)
-	{
-		return;
-	}
-
-	_is_open = true;
-
 	_direction = direction;
 	_baud_rate = baud_rate.Value();
 	_data_bits = data_bits.Value();
