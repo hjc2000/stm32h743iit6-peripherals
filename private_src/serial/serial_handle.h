@@ -2,7 +2,6 @@
 #include "base/define.h"
 #include "base/peripheral/gpio/gpio_parameter.h"
 #include "base/peripheral/gpio/GpioPin.h"
-#include "base/peripheral/serial/ISerial.h"
 #include "base/peripheral/serial/serial_handle.h"
 #include "base/string/define.h"
 #include "base/task/IBinarySemaphore.h"
@@ -10,8 +9,7 @@
 #include "hal.h"
 #include <stdexcept>
 
-class base::serial::serial_handle :
-	public base::serial::ISerial
+class base::serial::serial_handle
 {
 private:
 	serial_handle() = default;
@@ -64,53 +62,53 @@ public:
 	/// @param stop_bits 停止位位数。
 	/// @param hardware_flow_control 硬件流控。
 	///
-	virtual void Start(base::serial::Direction direction,
-					   base::serial::BaudRate const &baud_rate,
-					   base::serial::DataBits const &data_bits,
-					   base::serial::Parity parity,
-					   base::serial::StopBits stop_bits,
-					   base::serial::HardwareFlowControl hardware_flow_control) override;
+	void Start(base::serial::Direction direction,
+			   base::serial::BaudRate const &baud_rate,
+			   base::serial::DataBits const &data_bits,
+			   base::serial::Parity parity,
+			   base::serial::StopBits stop_bits,
+			   base::serial::HardwareFlowControl hardware_flow_control);
 
 	/* #region 串口属性 */
 
 	/// @brief 数据传输方向
 	/// @return
-	virtual base::serial::Direction Direction() const override
+	base::serial::Direction Direction() const
 	{
 		return _direction;
 	}
 
 	/// @brief 波特率。
 	/// @return
-	virtual uint32_t BaudRate() const override
+	uint32_t BaudRate() const
 	{
 		return _baud_rate;
 	}
 
 	/// @brief 数据位的个数。
 	/// @return
-	virtual uint8_t DataBits() const override
+	uint8_t DataBits() const
 	{
 		return _data_bits;
 	}
 
 	/// @brief 校验位。
 	/// @return
-	virtual base::serial::Parity Parity() const override
+	base::serial::Parity Parity() const
 	{
 		return _parity;
 	}
 
 	/// @brief 停止位个数。
 	/// @return
-	virtual base::serial::StopBits StopBits() const override
+	base::serial::StopBits StopBits() const
 	{
 		return _stop_bits;
 	}
 
 	/// @brief 硬件流控。
 	/// @return
-	virtual base::serial::HardwareFlowControl HardwareFlowControl() const override
+	base::serial::HardwareFlowControl HardwareFlowControl() const
 	{
 		return _hardware_flow_control;
 	}
@@ -125,7 +123,7 @@ public:
 	/// @return true 能读取。
 	/// @return false 不能读取。
 	///
-	virtual bool CanRead() const override
+	bool CanRead() const
 	{
 		if (Direction() == base::serial::Direction::RX)
 		{
@@ -146,7 +144,7 @@ public:
 	/// @return true 能写入。
 	/// @return false 不能写入。
 	///
-	virtual bool CanWrite() const override
+	bool CanWrite() const
 	{
 		if (Direction() == base::serial::Direction::TX)
 		{
@@ -167,7 +165,7 @@ public:
 	/// @return true 能定位。
 	/// @return false 不能定位。
 	///
-	virtual bool CanSeek() const override
+	bool CanSeek() const
 	{
 		return false;
 	}
@@ -177,7 +175,7 @@ public:
 	///
 	/// @return int64_t
 	///
-	virtual int64_t Length() const override
+	int64_t Length() const
 	{
 		throw std::runtime_error{CODE_POS_STR + "不支持的功能。"};
 	}
@@ -187,7 +185,7 @@ public:
 	///
 	/// @param value
 	///
-	virtual void SetLength(int64_t value) override
+	void SetLength(int64_t value)
 	{
 		throw std::runtime_error{CODE_POS_STR + "不支持的功能。"};
 	}
@@ -197,7 +195,7 @@ public:
 	///
 	/// @return int64_t
 	///
-	virtual int64_t Position() const override
+	int64_t Position() const
 	{
 		throw std::runtime_error{CODE_POS_STR + "不支持的功能。"};
 	}
@@ -207,7 +205,7 @@ public:
 	///
 	/// @param value
 	///
-	virtual void SetPosition(int64_t value) override
+	void SetPosition(int64_t value)
 	{
 		throw std::runtime_error{CODE_POS_STR + "不支持的功能。"};
 	}
@@ -215,8 +213,6 @@ public:
 	/* #endregion */
 
 	/* #region 读写冲关 */
-
-	using base::Stream::Read;
 
 	///
 	/// @brief 调用后临时启动 DMA 接收一次数据。
@@ -231,15 +227,13 @@ public:
 	///
 	/// @return
 	///
-	virtual int32_t Read(base::Span const &span) override;
-
-	using base::Stream::Write;
+	int32_t Read(base::Span const &span);
 
 	///
 	/// @brief 调用后临时启动 DMA 进行一次发送。
 	/// @param span
 	///
-	virtual void Write(base::ReadOnlySpan const &span) override;
+	void Write(base::ReadOnlySpan const &span);
 
 	///
 	/// @brief 冲洗流。
@@ -247,7 +241,7 @@ public:
 	/// @note 对于写入的数据，作用是将其从内部缓冲区转移到底层。
 	/// @note 对于内部的可以读取但尚未读取的数据，一般不会有什么作用。Flush 没见过对可读数据生效的。
 	///
-	virtual void Flush() override
+	void Flush()
 	{
 	}
 
@@ -258,7 +252,7 @@ public:
 	///
 	/// @note 因为本接口是串口接口，所以关闭流也等于关闭串口。
 	///
-	virtual void Close() override;
+	void Close();
 
 	/* #endregion */
 };

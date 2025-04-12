@@ -1,5 +1,6 @@
 #include "serial_handle.h"
 #include "base/define.h"
+#include "base/peripheral/serial/serial_handle.h"
 #include "base/string/define.h"
 #include "bsp-interface/di/interrupt.h"
 
@@ -188,7 +189,7 @@ void base::serial::serial_handle::InitializeUart()
 	_uart_handle.ErrorCallback = OnReadTimeout;
 
 	// 超时在串口初始化后设置才有效
-	SetReadTimeoutByBaudCount(FramesBaudCount(2));
+	SetReadTimeoutByBaudCount(base::serial::frames_baud_count(*this, 2));
 }
 
 void base::serial::serial_handle::InitializeInterrupt()
