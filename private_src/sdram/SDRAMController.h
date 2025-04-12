@@ -1,6 +1,6 @@
 #pragma once
-#include "base/peripheral/gpio_parameter.h"
-#include "base/peripheral/GpioPin.h"
+#include "base/peripheral/gpio/gpio_parameter.h"
+#include "base/peripheral/gpio/GpioPin.h"
 #include "base/peripheral/sdram/sdram_timing.h"
 #include <base/define.h>
 #include <bsp-interface/di/sdram.h>

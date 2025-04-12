@@ -1,7 +1,7 @@
 #include "gpio_pin_handle.h"
 #include "base/define.h"
 #include "base/LockGuard.h"
-#include "base/peripheral/gpio_parameter.h"
+#include "base/peripheral/gpio/gpio_parameter.h"
 #include "base/string/define.h"
 #include "base/task/IMutex.h"
 #include "bsp-interface/di/interrupt.h"
