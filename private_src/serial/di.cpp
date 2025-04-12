@@ -1,9 +1,9 @@
 #include "base/container/Dictionary.h"
-#include "Serial.h"
+#include "serial_handle.h"
 
 base::serial::ISerial &base::serial::MainSerial()
 {
-	return bsp::Serial::Instance();
+	return base::serial::serial_handle::Instance();
 }
 
 namespace
@@ -19,7 +19,7 @@ namespace
 	public:
 		DictionaryProvider()
 		{
-			Add(&bsp::Serial::Instance());
+			Add(&base::serial::serial_handle::Instance());
 		}
 
 		base::Dictionary<std::string, base::AutoPtr<base::serial::ISerial>> _dic{};

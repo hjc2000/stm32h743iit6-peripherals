@@ -1,25 +1,6 @@
 #include "serial_handle.h" // IWYU pragma: keep
 
 ///
-/// @brief 扫描可用的串口。
-///
-/// @return std::vector<std::string>
-///
-std::vector<std::string> scan_serials();
-
-/* #region open */
-
-///
-/// @brief 通过串口名称打开串口。
-///
-/// @param name 串口名称。
-///		@note 通用操作系统中使用这种方式。
-///
-/// @return base::serial::sp_serial_handle
-///
-base::serial::sp_serial_handle open(std::string const &name);
-
-///
 /// @brief 通过串口 ID 打开串口。
 ///
 /// @param serial_id 串口 ID.
@@ -28,10 +9,6 @@ base::serial::sp_serial_handle open(std::string const &name);
 /// @return base::serial::sp_serial_handle
 ///
 base::serial::sp_serial_handle open(int serial_id);
-
-/* #endregion */
-
-/* #region 启动串口 */
 
 ///
 /// @brief 启动串口。
@@ -51,8 +28,6 @@ void start(base::serial::sp_serial_handle const &h,
 		   base::serial::Parity parity,
 		   base::serial::StopBits stop_bits,
 		   base::serial::HardwareFlowControl hardware_flow_control);
-
-/* #endregion */
 
 /* #region 串口属性 */
 
