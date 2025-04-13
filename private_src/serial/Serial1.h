@@ -61,6 +61,8 @@ namespace bsp
 		void SetReadTimeoutByBaudCount(uint32_t value);
 
 	public:
+		Serial1();
+
 		~Serial1();
 
 		///

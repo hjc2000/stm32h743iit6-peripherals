@@ -32,46 +32,6 @@ extern "C"
 		}
 	}
 
-	void USART1_IRQHandler()
-	{
-		std::function<void()> &func = bsp::di::interrupt::IsrManager().GetIsr(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
-		try
-		{
-			func();
-		}
-		catch (...)
-		{
-		}
-	}
-
-	/* #region DMA */
-
-	void DMA_STR0_IRQHandler()
-	{
-		std::function<void()> &func = bsp::di::interrupt::IsrManager().GetIsr(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
-		try
-		{
-			func();
-		}
-		catch (...)
-		{
-		}
-	}
-
-	void DMA_STR1_IRQHandler()
-	{
-		std::function<void()> &func = bsp::di::interrupt::IsrManager().GetIsr(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
-		try
-		{
-			func();
-		}
-		catch (...)
-		{
-		}
-	}
-
-	/* #endregion */
-
 	/* #region EXTI */
 
 	void EXTI0_IRQHandler()

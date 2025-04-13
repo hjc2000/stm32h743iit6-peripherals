@@ -1,8 +1,107 @@
 #include "Serial1.h"
+#include "base/define.h"
+#include "base/LockGuard.h"
 #include "base/peripheral/serial/serial_handle.h"
 #include "base/string/define.h"
+#include "base/task/IMutex.h"
 #include "bsp-interface/di/interrupt.h"
+#include <functional>
+#include <memory>
 #include <stdexcept>
+
+namespace
+{
+	class Isr
+	{
+	private:
+		Isr() = default;
+
+	public:
+		std::function<void()> _uart1_isr;
+		std::function<void()> _dma1_stream0_isr;
+		std::function<void()> _dma1_stream1_isr;
+
+		static Isr &Instance()
+		{
+			static Isr o;
+			return o;
+		}
+	};
+
+	PREINIT(Isr::Instance)
+
+	class UsageStateManager
+	{
+	private:
+		UsageStateManager() = default;
+
+		std::shared_ptr<base::IMutex> _lock = base::CreateIMutex();
+		bool _is_used = false;
+
+	public:
+		static UsageStateManager &Instance()
+		{
+			static UsageStateManager o;
+			return o;
+		}
+
+		void SetAsUsed()
+		{
+			base::LockGuard g{*_lock};
+			if (_is_used)
+			{
+				throw std::runtime_error{CODE_POS_STR + "已经被占用了。"};
+			}
+
+			_is_used = true;
+		}
+
+		void SetAsUnused()
+		{
+			base::LockGuard g{*_lock};
+			_is_used = false;
+		}
+	};
+
+	PREINIT(UsageStateManager::Instance)
+
+} // namespace
+
+extern "C"
+{
+	void USART1_IRQHandler()
+	{
+		try
+		{
+			Isr::Instance()._uart1_isr();
+		}
+		catch (...)
+		{
+		}
+	}
+
+	void DMA_STR0_IRQHandler()
+	{
+		try
+		{
+			Isr::Instance()._dma1_stream0_isr();
+		}
+		catch (...)
+		{
+		}
+	}
+
+	void DMA_STR1_IRQHandler()
+	{
+		try
+		{
+			Isr::Instance()._dma1_stream1_isr();
+		}
+		catch (...)
+		{
+		}
+	}
+}
 
 /* #region 初始化 */
 
@@ -194,23 +293,24 @@ void bsp::Serial1::InitializeUart()
 
 void bsp::Serial1::InitializeInterrupt()
 {
-	bsp::di::interrupt::IsrManager().AddIsr(static_cast<uint32_t>(IRQn_Type::USART1_IRQn),
-											[this]()
-											{
-												HAL_UART_IRQHandler(&_handle_context._uart_handle);
-											});
+	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
+	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
+	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
 
-	bsp::di::interrupt::IsrManager().AddIsr(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn),
-											[this]()
-											{
-												HAL_DMA_IRQHandler(_handle_context._uart_handle.hdmatx);
-											});
+	Isr::Instance()._uart1_isr = [this]()
+	{
+		HAL_UART_IRQHandler(&_handle_context._uart_handle);
+	};
 
-	bsp::di::interrupt::IsrManager().AddIsr(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn),
-											[this]()
-											{
-												HAL_DMA_IRQHandler(_handle_context._uart_handle.hdmarx);
-											});
+	Isr::Instance()._dma1_stream0_isr = [this]()
+	{
+		HAL_DMA_IRQHandler(_handle_context._uart_handle.hdmatx);
+	};
+
+	Isr::Instance()._dma1_stream1_isr = [this]()
+	{
+		HAL_DMA_IRQHandler(_handle_context._uart_handle.hdmarx);
+	};
 
 	bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn), 10);
 	bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn), 10);
@@ -259,12 +359,18 @@ void bsp::Serial1::SetReadTimeoutByBaudCount(uint32_t value)
 	}
 }
 
+bsp::Serial1::Serial1()
+{
+	UsageStateManager::Instance().SetAsUsed();
+}
+
 bsp::Serial1::~Serial1()
 {
 	HAL_UART_DMAStop(&_handle_context._uart_handle);
 	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
 	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
 	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
+	UsageStateManager::Instance().SetAsUnused();
 }
 
 /* #region 读写冲关 */
