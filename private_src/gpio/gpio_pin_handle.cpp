@@ -29,6 +29,14 @@ namespace
 		std::array<std::bitset<16>, PortCount()> _states{};
 		std::shared_ptr<base::IMutex> _lock = base::CreateIMutex();
 
+		void CheckUsage(base::gpio::PortEnum port, uint32_t pin)
+		{
+			if (_states[static_cast<int>(port)][pin])
+			{
+				throw std::runtime_error{CODE_POS_STR + "已经占用了，无法再次占用。"};
+			}
+		}
+
 	public:
 		static UsageStateManager &Instance()
 		{
@@ -43,11 +51,9 @@ namespace
 				throw std::invalid_argument{CODE_POS_STR};
 			}
 
+			CheckUsage(port, pin);
 			base::LockGuard g{*_lock};
-			if (_states[static_cast<int>(port)][pin])
-			{
-				throw std::runtime_error{CODE_POS_STR + "已经占用了，无法再次占用。"};
-			}
+			CheckUsage(port, pin);
 
 			_states[static_cast<int>(port)][pin] = true;
 		}

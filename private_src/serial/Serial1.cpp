@@ -38,6 +38,14 @@ namespace
 		std::shared_ptr<base::IMutex> _lock = base::CreateIMutex();
 		bool _is_used = false;
 
+		void CheckUsage()
+		{
+			if (_is_used)
+			{
+				throw std::runtime_error{CODE_POS_STR + "已经被占用了。"};
+			}
+		}
+
 	public:
 		static UsageStateManager &Instance()
 		{
@@ -47,11 +55,10 @@ namespace
 
 		void SetAsUsed()
 		{
+			// 双重检查锁定
+			CheckUsage();
 			base::LockGuard g{*_lock};
-			if (_is_used)
-			{
-				throw std::runtime_error{CODE_POS_STR + "已经被占用了。"};
-			}
+			CheckUsage();
 
 			_is_used = true;
 		}
