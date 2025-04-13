@@ -1,9 +1,9 @@
 #include "base/peripheral/serial/serial_handle.h"
-#include "serial_handle.h" // IWYU pragma: keep
+#include "Serial1.h"
 
 base::serial::sp_serial_handle base::serial::open(int serial_id)
 {
-	return base::serial::sp_serial_handle{new base::serial::serial_handle{}};
+	return base::serial::sp_serial_handle{new bsp::Serial1{}};
 }
 
 void base::serial::start(base::serial::serial_handle &h,
