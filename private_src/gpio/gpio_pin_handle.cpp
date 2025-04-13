@@ -11,12 +11,18 @@
 #include <cstdint>
 #include <memory>
 #include <stdexcept>
+#include <string>
 
 namespace
 {
 	constexpr int PortCount()
 	{
 		return static_cast<int>(base::gpio::PortEnum::PortP) + 1;
+	}
+
+	std::string PinName(base::gpio::PortEnum port, uint32_t pin)
+	{
+		return base::to_string(port) + std::to_string(pin);
 	}
 
 	/* #region UsageStateManager */
@@ -33,7 +39,7 @@ namespace
 		{
 			if (_states[static_cast<int>(port)][pin])
 			{
-				throw std::runtime_error{CODE_POS_STR + "已经占用了，无法再次占用。"};
+				throw std::runtime_error{CODE_POS_STR + PinName(port, pin) + "已经占用了，无法再次占用。"};
 			}
 		}
 
