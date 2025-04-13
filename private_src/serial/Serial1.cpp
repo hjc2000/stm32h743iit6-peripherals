@@ -3,10 +3,9 @@
 #include "base/LockGuard.h"
 #include "base/peripheral/serial/serial_handle.h"
 #include "base/string/define.h"
-#include "base/task/IMutex.h"
+#include "base/UsageStateManager.h"
 #include "bsp-interface/di/interrupt.h"
 #include <functional>
-#include <memory>
 #include <stdexcept>
 
 namespace
@@ -30,47 +29,7 @@ namespace
 
 	PREINIT(Isr::Instance)
 
-	class UsageStateManager
-	{
-	private:
-		UsageStateManager() = default;
-
-		std::shared_ptr<base::IMutex> _lock = base::CreateIMutex();
-		bool _is_used = false;
-
-		void CheckUsage()
-		{
-			if (_is_used)
-			{
-				throw std::runtime_error{CODE_POS_STR + "已经被占用了。"};
-			}
-		}
-
-	public:
-		static UsageStateManager &Instance()
-		{
-			static UsageStateManager o;
-			return o;
-		}
-
-		void SetAsUsed()
-		{
-			// 双重检查锁定
-			CheckUsage();
-			base::LockGuard g{*_lock};
-			CheckUsage();
-
-			_is_used = true;
-		}
-
-		void SetAsUnused()
-		{
-			base::LockGuard g{*_lock};
-			_is_used = false;
-		}
-	};
-
-	PREINIT(UsageStateManager::Instance)
+	base::UsageStateManager _usage_state_maneger{};
 
 } // namespace
 
@@ -368,7 +327,7 @@ void bsp::Serial1::SetReadTimeoutByBaudCount(uint32_t value)
 
 bsp::Serial1::Serial1()
 {
-	UsageStateManager::Instance().SetAsUsed();
+	_usage_state_maneger.SetAsUsed();
 }
 
 bsp::Serial1::~Serial1()
@@ -377,7 +336,7 @@ bsp::Serial1::~Serial1()
 	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
 	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
 	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
-	UsageStateManager::Instance().SetAsUnused();
+	_usage_state_maneger.SetAsUnused();
 }
 
 int32_t bsp::Serial1::Read(base::Span const &span)
