@@ -128,8 +128,6 @@ namespace bsp
 
 		/* #endregion */
 
-		/* #region 读写冲关 */
-
 		///
 		/// @brief 调用后临时启动 DMA 接收一次数据。
 		///
@@ -150,17 +148,5 @@ namespace bsp
 		/// @param span
 		///
 		virtual void Write(base::ReadOnlySpan const &span) override;
-
-		///
-		/// @brief 冲洗流。
-		///
-		/// @note 对于写入的数据，作用是将其从内部缓冲区转移到底层。
-		/// @note 对于内部的可以读取但尚未读取的数据，一般不会有什么作用。Flush 没见过对可读数据生效的。
-		///
-		virtual void Flush() override
-		{
-		}
-
-		/* #endregion */
 	};
 } // namespace bsp

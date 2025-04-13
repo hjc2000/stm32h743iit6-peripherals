@@ -373,8 +373,6 @@ bsp::Serial1::~Serial1()
 	UsageStateManager::Instance().SetAsUnused();
 }
 
-/* #region 读写冲关 */
-
 int32_t bsp::Serial1::Read(base::Span const &span)
 {
 	if (span.Size() > UINT16_MAX)
@@ -418,8 +416,6 @@ void bsp::Serial1::Write(base::ReadOnlySpan const &span)
 		throw std::runtime_error{CODE_POS_STR + "发送失败"};
 	}
 }
-
-/* #endregion */
 
 void bsp::Serial1::Start(base::serial::Direction direction,
 						 base::serial::BaudRate const &baud_rate,
