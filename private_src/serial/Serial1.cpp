@@ -1,5 +1,4 @@
 #include "Serial1.h"
-#include "base/define.h"
 #include "base/LockGuard.h"
 #include "base/peripheral/serial/serial_handle.h"
 #include "base/string/define.h"
@@ -10,24 +9,9 @@
 
 namespace
 {
-	class Isr
-	{
-	private:
-		Isr() = default;
-
-	public:
-		std::function<void()> _uart1_isr;
-		std::function<void()> _dma1_stream0_isr;
-		std::function<void()> _dma1_stream1_isr;
-
-		static Isr &Instance()
-		{
-			static Isr o;
-			return o;
-		}
-	};
-
-	PREINIT(Isr::Instance)
+	std::function<void()> _uart1_isr;
+	std::function<void()> _dma1_stream0_isr;
+	std::function<void()> _dma1_stream1_isr;
 
 	base::UsageStateManager _usage_state_maneger{};
 
@@ -39,7 +23,7 @@ extern "C"
 	{
 		try
 		{
-			Isr::Instance()._uart1_isr();
+			_uart1_isr();
 		}
 		catch (...)
 		{
@@ -50,7 +34,7 @@ extern "C"
 	{
 		try
 		{
-			Isr::Instance()._dma1_stream0_isr();
+			_dma1_stream0_isr();
 		}
 		catch (...)
 		{
@@ -61,7 +45,7 @@ extern "C"
 	{
 		try
 		{
-			Isr::Instance()._dma1_stream1_isr();
+			_dma1_stream1_isr();
 		}
 		catch (...)
 		{
@@ -263,17 +247,17 @@ void bsp::Serial1::InitializeInterrupt()
 	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
 	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
 
-	Isr::Instance()._uart1_isr = [this]()
+	_uart1_isr = [this]()
 	{
 		HAL_UART_IRQHandler(&_handle_context._uart_handle);
 	};
 
-	Isr::Instance()._dma1_stream0_isr = [this]()
+	_dma1_stream0_isr = [this]()
 	{
 		HAL_DMA_IRQHandler(_handle_context._uart_handle.hdmatx);
 	};
 
-	Isr::Instance()._dma1_stream1_isr = [this]()
+	_dma1_stream1_isr = [this]()
 	{
 		HAL_DMA_IRQHandler(_handle_context._uart_handle.hdmarx);
 	};
