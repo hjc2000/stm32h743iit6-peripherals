@@ -16,12 +16,16 @@ namespace bsp
 		class handle_context
 		{
 		public:
+			handle_context(Serial1 *self)
+			{
+				_self = self;
+			}
+
 			UART_HandleTypeDef _uart_handle{};
 			Serial1 *_self{};
 		};
 
-	public:
-		handle_context _handle_context{};
+		handle_context _handle_context{this};
 		std::shared_ptr<base::IBinarySemaphore> _sending_completion_signal = base::CreateIBinarySemaphore(false);
 		std::shared_ptr<base::IBinarySemaphore> _receiving_completion_signal = base::CreateIBinarySemaphore(false);
 		std::shared_ptr<base::IMutex> _read_lock = base::CreateIMutex();
@@ -56,8 +60,7 @@ namespace bsp
 
 		void SetReadTimeoutByBaudCount(uint32_t value);
 
-		Serial1();
-
+	public:
 		~Serial1();
 
 		///

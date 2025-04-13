@@ -4,11 +4,6 @@
 #include "bsp-interface/di/interrupt.h"
 #include <stdexcept>
 
-namespace
-{
-	bsp::Serial1 *_instance = nullptr;
-}
-
 /* #region 初始化 */
 
 void bsp::Serial1::InitializeGpio()
@@ -224,18 +219,32 @@ void bsp::Serial1::InitializeInterrupt()
 
 /* #endregion */
 
-bsp::Serial1::Serial1()
+int32_t bsp::Serial1::HaveRead()
 {
-	_instance = this;
+	return _handle_context._uart_handle.RxXferSize - __HAL_DMA_GET_COUNTER(&_rx_dma_handle);
 }
 
-bsp::Serial1::~Serial1()
+/* #region 被中断处理函数回调的函数 */
+
+void bsp::Serial1::OnReceiveEventCallback(UART_HandleTypeDef *huart, uint16_t pos)
 {
-	HAL_UART_DMAStop(&_handle_context._uart_handle);
-	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
-	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
-	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
+	handle_context *context = reinterpret_cast<handle_context *>(huart);
+	context->_self->_receiving_completion_signal->ReleaseFromISR();
 }
+
+void bsp::Serial1::OnSendCompleteCallback(UART_HandleTypeDef *huart)
+{
+	handle_context *context = reinterpret_cast<handle_context *>(huart);
+	context->_self->_sending_completion_signal->ReleaseFromISR();
+}
+
+void bsp::Serial1::OnReadTimeout(UART_HandleTypeDef *huart)
+{
+	handle_context *context = reinterpret_cast<handle_context *>(huart);
+	context->_self->_receiving_completion_signal->ReleaseFromISR();
+}
+
+/* #endregion */
 
 void bsp::Serial1::SetReadTimeoutByBaudCount(uint32_t value)
 {
@@ -250,29 +259,13 @@ void bsp::Serial1::SetReadTimeoutByBaudCount(uint32_t value)
 	}
 }
 
-int32_t bsp::Serial1::HaveRead()
+bsp::Serial1::~Serial1()
 {
-	return _handle_context._uart_handle.RxXferSize - __HAL_DMA_GET_COUNTER(&_rx_dma_handle);
+	HAL_UART_DMAStop(&_handle_context._uart_handle);
+	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
+	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
+	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
 }
-
-/* #region 被中断处理函数回调的函数 */
-
-void bsp::Serial1::OnReceiveEventCallback(UART_HandleTypeDef *huart, uint16_t pos)
-{
-	_instance->_receiving_completion_signal->ReleaseFromISR();
-}
-
-void bsp::Serial1::OnSendCompleteCallback(UART_HandleTypeDef *huart)
-{
-	_instance->_sending_completion_signal->ReleaseFromISR();
-}
-
-void bsp::Serial1::OnReadTimeout(UART_HandleTypeDef *huart)
-{
-	_instance->_receiving_completion_signal->ReleaseFromISR();
-}
-
-/* #endregion */
 
 /* #region 读写冲关 */
 
