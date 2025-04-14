@@ -57,7 +57,7 @@ void bsp::SDRAMController::OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider
 	_handle.Init.ReadBurst = FMC_SDRAM_RBURST_ENABLE;
 	_handle.Init.ReadPipeDelay = FMC_SDRAM_RPIPE_DELAY_2;
 
-	switch (row_bit_count._value)
+	switch (row_bit_count.Value())
 	{
 	case 11:
 		{
@@ -80,7 +80,7 @@ void bsp::SDRAMController::OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider
 		}
 	}
 
-	switch (column_bit_count._value)
+	switch (column_bit_count.Value())
 	{
 	case 8:
 		{
@@ -108,7 +108,7 @@ void bsp::SDRAMController::OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider
 		}
 	}
 
-	switch (data_width._value)
+	switch (data_width.Value())
 	{
 	case 8:
 		{
@@ -131,7 +131,7 @@ void bsp::SDRAMController::OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider
 		}
 	}
 
-	switch (bank_count._value)
+	switch (bank_count.Value())
 	{
 	case 2:
 		{
