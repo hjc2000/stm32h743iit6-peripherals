@@ -33,11 +33,11 @@ bsp::SDRAMController &bsp::SDRAMController::Instance()
 }
 
 void bsp::SDRAMController::OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
-											   bsp::sdram::property::BankCount const &bank_count,
-											   bsp::sdram::property::RowBitCount const &row_bit_count,
-											   bsp::sdram::property::ColumnBitCount const &column_bit_count,
-											   bsp::sdram::property::DataWidth const &data_width,
-											   bsp::sdram::property::ReadBurstLength const &read_burst_length)
+											   bsp::sdram::BankCount const &bank_count,
+											   bsp::sdram::RowBitCount const &row_bit_count,
+											   bsp::sdram::ColumnBitCount const &column_bit_count,
+											   bsp::sdram::DataWidth const &data_width,
+											   bsp::sdram::ReadBurstLength const &read_burst_length)
 {
 	/* 保护SDRAM区域,共32M字节 */
 	mpu_set_protection(0xC0000000,               /* 基地址 */

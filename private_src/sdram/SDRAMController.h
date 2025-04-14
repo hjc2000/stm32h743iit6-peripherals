@@ -108,11 +108,11 @@ namespace bsp
 		/// @param data_width
 		/// @param read_burst_length
 		virtual void OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
-										 bsp::sdram::property::BankCount const &bank_count,
-										 bsp::sdram::property::RowBitCount const &row_bit_count,
-										 bsp::sdram::property::ColumnBitCount const &column_bit_count,
-										 bsp::sdram::property::DataWidth const &data_width,
-										 bsp::sdram::property::ReadBurstLength const &read_burst_length) override;
+										 bsp::sdram::BankCount const &bank_count,
+										 bsp::sdram::RowBitCount const &row_bit_count,
+										 bsp::sdram::ColumnBitCount const &column_bit_count,
+										 bsp::sdram::DataWidth const &data_width,
+										 bsp::sdram::ReadBurstLength const &read_burst_length) override;
 
 		/// @brief 将输入信号置于空操作命令状态，然后开始向 SDRAM 提供 CLK 信号。
 		void PowerUp();
