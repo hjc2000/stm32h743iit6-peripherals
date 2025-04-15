@@ -24,6 +24,10 @@ void base::sdram::sdram_controller_handle::StartAutoSendingAutoRefreshCommand(ba
 	HAL_SDRAM_ProgramRefreshRate(&_handle, refresh_count);
 }
 
+base::sdram::sdram_controller_handle::sdram_controller_handle()
+{
+}
+
 PREINIT(base::sdram::sdram_controller_handle::Instance);
 
 base::sdram::sdram_controller_handle &base::sdram::sdram_controller_handle::Instance()

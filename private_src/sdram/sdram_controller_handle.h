@@ -13,8 +13,6 @@ class base::sdram::sdram_controller_handle :
 	public bsp::sdram::ISDRAMController
 {
 private:
-	sdram_controller_handle() = default;
-
 	SDRAM_HandleTypeDef _handle{};
 
 	std::vector<base::gpio::GpioPin> _pins{
@@ -97,6 +95,8 @@ private:
 	void StartAutoSendingAutoRefreshCommand(base::sdram::sdram_timing const &timing);
 
 public:
+	sdram_controller_handle();
+
 	static_function sdram_controller_handle &Instance();
 
 	/// @brief 将 SDRAM 控制器以读突发的模式打开。写不突发。
