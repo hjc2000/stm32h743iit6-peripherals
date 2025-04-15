@@ -1,7 +1,7 @@
+#include "sdram_controller_handle.h"
 #include <bsp-interface/di/sdram.h>
-#include <SDRAMController.h>
 
 bsp::sdram::ISDRAMController &bsp::di::sdram::SDRAMController()
 {
-    return bsp::SDRAMController::Instance();
+	return base::sdram::sdram_controller_handle::Instance();
 }

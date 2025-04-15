@@ -1,9 +1,9 @@
-#include "SDRAMController.h"
+#include "sdram_controller_handle.h"
 #include "base/define.h"
 #include <bsp-interface/di/clock.h>
 #include <bsp-interface/di/gpio.h>
 
-void bsp::SDRAMController::InitializeGPIO()
+void base::sdram::sdram_controller_handle::InitializeGPIO()
 {
 	for (auto &pin : _pins)
 	{
@@ -13,7 +13,7 @@ void bsp::SDRAMController::InitializeGPIO()
 	}
 }
 
-void bsp::SDRAMController::StartAutoSendingAutoRefreshCommand(base::sdram::sdram_timing const &timing)
+void base::sdram::sdram_controller_handle::StartAutoSendingAutoRefreshCommand(base::sdram::sdram_timing const &timing)
 {
 	int refresh_count = timing.auto_refresh_command_clock_count() - 50;
 	if (refresh_count < 50)
@@ -24,20 +24,20 @@ void bsp::SDRAMController::StartAutoSendingAutoRefreshCommand(base::sdram::sdram
 	HAL_SDRAM_ProgramRefreshRate(&_handle, refresh_count);
 }
 
-PREINIT(bsp::SDRAMController::Instance);
+PREINIT(base::sdram::sdram_controller_handle::Instance);
 
-bsp::SDRAMController &bsp::SDRAMController::Instance()
+base::sdram::sdram_controller_handle &base::sdram::sdram_controller_handle::Instance()
 {
-	static bsp::SDRAMController o{};
+	static base::sdram::sdram_controller_handle o{};
 	return o;
 }
 
-void bsp::SDRAMController::OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
-											   base::sdram::BankCount const &bank_count,
-											   base::sdram::RowBitCount const &row_bit_count,
-											   base::sdram::ColumnBitCount const &column_bit_count,
-											   base::sdram::DataWidth const &data_width,
-											   base::sdram::ReadBurstLength const &read_burst_length)
+void base::sdram::sdram_controller_handle::OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
+															   base::sdram::BankCount const &bank_count,
+															   base::sdram::RowBitCount const &row_bit_count,
+															   base::sdram::ColumnBitCount const &column_bit_count,
+															   base::sdram::DataWidth const &data_width,
+															   base::sdram::ReadBurstLength const &read_burst_length)
 {
 	/* 保护SDRAM区域,共32M字节 */
 	mpu_set_protection(0xC0000000,               /* 基地址 */
@@ -203,7 +203,7 @@ void bsp::SDRAMController::OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider
 	StartAutoSendingAutoRefreshCommand(_timing);
 }
 
-void bsp::SDRAMController::PowerUp()
+void base::sdram::sdram_controller_handle::PowerUp()
 {
 	FMC_SDRAM_CommandTypeDef command{};
 	command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK1;
@@ -217,7 +217,7 @@ void bsp::SDRAMController::PowerUp()
 	}
 }
 
-void bsp::SDRAMController::PrechargeAll()
+void base::sdram::sdram_controller_handle::PrechargeAll()
 {
 	FMC_SDRAM_CommandTypeDef command{};
 	command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK1;
@@ -231,7 +231,7 @@ void bsp::SDRAMController::PrechargeAll()
 	}
 }
 
-void bsp::SDRAMController::AutoRefresh()
+void base::sdram::sdram_controller_handle::AutoRefresh()
 {
 	FMC_SDRAM_CommandTypeDef command{};
 	command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK1;
@@ -245,7 +245,7 @@ void bsp::SDRAMController::AutoRefresh()
 	}
 }
 
-void bsp::SDRAMController::WriteModeRegister(uint32_t value)
+void base::sdram::sdram_controller_handle::WriteModeRegister(uint32_t value)
 {
 	FMC_SDRAM_CommandTypeDef command{};
 	command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK1;
@@ -259,7 +259,7 @@ void bsp::SDRAMController::WriteModeRegister(uint32_t value)
 	}
 }
 
-base::sdram::sdram_timing const &bsp::SDRAMController::Timing() const
+base::sdram::sdram_timing const &base::sdram::sdram_controller_handle::Timing() const
 {
 	return _timing;
 }
