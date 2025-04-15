@@ -4,13 +4,11 @@
 #include "base/peripheral/sdram/sdram_controller_handle.h"
 #include "base/peripheral/sdram/sdram_timing.h"
 #include <base/define.h>
-#include <bsp-interface/di/sdram.h>
 #include <hal.h>
 #include <vector>
 
 /// @brief 封装 FMC 接口。
-class base::sdram::sdram_controller_handle :
-	public bsp::sdram::ISDRAMController
+class base::sdram::sdram_controller_handle
 {
 private:
 	SDRAM_HandleTypeDef _handle{};
@@ -97,7 +95,7 @@ private:
 public:
 	sdram_controller_handle();
 
-	static_function sdram_controller_handle &Instance();
+	~sdram_controller_handle();
 
 	/// @brief 将 SDRAM 控制器以读突发的模式打开。写不突发。
 	/// @param timing_provider
@@ -106,34 +104,34 @@ public:
 	/// @param column_bit_count
 	/// @param data_width
 	/// @param read_burst_length
-	virtual void OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
-									 base::sdram::BankCount const &bank_count,
-									 base::sdram::RowBitCount const &row_bit_count,
-									 base::sdram::ColumnBitCount const &column_bit_count,
-									 base::sdram::DataWidth const &data_width,
-									 base::sdram::ReadBurstLength const &read_burst_length) override;
+	void OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
+							 base::sdram::BankCount const &bank_count,
+							 base::sdram::RowBitCount const &row_bit_count,
+							 base::sdram::ColumnBitCount const &column_bit_count,
+							 base::sdram::DataWidth const &data_width,
+							 base::sdram::ReadBurstLength const &read_burst_length);
 
 	/// @brief 将输入信号置于空操作命令状态，然后开始向 SDRAM 提供 CLK 信号。
 	void PowerUp();
 
 	/// @brief 发送：“预充电所有 BANK” 的命令。
-	virtual void PrechargeAll() override;
+	void PrechargeAll();
 
 	/// @brief 发送自动刷新命令。
-	virtual void AutoRefresh() override;
+	void AutoRefresh();
 
 	/// @brief 写模式寄存器。
 	/// @param value
-	virtual void WriteModeRegister(uint32_t value) override;
+	void WriteModeRegister(uint32_t value);
 
 	/// @brief 控制器被打开后所使用的时序。
 	/// @return
-	virtual base::sdram::sdram_timing const &Timing() const override;
+	base::sdram::sdram_timing const &Timing() const;
 
 	/// @brief 此 SDRAM 控制器所管理的内存段的起始地址。打开 SDRAM 后，对着这个地址开始往后的内存区域
 	/// 读写数据即可读写 SDRAM 的内容。
 	/// @return
-	virtual uint8_t *StartAddress() const override
+	uint8_t *StartAddress() const
 	{
 		return reinterpret_cast<uint8_t *>(0xC0000000);
 	}
