@@ -1,7 +1,6 @@
 #include "sdram_controller_handle.h"
 #include "base/UsageStateManager.h"
 #include "bsp-interface/di/clock.h"
-#include "bsp-interface/di/gpio.h"
 
 namespace
 {
