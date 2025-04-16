@@ -3,6 +3,7 @@
 #include "base/peripheral/gpio/GpioPin.h"
 #include "base/peripheral/sdram/sdram_controller_handle.h"
 #include "base/peripheral/sdram/sdram_timing.h"
+#include "base/UsageStateManager.h"
 #include <base/define.h>
 #include <hal.h>
 #include <vector>
@@ -11,6 +12,7 @@
 class base::sdram::sdram_controller_handle
 {
 private:
+	base::UsageStateManager<sdram_controller_handle> _usage_manager{};
 	SDRAM_HandleTypeDef _handle{};
 
 	std::vector<base::gpio::GpioPin> _pins{
@@ -93,10 +95,6 @@ private:
 	void StartAutoSendingAutoRefreshCommand(base::sdram::sdram_timing const &timing);
 
 public:
-	sdram_controller_handle();
-
-	~sdram_controller_handle();
-
 	/// @brief 将 SDRAM 控制器以读突发的模式打开。写不突发。
 	/// @param timing_provider
 	/// @param bank_count

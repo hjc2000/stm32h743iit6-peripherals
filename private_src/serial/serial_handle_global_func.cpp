@@ -1,9 +1,9 @@
 #include "base/peripheral/serial/serial_handle.h"
 #include "Serial1.h"
 
-base::serial::sp_serial_handle base::serial::open(int serial_id)
+std::shared_ptr<base::serial::serial_handle> base::serial::open(int serial_id)
 {
-	return base::serial::sp_serial_handle{new bsp::Serial1{}};
+	return std::shared_ptr<base::serial::serial_handle>{new bsp::Serial1{}};
 }
 
 void base::serial::start(base::serial::serial_handle &h,

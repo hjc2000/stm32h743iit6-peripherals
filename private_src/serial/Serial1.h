@@ -4,6 +4,7 @@
 #include "base/peripheral/gpio/GpioPin.h"
 #include "base/task/IBinarySemaphore.h"
 #include "base/task/IMutex.h"
+#include "base/UsageStateManager.h"
 #include "hal.h"
 #include "serial_handle.h"
 
@@ -13,6 +14,8 @@ namespace bsp
 		public base::serial::serial_handle
 	{
 	private:
+		base::UsageStateManager<Serial1> _usage_state_maneger{};
+
 		class handle_context
 		{
 		public:
@@ -61,8 +64,6 @@ namespace bsp
 		void SetReadTimeoutByBaudCount(uint32_t value);
 
 	public:
-		Serial1();
-
 		~Serial1();
 
 		///

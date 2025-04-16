@@ -1,11 +1,5 @@
 #include "sdram_controller_handle.h"
-#include "base/UsageStateManager.h"
 #include "bsp-interface/di/clock.h"
-
-namespace
-{
-	base::UsageStateManager _usage_manager;
-}
 
 void base::sdram::sdram_controller_handle::InitializeGPIO()
 {
@@ -26,16 +20,6 @@ void base::sdram::sdram_controller_handle::StartAutoSendingAutoRefreshCommand(ba
 	}
 
 	HAL_SDRAM_ProgramRefreshRate(&_handle, refresh_count);
-}
-
-base::sdram::sdram_controller_handle::sdram_controller_handle()
-{
-	_usage_manager.SetAsUsed();
-}
-
-base::sdram::sdram_controller_handle::~sdram_controller_handle()
-{
-	_usage_manager.SetAsUnused();
 }
 
 void base::sdram::sdram_controller_handle::OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
