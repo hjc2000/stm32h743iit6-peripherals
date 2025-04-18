@@ -140,19 +140,19 @@ base::IEnumerable<base::ReadOnlySpan> const &bsp::EthernetController::ReceiveMul
 			rx_buffers[i].next = &rx_buffers[i + 1];
 		}
 
-		if (!HAL_ETH_IsRxDataAvailable(&_handle))
+		if (!HAL_ETH_IsRxDataAvailable(&_handle_context._handle))
 		{
 			// 无数据可接收，等待信号量。有数据到来会触发中断，中断服务函数会释放信号量。
 			_receiving_completion_signal->Acquire();
 		}
 
-		if (HAL_ETH_GetRxDataBuffer(&_handle, rx_buffers) != HAL_OK)
+		if (HAL_ETH_GetRxDataBuffer(&_handle_context._handle, rx_buffers) != HAL_OK)
 		{
 			bsp::di::Console().WriteLine("HAL_ETH_GetRxDataBuffer 接收数据发生错误。");
 			continue;
 		}
 
-		HAL_ETH_BuildRxDescriptors(&_handle);
+		HAL_ETH_BuildRxDescriptors(&_handle_context._handle);
 
 		for (ETH_BufferTypeDef buffer : rx_buffers)
 		{
@@ -213,37 +213,39 @@ void bsp::EthernetController::Open(base::ethernet::InterfaceType interface_type,
 	big_endian_mac_buffer_span.CopyFrom(mac.Span());
 	big_endian_mac_buffer_span.Reverse();
 
-	_handle.Instance = ETH;
-	_handle.Init.MACAddr = big_endian_mac_buffer;
-	_handle.Init.MediaInterface = HAL_ETH_RMII_MODE;
-	_handle.Init.RxDesc = reinterpret_cast<ETH_DMADescTypeDef *>(0x30040000);
-	_handle.Init.TxDesc = reinterpret_cast<ETH_DMADescTypeDef *>(0x30040000 + 4 * sizeof(ETH_DMADescTypeDef));
-	_handle.Init.RxBuffLen = ETH_MAX_PACKET_SIZE;
-	HAL_StatusTypeDef result = HAL_ETH_Init(&_handle);
+	_handle_context._handle.Instance = ETH;
+	_handle_context._handle.Init.MACAddr = big_endian_mac_buffer;
+	_handle_context._handle.Init.MediaInterface = HAL_ETH_RMII_MODE;
+	_handle_context._handle.Init.RxDesc = reinterpret_cast<ETH_DMADescTypeDef *>(0x30040000);
+	_handle_context._handle.Init.TxDesc = reinterpret_cast<ETH_DMADescTypeDef *>(0x30040000 + 4 * sizeof(ETH_DMADescTypeDef));
+	_handle_context._handle.Init.RxBuffLen = ETH_MAX_PACKET_SIZE;
+	HAL_StatusTypeDef result = HAL_ETH_Init(&_handle_context._handle);
 	if (result != HAL_OK)
 	{
 		throw std::runtime_error{"打开以太网口失败"};
 	}
 
-	_handle.TxCpltCallback = [](ETH_HandleTypeDef *handle)
+	_handle_context._handle.TxCpltCallback = [](ETH_HandleTypeDef *handle)
 	{
-		EthernetController::Instance()._send_completion_signal->ReleaseFromISR();
+		handle_context *context = reinterpret_cast<handle_context *>(handle);
+		context->_self->_send_completion_signal->ReleaseFromISR();
 	};
 
-	_handle.RxCpltCallback = [](ETH_HandleTypeDef *heth)
+	_handle_context._handle.RxCpltCallback = [](ETH_HandleTypeDef *handle)
 	{
-		EthernetController::Instance()._receiving_completion_signal->ReleaseFromISR();
+		handle_context *context = reinterpret_cast<handle_context *>(handle);
+		context->_self->_receiving_completion_signal->ReleaseFromISR();
 	};
 
 	// MDC时钟
-	HAL_ETH_SetMDIOClockRange(&_handle);
+	HAL_ETH_SetMDIOClockRange(&_handle_context._handle);
 
 	using buffer_type = uint8_t(*)[ETH_MAX_PACKET_SIZE];
 	buffer_type buffer = reinterpret_cast<buffer_type>(0x30040200);
 
 	for (int idx = 0; idx < static_cast<int>(ETH_RX_DESC_CNT); idx++)
 	{
-		HAL_ETH_DescAssignMemory(&_handle,
+		HAL_ETH_DescAssignMemory(&_handle_context._handle,
 								 idx,
 								 buffer[idx],
 								 NULL);
@@ -257,14 +259,14 @@ void bsp::EthernetController::Open(base::ethernet::InterfaceType interface_type,
 	bsp::di::interrupt::IsrManager().AddIsr(static_cast<uint32_t>(ETH_IRQn),
 											[&]()
 											{
-												HAL_ETH_IRQHandler(&_handle);
+												HAL_ETH_IRQHandler(&_handle_context._handle);
 											});
 }
 
 uint32_t bsp::EthernetController::ReadPHYRegister(uint32_t register_index)
 {
 	uint32_t regval = 0;
-	HAL_StatusTypeDef result = HAL_ETH_ReadPHYRegister(&_handle,
+	HAL_StatusTypeDef result = HAL_ETH_ReadPHYRegister(&_handle_context._handle,
 													   _phy_address,
 													   register_index,
 													   &regval);
@@ -279,7 +281,7 @@ uint32_t bsp::EthernetController::ReadPHYRegister(uint32_t register_index)
 
 void bsp::EthernetController::WritePHYRegister(uint32_t register_index, uint32_t value)
 {
-	HAL_StatusTypeDef result = HAL_ETH_WritePHYRegister(&_handle,
+	HAL_StatusTypeDef result = HAL_ETH_WritePHYRegister(&_handle_context._handle,
 														_phy_address,
 														register_index,
 														value);
@@ -294,7 +296,7 @@ void bsp::EthernetController::Start(base::ethernet::DuplexMode duplex_mode, base
 {
 	{
 		ETH_MACConfigTypeDef def{};
-		HAL_ETH_GetMACConfig(&_handle, &def);
+		HAL_ETH_GetMACConfig(&_handle_context._handle, &def);
 
 		if (speed == base::Mbps{10})
 		{
@@ -314,19 +316,19 @@ void bsp::EthernetController::Start(base::ethernet::DuplexMode duplex_mode, base
 			def.DuplexMode = ETH_FULLDUPLEX_MODE;
 		}
 
-		HAL_ETH_SetMACConfig(&_handle, &def);
+		HAL_ETH_SetMACConfig(&_handle_context._handle, &def);
 	}
 
 	// 设置过滤规则
 	{
 		ETH_MACFilterConfigTypeDef def{};
-		HAL_ETH_GetMACFilterConfig(&_handle, &def);
+		HAL_ETH_GetMACFilterConfig(&_handle_context._handle, &def);
 		def.PromiscuousMode = FunctionalState::ENABLE;
 		// def.PassAllMulticast = FunctionalState::ENABLE;
-		HAL_ETH_SetMACFilterConfig(&_handle, &def);
+		HAL_ETH_SetMACFilterConfig(&_handle_context._handle, &def);
 	}
 
-	HAL_ETH_Start_IT(&_handle);
+	HAL_ETH_Start_IT(&_handle_context._handle);
 }
 
 void bsp::EthernetController::Send(base::IEnumerable<base::ReadOnlySpan> const &spans)
@@ -352,7 +354,7 @@ void bsp::EthernetController::Send(base::IEnumerable<base::ReadOnlySpan> const &
 	if (_eth_buffers.Count() > 0)
 	{
 		_sending_config.TxBuffer = &_eth_buffers[0];
-		HAL_ETH_Transmit_IT(&_handle, &_sending_config);
+		HAL_ETH_Transmit_IT(&_handle_context._handle, &_sending_config);
 	}
 }
 
@@ -366,7 +368,7 @@ void bsp::EthernetController::Send(base::ReadOnlySpan const &span)
 	eth_buffer.len = span.Size();
 
 	_sending_config.TxBuffer = &eth_buffer;
-	HAL_ETH_Transmit_IT(&_handle, &_sending_config);
+	HAL_ETH_Transmit_IT(&_handle_context._handle, &_sending_config);
 }
 
 base::ReadOnlySpan bsp::EthernetController::Receive()
@@ -381,19 +383,19 @@ base::ReadOnlySpan bsp::EthernetController::Receive()
 			rx_buffers[i].next = &rx_buffers[i + 1];
 		}
 
-		if (!HAL_ETH_IsRxDataAvailable(&_handle))
+		if (!HAL_ETH_IsRxDataAvailable(&_handle_context._handle))
 		{
 			// 无数据可接收，等待信号量。有数据到来会触发中断，中断服务函数会释放信号量。
 			_receiving_completion_signal->Acquire();
 		}
 
-		if (HAL_ETH_GetRxDataBuffer(&_handle, rx_buffers) != HAL_OK)
+		if (HAL_ETH_GetRxDataBuffer(&_handle_context._handle, rx_buffers) != HAL_OK)
 		{
 			bsp::di::Console().WriteLine("HAL_ETH_GetRxDataBuffer 接收数据发生错误。");
 			continue;
 		}
 
-		HAL_ETH_BuildRxDescriptors(&_handle);
+		HAL_ETH_BuildRxDescriptors(&_handle_context._handle);
 
 		for (ETH_BufferTypeDef buffer : rx_buffers)
 		{

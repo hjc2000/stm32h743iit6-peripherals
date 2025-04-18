@@ -13,9 +13,21 @@ namespace bsp
 		public bsp::IEthernetController
 	{
 	private:
+		class handle_context
+		{
+		public:
+			handle_context(EthernetController *self)
+				: _self(self)
+			{
+			}
+
+			ETH_HandleTypeDef _handle{};
+			EthernetController *_self{};
+		};
+
 		EthernetController();
 
-		ETH_HandleTypeDef _handle{};
+		handle_context _handle_context{this};
 		base::ethernet::InterfaceType _interface_type;
 		uint32_t _phy_address = 0;
 		base::Mac _mac;
