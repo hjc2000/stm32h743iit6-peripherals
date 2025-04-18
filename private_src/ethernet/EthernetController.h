@@ -3,7 +3,6 @@
 #include "base/define.h"
 #include "base/peripheral/ethernet/parameter.h"
 #include "base/task/IBinarySemaphore.h"
-#include "bsp-interface/di/task.h"
 #include "bsp-interface/ethernet/IEthernetController.h"
 #include "hal.h"
 
