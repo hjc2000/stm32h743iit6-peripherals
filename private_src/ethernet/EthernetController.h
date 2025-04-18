@@ -62,7 +62,7 @@ namespace bsp
 		/// @brief 启动以太网。
 		/// @param duplex_mode
 		/// @param speed
-		void Start(bsp::EthernetDuplexMode duplex_mode,
+		void Start(base::ethernet::DuplexMode duplex_mode,
 				   base::bps const &speed) override;
 
 		/// @brief 发送。

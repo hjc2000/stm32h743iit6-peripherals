@@ -290,7 +290,7 @@ void bsp::EthernetController::WritePHYRegister(uint32_t register_index, uint32_t
 	}
 }
 
-void bsp::EthernetController::Start(bsp::EthernetDuplexMode duplex_mode, base::bps const &speed)
+void bsp::EthernetController::Start(base::ethernet::DuplexMode duplex_mode, base::bps const &speed)
 {
 	{
 		ETH_MACConfigTypeDef def{};
@@ -305,7 +305,7 @@ void bsp::EthernetController::Start(bsp::EthernetDuplexMode duplex_mode, base::b
 			def.Speed = ETH_SPEED_100M;
 		}
 
-		if (duplex_mode == bsp::EthernetDuplexMode::HalfDuplex)
+		if (duplex_mode == base::ethernet::DuplexMode::HalfDuplex)
 		{
 			def.DuplexMode = ETH_HALFDUPLEX_MODE;
 		}
