@@ -1,6 +1,7 @@
 #pragma once
 #include "base/container/List.h"
 #include "base/define.h"
+#include "base/peripheral/ethernet/ethernet_controller_handle.h"
 #include "base/peripheral/ethernet/parameter.h"
 #include "base/task/IBinarySemaphore.h"
 #include "bsp-interface/ethernet/IEthernetController.h"
