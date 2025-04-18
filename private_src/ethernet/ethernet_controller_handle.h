@@ -4,6 +4,7 @@
 #include "base/peripheral/ethernet/ethernet_controller_handle.h"
 #include "base/peripheral/ethernet/parameter.h"
 #include "base/task/IBinarySemaphore.h"
+#include "base/unit/Mbps.h"
 #include "bsp-interface/ethernet/IEthernetController.h"
 #include "hal.h"
 
@@ -23,8 +24,6 @@ private:
 		ethernet_controller_handle *_self{};
 	};
 
-	ethernet_controller_handle();
-
 	handle_context _handle_context{this};
 	base::ethernet::InterfaceType _interface_type;
 	uint32_t _phy_address = 0;
@@ -40,6 +39,8 @@ private:
 	base::IEnumerable<base::ReadOnlySpan> const &ReceiveMultiSpans();
 
 public:
+	ethernet_controller_handle();
+
 	static_function ethernet_controller_handle &Instance();
 
 	/// @brief 以太网控制器的名称。
@@ -73,7 +74,7 @@ public:
 	/// @param duplex_mode
 	/// @param speed
 	void Start(base::ethernet::DuplexMode duplex_mode,
-			   base::bps const &speed) override;
+			   base::Mbps const &speed) override;
 
 	/// @brief 发送。
 	/// @param spans

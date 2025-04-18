@@ -1,8 +1,8 @@
+#include "ethernet_controller_handle.h"
 #include "base/define.h"
 #include "bsp-interface/di/cache.h"
 #include "bsp-interface/di/console.h"
 #include "bsp-interface/di/interrupt.h"
-#include "ethernet_controller_handle.h"
 #include "hal.h"
 
 #define ETH_CLK_GPIO_PORT GPIOA
@@ -292,7 +292,7 @@ void base::ethernet::ethernet_controller_handle::WritePHYRegister(uint32_t regis
 	}
 }
 
-void base::ethernet::ethernet_controller_handle::Start(base::ethernet::DuplexMode duplex_mode, base::bps const &speed)
+void base::ethernet::ethernet_controller_handle::Start(base::ethernet::DuplexMode duplex_mode, base::Mbps const &speed)
 {
 	{
 		ETH_MACConfigTypeDef def{};
