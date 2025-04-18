@@ -200,7 +200,7 @@ base::Mac bsp::EthernetController::Mac() const
 	return _mac;
 }
 
-void bsp::EthernetController::Open(bsp::EthernetInterfaceType interface_type,
+void bsp::EthernetController::Open(base::ethernet::InterfaceType interface_type,
 								   uint32_t phy_address,
 								   base::Mac const &mac)
 {

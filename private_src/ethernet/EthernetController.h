@@ -1,6 +1,7 @@
 #pragma once
 #include "base/container/List.h"
 #include "base/define.h"
+#include "base/peripheral/ethernet/parameter.h"
 #include "base/task/IBinarySemaphore.h"
 #include "bsp-interface/di/task.h"
 #include "bsp-interface/ethernet/IEthernetController.h"
@@ -15,7 +16,7 @@ namespace bsp
 		EthernetController();
 
 		ETH_HandleTypeDef _handle{};
-		bsp::EthernetInterfaceType _interface_type;
+		base::ethernet::InterfaceType _interface_type;
 		uint32_t _phy_address = 0;
 		base::Mac _mac;
 		ETH_TxPacketConfig _sending_config{};
@@ -44,7 +45,7 @@ namespace bsp
 		/// @param interface_type 连接着 PHY 的接口类型。（使用的是 MII 还是 RMII）
 		/// @param phy_address PHY 的地址。
 		/// @param mac MAC 地址。
-		void Open(bsp::EthernetInterfaceType interface_type,
+		void Open(base::ethernet::InterfaceType interface_type,
 				  uint32_t phy_address,
 				  base::Mac const &mac) override;
 
