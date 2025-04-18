@@ -1,8 +1,8 @@
-#include "EthernetController.h"
 #include "base/define.h"
 #include "bsp-interface/di/cache.h"
 #include "bsp-interface/di/console.h"
 #include "bsp-interface/di/interrupt.h"
+#include "ethernet_controller_handle.h"
 #include "hal.h"
 
 #define ETH_CLK_GPIO_PORT GPIOA
@@ -32,7 +32,7 @@
 #define ETH_TXD1_GPIO_PORT GPIOG
 #define ETH_TXD1_GPIO_PIN GPIO_PIN_14
 
-bsp::EthernetController::EthernetController()
+base::ethernet::ethernet_controller_handle::ethernet_controller_handle()
 {
 	// MPU 设置
 	{
@@ -128,7 +128,7 @@ bsp::EthernetController::EthernetController()
 	_send_completion_signal->Release();
 }
 
-base::IEnumerable<base::ReadOnlySpan> const &bsp::EthernetController::ReceiveMultiSpans()
+base::IEnumerable<base::ReadOnlySpan> const &base::ethernet::ethernet_controller_handle::ReceiveMultiSpans()
 {
 	while (true)
 	{
@@ -182,27 +182,27 @@ base::IEnumerable<base::ReadOnlySpan> const &bsp::EthernetController::ReceiveMul
 	}
 }
 
-PREINIT(bsp::EthernetController::Instance);
+PREINIT(base::ethernet::ethernet_controller_handle::Instance);
 
-bsp::EthernetController &bsp::EthernetController::Instance()
+base::ethernet::ethernet_controller_handle &base::ethernet::ethernet_controller_handle::Instance()
 {
-	static EthernetController o{};
+	static ethernet_controller_handle o{};
 	return o;
 }
 
-std::string bsp::EthernetController::Name() const
+std::string base::ethernet::ethernet_controller_handle::Name() const
 {
 	return "eth";
 }
 
-base::Mac bsp::EthernetController::Mac() const
+base::Mac base::ethernet::ethernet_controller_handle::Mac() const
 {
 	return _mac;
 }
 
-void bsp::EthernetController::Open(base::ethernet::InterfaceType interface_type,
-								   uint32_t phy_address,
-								   base::Mac const &mac)
+void base::ethernet::ethernet_controller_handle::Open(base::ethernet::InterfaceType interface_type,
+													  uint32_t phy_address,
+													  base::Mac const &mac)
 {
 	_interface_type = interface_type;
 	_phy_address = phy_address;
@@ -263,7 +263,7 @@ void bsp::EthernetController::Open(base::ethernet::InterfaceType interface_type,
 											});
 }
 
-uint32_t bsp::EthernetController::ReadPHYRegister(uint32_t register_index)
+uint32_t base::ethernet::ethernet_controller_handle::ReadPHYRegister(uint32_t register_index)
 {
 	uint32_t regval = 0;
 	HAL_StatusTypeDef result = HAL_ETH_ReadPHYRegister(&_handle_context._handle,
@@ -279,7 +279,7 @@ uint32_t bsp::EthernetController::ReadPHYRegister(uint32_t register_index)
 	return regval;
 }
 
-void bsp::EthernetController::WritePHYRegister(uint32_t register_index, uint32_t value)
+void base::ethernet::ethernet_controller_handle::WritePHYRegister(uint32_t register_index, uint32_t value)
 {
 	HAL_StatusTypeDef result = HAL_ETH_WritePHYRegister(&_handle_context._handle,
 														_phy_address,
@@ -292,7 +292,7 @@ void bsp::EthernetController::WritePHYRegister(uint32_t register_index, uint32_t
 	}
 }
 
-void bsp::EthernetController::Start(base::ethernet::DuplexMode duplex_mode, base::bps const &speed)
+void base::ethernet::ethernet_controller_handle::Start(base::ethernet::DuplexMode duplex_mode, base::bps const &speed)
 {
 	{
 		ETH_MACConfigTypeDef def{};
@@ -331,7 +331,7 @@ void bsp::EthernetController::Start(base::ethernet::DuplexMode duplex_mode, base
 	HAL_ETH_Start_IT(&_handle_context._handle);
 }
 
-void bsp::EthernetController::Send(base::IEnumerable<base::ReadOnlySpan> const &spans)
+void base::ethernet::ethernet_controller_handle::Send(base::IEnumerable<base::ReadOnlySpan> const &spans)
 {
 	_send_completion_signal->Acquire();
 	_sending_config.Length = 0;
@@ -358,7 +358,7 @@ void bsp::EthernetController::Send(base::IEnumerable<base::ReadOnlySpan> const &
 	}
 }
 
-void bsp::EthernetController::Send(base::ReadOnlySpan const &span)
+void base::ethernet::ethernet_controller_handle::Send(base::ReadOnlySpan const &span)
 {
 	_send_completion_signal->Acquire();
 	_sending_config.Length = span.Size();
@@ -371,7 +371,7 @@ void bsp::EthernetController::Send(base::ReadOnlySpan const &span)
 	HAL_ETH_Transmit_IT(&_handle_context._handle, &_sending_config);
 }
 
-base::ReadOnlySpan bsp::EthernetController::Receive()
+base::ReadOnlySpan base::ethernet::ethernet_controller_handle::Receive()
 {
 	while (true)
 	{
