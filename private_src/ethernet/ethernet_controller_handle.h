@@ -76,7 +76,7 @@ public:
 
 	/// @brief 发送。
 	/// @param spans
-	void Send(base::IEnumerable<base::ReadOnlySpan> const &spans);
+	void Send(std::vector<base::ReadOnlySpan> const &spans);
 
 	/// @brief 发送单个 span.
 	/// @note 默认实现是基于 void Send(base::IEnumerable<base::ReadOnlySpan> const &spans).

@@ -61,6 +61,12 @@ void base::ethernet::send(base::ethernet::ethernet_controller_handle &h,
 	h.Send(span);
 }
 
+void base::ethernet::send(base::ethernet::ethernet_controller_handle &h,
+						  std::vector<base::ReadOnlySpan> const &spans)
+{
+	h.Send(spans);
+}
+
 base::ReadOnlySpan base::ethernet::receive(base::ethernet::ethernet_controller_handle &h)
 {
 	return h.Receive();

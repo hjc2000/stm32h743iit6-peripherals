@@ -331,7 +331,7 @@ void base::ethernet::ethernet_controller_handle::Start(base::ethernet::DuplexMod
 	HAL_ETH_Start_IT(&_handle_context._handle);
 }
 
-void base::ethernet::ethernet_controller_handle::Send(base::IEnumerable<base::ReadOnlySpan> const &spans)
+void base::ethernet::ethernet_controller_handle::Send(std::vector<base::ReadOnlySpan> const &spans)
 {
 	_send_completion_signal->Acquire();
 	_sending_config.Length = 0;
