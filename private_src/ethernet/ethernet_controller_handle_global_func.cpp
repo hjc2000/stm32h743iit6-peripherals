@@ -1,6 +1,6 @@
 #include "ethernet_controller_handle.h"
 
-std::shared_ptr<base::ethernet::ethernet_controller_handle> base::ethernet::open()
+std::shared_ptr<base::ethernet::ethernet_controller_handle> base::ethernet::open(uint32_t id)
 {
 	return std::shared_ptr<base::ethernet::ethernet_controller_handle>{new base::ethernet::ethernet_controller_handle{}};
 }

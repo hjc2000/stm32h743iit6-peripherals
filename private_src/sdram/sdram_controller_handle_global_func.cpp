@@ -1,7 +1,7 @@
 #include "base/stream/Span.h"
 #include "sdram_controller_handle.h"
 
-std::shared_ptr<base::sdram::sdram_controller_handle> base::sdram::open()
+std::shared_ptr<base::sdram::sdram_controller_handle> base::sdram::open(uint32_t id)
 {
 	return std::shared_ptr<base::sdram::sdram_controller_handle>{new base::sdram::sdram_controller_handle{}};
 }
