@@ -1,5 +1,4 @@
 #include "ethernet_controller_handle.h"
-#include "base/define.h"
 #include "bsp-interface/di/cache.h"
 #include "bsp-interface/di/console.h"
 #include "bsp-interface/di/interrupt.h"
