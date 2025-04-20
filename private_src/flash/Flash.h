@@ -1,5 +1,5 @@
 #pragma once
-#include "base/task/IBinarySemaphore.h"
+#include "base/task/BinarySemaphore.h"
 #include <atomic>
 #include <base/define.h>
 #include <base/LockGuard.h>
@@ -28,7 +28,7 @@ namespace bsp
 		friend void ::HAL_FLASH_OperationErrorCallback(uint32_t ReturnValue);
 
 		std::atomic_bool _operation_failed = false;
-		std::shared_ptr<base::IBinarySemaphore> _operation_completed = base::CreateIBinarySemaphore(false);
+		base::task::BinarySemaphore _operation_completed{false};
 
 	public:
 		static_function Flash &Instance();

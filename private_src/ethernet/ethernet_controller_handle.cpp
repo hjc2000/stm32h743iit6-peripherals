@@ -124,7 +124,7 @@ base::ethernet::ethernet_controller_handle::ethernet_controller_handle()
 	_sending_config.ChecksumCtrl = ETH_CHECKSUM_IPHDR_PAYLOAD_INSERT_PHDR_CALC;
 	_sending_config.CRCPadCtrl = ETH_CRC_PAD_INSERT;
 
-	_send_completion_signal->Release();
+	_send_completion_signal.Release();
 }
 
 base::IEnumerable<base::ReadOnlySpan> const &base::ethernet::ethernet_controller_handle::ReceiveMultiSpans()
@@ -142,7 +142,7 @@ base::IEnumerable<base::ReadOnlySpan> const &base::ethernet::ethernet_controller
 		if (!HAL_ETH_IsRxDataAvailable(&_handle_context._handle))
 		{
 			// 无数据可接收，等待信号量。有数据到来会触发中断，中断服务函数会释放信号量。
-			_receiving_completion_signal->Acquire();
+			_receiving_completion_signal.Acquire();
 		}
 
 		if (HAL_ETH_GetRxDataBuffer(&_handle_context._handle, rx_buffers) != HAL_OK)
@@ -219,13 +219,13 @@ void base::ethernet::ethernet_controller_handle::Open(base::ethernet::InterfaceT
 	_handle_context._handle.TxCpltCallback = [](ETH_HandleTypeDef *handle)
 	{
 		handle_context *context = reinterpret_cast<handle_context *>(handle);
-		context->_self->_send_completion_signal->ReleaseFromISR();
+		context->_self->_send_completion_signal.ReleaseFromIsr();
 	};
 
 	_handle_context._handle.RxCpltCallback = [](ETH_HandleTypeDef *handle)
 	{
 		handle_context *context = reinterpret_cast<handle_context *>(handle);
-		context->_self->_receiving_completion_signal->ReleaseFromISR();
+		context->_self->_receiving_completion_signal.ReleaseFromIsr();
 	};
 
 	// MDC时钟
@@ -324,7 +324,7 @@ void base::ethernet::ethernet_controller_handle::Start(base::ethernet::DuplexMod
 
 void base::ethernet::ethernet_controller_handle::Send(std::vector<base::ReadOnlySpan> const &spans)
 {
-	_send_completion_signal->Acquire();
+	_send_completion_signal.Acquire();
 	_sending_config.Length = 0;
 	_eth_buffers.Clear();
 	for (auto span : spans)
@@ -351,7 +351,7 @@ void base::ethernet::ethernet_controller_handle::Send(std::vector<base::ReadOnly
 
 void base::ethernet::ethernet_controller_handle::Send(base::ReadOnlySpan const &span)
 {
-	_send_completion_signal->Acquire();
+	_send_completion_signal.Acquire();
 	_sending_config.Length = span.Size();
 
 	ETH_BufferTypeDef eth_buffer{};
@@ -377,7 +377,7 @@ base::ReadOnlySpan base::ethernet::ethernet_controller_handle::Receive()
 		if (!HAL_ETH_IsRxDataAvailable(&_handle_context._handle))
 		{
 			// 无数据可接收，等待信号量。有数据到来会触发中断，中断服务函数会释放信号量。
-			_receiving_completion_signal->Acquire();
+			_receiving_completion_signal.Acquire();
 		}
 
 		if (HAL_ETH_GetRxDataBuffer(&_handle_context._handle, rx_buffers) != HAL_OK)

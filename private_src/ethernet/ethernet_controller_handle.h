@@ -2,7 +2,7 @@
 #include "base/container/List.h"
 #include "base/peripheral/ethernet/ethernet_controller_handle.h"
 #include "base/peripheral/ethernet/parameter.h"
-#include "base/task/IBinarySemaphore.h"
+#include "base/task/BinarySemaphore.h"
 #include "base/unit/Mbps.h"
 #include "base/UsageStateManager.h"
 #include "hal.h"
@@ -34,9 +34,9 @@ private:
 	base::Mac _mac;
 	ETH_TxPacketConfig _sending_config{};
 	base::List<ETH_BufferTypeDef> _eth_buffers{};
-	std::shared_ptr<base::IBinarySemaphore> _send_completion_signal = base::CreateIBinarySemaphore(false);
+	base::task::BinarySemaphore _send_completion_signal{false};
 	base::List<base::ReadOnlySpan> _received_span_list{};
-	std::shared_ptr<base::IBinarySemaphore> _receiving_completion_signal = base::CreateIBinarySemaphore(false);
+	base::task::BinarySemaphore _receiving_completion_signal{false};
 
 	/// @brief 接收。
 	/// @return

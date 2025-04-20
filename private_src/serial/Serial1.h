@@ -2,7 +2,7 @@
 #include "base/define.h"
 #include "base/peripheral/gpio/gpio_parameter.h"
 #include "base/peripheral/gpio/GpioPin.h"
-#include "base/task/IBinarySemaphore.h"
+#include "base/task/BinarySemaphore.h"
 #include "base/task/Mutex.h"
 #include "base/UsageStateManager.h"
 #include "hal.h"
@@ -29,8 +29,8 @@ namespace bsp
 		};
 
 		handle_context _handle_context{this};
-		std::shared_ptr<base::IBinarySemaphore> _sending_completion_signal = base::CreateIBinarySemaphore(false);
-		std::shared_ptr<base::IBinarySemaphore> _receiving_completion_signal = base::CreateIBinarySemaphore(false);
+		base::task::BinarySemaphore _sending_completion_signal{false};
+		base::task::BinarySemaphore _receiving_completion_signal{false};
 		base::task::Mutex _read_lock{};
 		DMA_HandleTypeDef _rx_dma_handle{};
 		DMA_HandleTypeDef _tx_dma_handle{};
