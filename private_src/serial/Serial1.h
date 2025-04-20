@@ -3,7 +3,7 @@
 #include "base/peripheral/gpio/gpio_parameter.h"
 #include "base/peripheral/gpio/GpioPin.h"
 #include "base/task/IBinarySemaphore.h"
-#include "base/task/IMutex.h"
+#include "base/task/Mutex.h"
 #include "base/UsageStateManager.h"
 #include "hal.h"
 #include "serial_handle.h"
@@ -31,7 +31,7 @@ namespace bsp
 		handle_context _handle_context{this};
 		std::shared_ptr<base::IBinarySemaphore> _sending_completion_signal = base::CreateIBinarySemaphore(false);
 		std::shared_ptr<base::IBinarySemaphore> _receiving_completion_signal = base::CreateIBinarySemaphore(false);
-		std::shared_ptr<base::IMutex> _read_lock = base::CreateIMutex();
+		base::task::Mutex _read_lock{};
 		DMA_HandleTypeDef _rx_dma_handle{};
 		DMA_HandleTypeDef _tx_dma_handle{};
 		base::gpio::GpioPin _pa9{base::gpio::PortEnum::PortA, 9};

@@ -1,7 +1,7 @@
 #include "Serial1.h"
-#include "base/LockGuard.h"
 #include "base/peripheral/serial/serial_handle.h"
 #include "base/string/define.h"
+#include "base/task/Mutex.h"
 #include "bsp-interface/di/interrupt.h"
 #include <functional>
 #include <stdexcept>
@@ -321,7 +321,7 @@ int32_t bsp::Serial1::Read(base::Span const &span)
 		throw std::invalid_argument{"count 太大"};
 	}
 
-	base::LockGuard l{*_read_lock};
+	base::task::MutexGuard l{_read_lock};
 	while (true)
 	{
 		{

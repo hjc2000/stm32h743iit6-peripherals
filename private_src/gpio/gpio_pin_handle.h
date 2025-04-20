@@ -1,12 +1,10 @@
 #pragma once
-#include "base/LockGuard.h"
 #include "base/peripheral/gpio/gpio_handle.h" // IWYU pragma: export
-#include "base/task/IMutex.h"
+#include "base/task/Mutex.h"
 #include "hal.h"
 #include <array>
 #include <bitset>
 #include <cstdint>
-#include <memory>
 #include <string>
 
 namespace bsp
@@ -155,7 +153,7 @@ namespace bsp
 	{
 	private:
 		inline static std::array<std::bitset<16>, PortCount()> _states{};
-		inline static std::shared_ptr<base::IMutex> _lock = base::CreateIMutex();
+		inline static base::task::Mutex _lock{};
 
 		base::gpio::PortEnum _port{};
 		uint32_t _pin{};
@@ -179,7 +177,7 @@ namespace bsp
 			}
 
 			CheckUsage(port, pin);
-			base::LockGuard g{*_lock};
+			base::task::MutexGuard g{_lock};
 			CheckUsage(port, pin);
 
 			_states[static_cast<int>(port)][pin] = true;
@@ -187,7 +185,7 @@ namespace bsp
 
 		~UsageStateManager()
 		{
-			base::LockGuard g{*_lock};
+			base::task::MutexGuard g{_lock};
 			_states[static_cast<int>(_port)][_pin] = false;
 		}
 	};
