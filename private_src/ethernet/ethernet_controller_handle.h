@@ -10,6 +10,8 @@
 class base::ethernet::ethernet_controller_handle
 {
 private:
+	/* #region 句柄 */
+
 	class handle_context
 	{
 	public:
@@ -23,6 +25,8 @@ private:
 	};
 
 	handle_context _handle_context{this};
+	/* #endregion */
+
 	base::ethernet::InterfaceType _interface_type;
 	uint32_t _phy_address = 0;
 	base::Mac _mac;
