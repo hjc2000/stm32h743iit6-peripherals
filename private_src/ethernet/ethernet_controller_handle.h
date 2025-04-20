@@ -1,15 +1,17 @@
 #pragma once
 #include "base/container/List.h"
-#include "base/define.h"
 #include "base/peripheral/ethernet/ethernet_controller_handle.h"
 #include "base/peripheral/ethernet/parameter.h"
 #include "base/task/IBinarySemaphore.h"
 #include "base/unit/Mbps.h"
+#include "base/UsageStateManager.h"
 #include "hal.h"
 
 class base::ethernet::ethernet_controller_handle
 {
 private:
+	base::UsageStateManager<ethernet_controller_handle> _usage_state_manager;
+
 	/* #region 句柄 */
 
 	class handle_context
@@ -42,8 +44,6 @@ private:
 
 public:
 	ethernet_controller_handle();
-
-	static_function ethernet_controller_handle &Instance();
 
 	/// @brief 以太网控制器的名称。
 	/// @return

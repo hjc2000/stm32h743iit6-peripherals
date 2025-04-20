@@ -182,14 +182,6 @@ base::IEnumerable<base::ReadOnlySpan> const &base::ethernet::ethernet_controller
 	}
 }
 
-PREINIT(base::ethernet::ethernet_controller_handle::Instance);
-
-base::ethernet::ethernet_controller_handle &base::ethernet::ethernet_controller_handle::Instance()
-{
-	static ethernet_controller_handle o{};
-	return o;
-}
-
 std::string base::ethernet::ethernet_controller_handle::Name() const
 {
 	return "eth";
