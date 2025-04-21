@@ -1,6 +1,6 @@
 #include "IndependentWatchDog.h"
+#include "base/Console.h"
 #include "base/define.h"
-#include <bsp-interface/di/console.h>
 
 base::Hz bsp::IndependentWatchDog::InnerClockSourceFreq() const
 {
@@ -53,7 +53,7 @@ void bsp::IndependentWatchDog::Open(std::chrono::milliseconds value)
 
 void bsp::IndependentWatchDog::Close()
 {
-	bsp::di::Console().WriteError("看门狗一旦开启就无法关闭");
+	base::console.WriteErrorLine("看门狗一旦开启就无法关闭");
 }
 
 std::chrono::milliseconds bsp::IndependentWatchDog::Timeout() const
