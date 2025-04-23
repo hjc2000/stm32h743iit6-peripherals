@@ -4,7 +4,6 @@
 #include <base/define.h>
 #include <base/LockGuard.h>
 #include <bsp-interface/di/interrupt.h>
-#include <bsp-interface/di/task.h>
 #include <bsp-interface/flash/IFlash.h>
 #include <hal.h>
 
