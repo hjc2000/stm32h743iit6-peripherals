@@ -1,6 +1,6 @@
 #include "ethernet_controller_handle.h"
 #include "base/Console.h"
-#include "bsp-interface/di/cache.h"
+#include "base/peripheral/cache/cache.h"
 #include "bsp-interface/di/interrupt.h"
 #include "hal.h"
 
@@ -165,7 +165,7 @@ base::IEnumerable<base::ReadOnlySpan> const &base::ethernet::ethernet_controller
 				break;
 			}
 
-			bsp::di::cache::InvalidateDCache(buffer.buffer, buffer.len);
+			base::cache::invalidate_d_cache(buffer.buffer, buffer.len);
 			base::ReadOnlySpan span{buffer.buffer, static_cast<int32_t>(buffer.len)};
 			_received_span_list.Add(span);
 			if (buffer.next == nullptr)
@@ -400,7 +400,7 @@ base::ReadOnlySpan base::ethernet::ethernet_controller_handle::Receive()
 				break;
 			}
 
-			bsp::di::cache::InvalidateDCache(buffer.buffer, buffer.len);
+			base::cache::invalidate_d_cache(buffer.buffer, buffer.len);
 			base::ReadOnlySpan span{buffer.buffer, static_cast<int32_t>(buffer.len)};
 			_received_span_list.Add(span);
 			if (buffer.next == nullptr)
