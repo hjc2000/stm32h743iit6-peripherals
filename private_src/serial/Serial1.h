@@ -1,7 +1,7 @@
 #pragma once
 #include "base/define.h"
-#include "base/peripheral/gpio/gpio_parameter.h"
-#include "base/peripheral/gpio/GpioPin.h"
+#include "base/embedded/gpio/gpio_parameter.h"
+#include "base/embedded/gpio/GpioPin.h"
 #include "base/task/BinarySemaphore.h"
 #include "base/task/Mutex.h"
 #include "base/UsageStateManager.h"

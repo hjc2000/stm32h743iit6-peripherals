@@ -1,5 +1,5 @@
 #include "gpio_pin_handle.h"
-#include "base/peripheral/gpio/gpio_parameter.h"
+#include "base/embedded/gpio/gpio_parameter.h"
 #include "base/string/define.h"
 #include "bsp-interface/di/interrupt.h"
 #include "stm32h7xx_hal_gpio.h"

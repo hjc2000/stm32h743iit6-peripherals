@@ -1,5 +1,5 @@
 #include "Serial1.h"
-#include "base/peripheral/serial/serial_handle.h"
+#include "base/embedded/serial/serial_handle.h"
 #include "base/string/define.h"
 #include "base/task/Mutex.h"
 #include "bsp-interface/di/interrupt.h"

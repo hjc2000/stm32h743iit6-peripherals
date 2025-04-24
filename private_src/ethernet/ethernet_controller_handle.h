@@ -1,7 +1,7 @@
 #pragma once
 #include "base/container/List.h"
-#include "base/peripheral/ethernet/ethernet_controller_handle.h"
-#include "base/peripheral/ethernet/parameter.h"
+#include "base/embedded/ethernet/ethernet_controller_handle.h"
+#include "base/embedded/ethernet/parameter.h"
 #include "base/task/BinarySemaphore.h"
 #include "base/unit/Mbps.h"
 #include "base/UsageStateManager.h"

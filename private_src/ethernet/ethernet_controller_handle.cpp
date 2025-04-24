@@ -1,6 +1,6 @@
 #include "ethernet_controller_handle.h"
 #include "base/Console.h"
-#include "base/peripheral/cache/cache.h"
+#include "base/embedded/cache/cache.h"
 #include "bsp-interface/di/interrupt.h"
 #include "hal.h"
 

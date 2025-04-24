@@ -1,4 +1,4 @@
-#include "base/peripheral/cache/cache.h"
+#include "base/embedded/cache/cache.h"
 #include "hal.h"
 
 void base::cache::enable()

@@ -1,8 +1,8 @@
 #pragma once
-#include "base/peripheral/gpio/gpio_parameter.h"
-#include "base/peripheral/gpio/GpioPin.h"
-#include "base/peripheral/sdram/sdram_controller_handle.h"
-#include "base/peripheral/sdram/sdram_timing.h"
+#include "base/embedded/gpio/gpio_parameter.h"
+#include "base/embedded/gpio/GpioPin.h"
+#include "base/embedded/sdram/sdram_controller_handle.h"
+#include "base/embedded/sdram/sdram_timing.h"
 #include "base/UsageStateManager.h"
 #include <base/define.h>
 #include <hal.h>

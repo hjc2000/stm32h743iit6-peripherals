@@ -1,5 +1,5 @@
 #pragma once
-#include "base/peripheral/gpio/gpio_handle.h" // IWYU pragma: export
+#include "base/embedded/gpio/gpio_handle.h" // IWYU pragma: export
 #include "base/task/Mutex.h"
 #include "hal.h"
 #include <array>
