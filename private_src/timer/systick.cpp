@@ -47,9 +47,9 @@ void base::systick::set_elapsed_handler(std::function<void()> func)
 ///
 base::Nanoseconds base::systick::system_time_stamp()
 {
-	base::Nanoseconds tick_period{base::systick::frequency()};
-	uint64_t period_count = _total_tick / base::systick::reload_value();
-	return period_count * tick_period;
+	base::Nanoseconds clock_period{base::systick::frequency()};
+	base::Nanoseconds elapsed_period = clock_period * base::systick::reload_value();
+	return _total_tick * elapsed_period;
 }
 
 extern "C"
@@ -66,7 +66,7 @@ extern "C"
 		// 读取一下 CTRL，SysTick 的溢出标志位会自动清除。
 		SysTick->CTRL;
 		HAL_IncTick();
-		_total_tick += base::systick::reload_value();
+		_total_tick++;
 
 		if (_elapsed_handler != nullptr)
 		{
