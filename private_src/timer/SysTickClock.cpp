@@ -1,7 +1,7 @@
 #include "SysTickClock.h"
 #include "base/define.h"
 #include "base/task/delay.h"
-#include <bsp-interface/di/interrupt.h>
+#include "bsp-interface/di/interrupt.h"
 
 extern "C"
 {
