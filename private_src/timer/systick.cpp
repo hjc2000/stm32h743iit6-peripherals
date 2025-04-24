@@ -1,4 +1,5 @@
 #include "base/peripheral/systick/systick.h"
+#include "base/math/Fraction.h"
 #include "base/task/delay.h"
 #include "base/unit/Hz.h"
 #include "base/unit/MHz.h"
@@ -7,11 +8,12 @@
 #include "bsp-interface/di/interrupt.h"
 #include "hal.h"
 #include <chrono>
+#include <cstdint>
 
 namespace
 {
 	std::function<void()> _elapsed_handler{};
-	base::Nanoseconds _system_time_stamp{};
+	uint64_t _total_tick{};
 
 } // namespace
 
@@ -46,7 +48,9 @@ void base::systick::set_elapsed_handler(std::function<void()> func)
 ///
 base::Nanoseconds base::systick::system_time_stamp()
 {
-	return _system_time_stamp;
+	base::Nanoseconds tick_period{base::systick::frequency()};
+	base::Fraction period_count{_total_tick, base::systick::reload_value()};
+	return period_count * tick_period;
 }
 
 extern "C"
@@ -63,11 +67,7 @@ extern "C"
 		// 读取一下 CTRL，SysTick 的溢出标志位会自动清除。
 		SysTick->CTRL;
 		HAL_IncTick();
-
-		{
-			base::Nanoseconds tick_period{base::systick::frequency()};
-			_system_time_stamp += tick_period;
-		}
+		_total_tick += base::systick::reload_value();
 
 		if (_elapsed_handler != nullptr)
 		{
