@@ -49,7 +49,7 @@ void base::systick::set_elapsed_handler(std::function<void()> func)
 base::Nanoseconds base::systick::system_time_stamp()
 {
 	base::Nanoseconds tick_period{base::systick::frequency()};
-	base::Fraction period_count{_total_tick, base::systick::reload_value()};
+	uint64_t period_count = _total_tick / base::systick::reload_value();
 	return period_count * tick_period;
 }
 
