@@ -1,14 +1,14 @@
-#include "base/define.h"
 #include "base/embedded/heap/heap.h"
+#include "base/define.h"
 #include "base/embedded/heap/Heap4.h"
 #include "base/embedded/heap/IHeap.h"
-#include "FreeRTOS.h"
+#include <cstddef>
 #include <stdlib.h>
 #include <string.h>
 
 namespace
 {
-	uint8_t _buffer[configTOTAL_HEAP_SIZE];
+	uint8_t _buffer[static_cast<size_t>(1024) * 200];
 
 	base::heap::Heap4 &Heap4Instance()
 	{
@@ -30,22 +30,4 @@ base::heap::IHeap &base::heap::Heap()
 std::shared_ptr<base::heap::IHeap> base::heap::CreateHeap(uint8_t *buffer, size_t size)
 {
 	return std::shared_ptr<base::heap::IHeap>{new base::heap::Heap4{buffer, size}};
-}
-
-/**
- * 实现 freertos 的函数。
- */
-extern "C"
-{
-	void *pvPortMalloc(size_t xWantedSize)
-	{
-		return base::heap::Malloc(xWantedSize);
-	}
-
-	/*-----------------------------------------------------------*/
-
-	void vPortFree(void *pv)
-	{
-		base::heap::Free(pv);
-	}
 }
