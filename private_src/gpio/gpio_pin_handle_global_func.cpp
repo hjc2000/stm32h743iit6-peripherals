@@ -1,8 +1,8 @@
 #include "gpio_pin_handle.h"
 
-base::gpio::sp_gpio_pin_handle base::gpio::open(base::gpio::PortEnum port, uint32_t pin)
+std::shared_ptr<base::gpio::gpio_pin_handle> base::gpio::open(base::gpio::PortEnum port, uint32_t pin)
 {
-	base::gpio::sp_gpio_pin_handle handle{new base::gpio::gpio_pin_handle{port, pin}};
+	std::shared_ptr<base::gpio::gpio_pin_handle> handle{new base::gpio::gpio_pin_handle{port, pin}};
 	return handle;
 }
 
