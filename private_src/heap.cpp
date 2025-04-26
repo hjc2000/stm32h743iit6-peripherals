@@ -26,8 +26,3 @@ base::heap::IHeap &base::heap::Heap()
 {
 	return Heap4Instance();
 }
-
-std::shared_ptr<base::heap::IHeap> base::heap::CreateHeap(uint8_t *buffer, size_t size)
-{
-	return std::shared_ptr<base::heap::IHeap>{new base::heap::Heap4{buffer, size}};
-}
