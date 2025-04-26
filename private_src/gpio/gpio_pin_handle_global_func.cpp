@@ -32,6 +32,8 @@ void base::gpio::initialize_as_alternate_function_mode(base::gpio::gpio_pin_hand
 
 /* #endregion */
 
+/* #region 引脚信息 */
+
 base::gpio::PortEnum base::gpio::port(base::gpio::gpio_pin_handle &h)
 {
 	return h.port();
@@ -41,6 +43,8 @@ uint32_t base::gpio::pin(base::gpio::gpio_pin_handle &h)
 {
 	return h.pin();
 }
+
+/* #endregion */
 
 /* #region 全局读写引脚函数 */
 
