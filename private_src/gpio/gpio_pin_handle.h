@@ -225,6 +225,16 @@ public:
 
 	/* #endregion */
 
+	base::gpio::PortEnum port() const
+	{
+		return _port_enum;
+	}
+
+	uint32_t pin() const
+	{
+		return _pin;
+	}
+
 	bool read_pin();
 	void write_pin(bool value);
 	void toggle_pin();

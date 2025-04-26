@@ -32,7 +32,15 @@ void base::gpio::initialize_as_alternate_function_mode(base::gpio::gpio_pin_hand
 
 /* #endregion */
 
-std::string base::gpio::pin_name(base::gpio::gpio_pin_handle &h);
+base::gpio::PortEnum base::gpio::port(base::gpio::gpio_pin_handle &h)
+{
+	return h.port();
+}
+
+uint32_t base::gpio::pin(base::gpio::gpio_pin_handle &h)
+{
+	return h.pin();
+}
 
 /* #region 全局读写引脚函数 */
 
