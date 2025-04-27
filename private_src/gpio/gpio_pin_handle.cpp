@@ -255,7 +255,7 @@ void base::gpio::gpio_pin_handle::WritePin(bool value)
 	HAL_GPIO_WritePin(_port, _pin_define, state);
 }
 
-void base::gpio::gpio_pin_handle::toggle_pin()
+void base::gpio::gpio_pin_handle::TogglePin()
 {
 	HAL_GPIO_TogglePin(_port, _pin_define);
 }

@@ -241,7 +241,7 @@ public:
 
 	bool ReadPin();
 	void WritePin(bool value);
-	void toggle_pin();
+	void TogglePin();
 
 	void register_interrupt_callback(std::function<void()> const &callback_func);
 	void unregister_interrupt_callback();

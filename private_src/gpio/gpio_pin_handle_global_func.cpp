@@ -60,7 +60,7 @@ void base::gpio::write_pin(base::gpio::gpio_pin_handle &h, bool value)
 
 void base::gpio::toggle_pin(base::gpio::gpio_pin_handle &h)
 {
-	h.toggle_pin();
+	h.TogglePin();
 }
 
 /* #endregion */
