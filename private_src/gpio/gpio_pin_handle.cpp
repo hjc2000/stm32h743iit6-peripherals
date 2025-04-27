@@ -269,7 +269,7 @@ void base::gpio::gpio_pin_handle::RegisterInterruptCallback(std::function<void()
 	bsp::di::interrupt::ExtiManager().Register(_pin, callback_func);
 }
 
-void base::gpio::gpio_pin_handle::unregister_interrupt_callback()
+void base::gpio::gpio_pin_handle::UnregisterInterruptCallback()
 {
 	bsp::di::interrupt::ExtiManager().Unregister(_pin);
 }

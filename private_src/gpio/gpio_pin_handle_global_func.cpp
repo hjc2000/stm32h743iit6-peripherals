@@ -75,7 +75,7 @@ void base::gpio::register_interrupt_callback(base::gpio::gpio_pin_handle &h,
 
 void base::gpio::unregister_interrupt_callback(base::gpio::gpio_pin_handle &h)
 {
-	h.unregister_interrupt_callback();
+	h.UnregisterInterruptCallback();
 }
 
 /* #endregion */
