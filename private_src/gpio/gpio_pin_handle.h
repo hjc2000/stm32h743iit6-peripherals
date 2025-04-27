@@ -1,8 +1,10 @@
 #pragma once
 #include "base/embedded/gpio/gpio_handle.h"
+#include "base/embedded/gpio/gpio_parameter.h"
 #include "base/embedded/gpio/GpioPinUsageStateManager.h"
 #include "hal.h"
 #include <cstdint>
+
 
 namespace bsp
 {
@@ -165,6 +167,11 @@ public:
 
 	void InitializeAsOutputMode(base::gpio::PullMode pull_mode,
 								base::gpio::DriveMode drive_mode);
+
+	void InitializeAsOutputMode()
+	{
+		InitializeAsOutputMode(base::gpio::PullMode::PullUp, base::gpio::DriveMode::PushPull);
+	}
 
 	void InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction af,
 										   base::gpio::PullMode pull_mode,
