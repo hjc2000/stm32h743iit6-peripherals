@@ -183,9 +183,9 @@ void base::gpio::gpio_pin_handle::InitializeAsOutputMode(base::gpio::PullMode pu
 	HAL_GPIO_Init(_port, &def);
 }
 
-void base::gpio::gpio_pin_handle::initialize_as_alternate_function_mode(base::gpio::AlternateFunction af,
-																		base::gpio::PullMode pull_mode,
-																		base::gpio::DriveMode drive_mode)
+void base::gpio::gpio_pin_handle::InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction af,
+																	base::gpio::PullMode pull_mode,
+																	base::gpio::DriveMode drive_mode)
 {
 	EnableClock();
 	GPIO_InitTypeDef def{};

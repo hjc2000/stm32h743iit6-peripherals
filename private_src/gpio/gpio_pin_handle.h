@@ -219,9 +219,9 @@ public:
 	void InitializeAsOutputMode(base::gpio::PullMode pull_mode,
 								base::gpio::DriveMode drive_mode);
 
-	void initialize_as_alternate_function_mode(base::gpio::AlternateFunction af,
-											   base::gpio::PullMode pull_mode,
-											   base::gpio::DriveMode drive_mode);
+	void InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction af,
+										   base::gpio::PullMode pull_mode,
+										   base::gpio::DriveMode drive_mode);
 
 	/* #endregion */
 

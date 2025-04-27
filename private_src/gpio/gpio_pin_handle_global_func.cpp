@@ -27,7 +27,7 @@ void base::gpio::initialize_as_alternate_function_mode(base::gpio::gpio_pin_hand
 													   base::gpio::PullMode pull_mode,
 													   base::gpio::DriveMode drive_mode)
 {
-	h.initialize_as_alternate_function_mode(af, pull_mode, drive_mode);
+	h.InitializeAsAlternateFunctionMode(af, pull_mode, drive_mode);
 }
 
 /* #endregion */
