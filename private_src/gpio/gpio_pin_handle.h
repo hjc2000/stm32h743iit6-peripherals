@@ -204,7 +204,7 @@ private:
 
 	void EnableClock();
 
-	uint32_t get_alternate_function_define_value(base::gpio::AlternateFunction af);
+	uint32_t GetAlternateFunctionDefineValue(base::gpio::AlternateFunction af);
 
 	/* #endregion */
 

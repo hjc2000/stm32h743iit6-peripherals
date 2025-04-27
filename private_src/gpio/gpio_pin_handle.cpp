@@ -44,7 +44,7 @@ void base::gpio::gpio_pin_handle::EnableClock()
 	}
 }
 
-uint32_t base::gpio::gpio_pin_handle::get_alternate_function_define_value(base::gpio::AlternateFunction af)
+uint32_t base::gpio::gpio_pin_handle::GetAlternateFunctionDefineValue(base::gpio::AlternateFunction af)
 {
 	switch (af)
 	{
@@ -189,7 +189,7 @@ void base::gpio::gpio_pin_handle::initialize_as_alternate_function_mode(base::gp
 {
 	EnableClock();
 	GPIO_InitTypeDef def{};
-	def.Alternate = get_alternate_function_define_value(af);
+	def.Alternate = GetAlternateFunctionDefineValue(af);
 
 	switch (pull_mode)
 	{
