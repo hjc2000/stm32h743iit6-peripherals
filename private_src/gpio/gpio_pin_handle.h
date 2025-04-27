@@ -202,7 +202,7 @@ private:
 
 	/* #region 初始化帮助方法 */
 
-	void enable_clock();
+	void EnableClock();
 
 	uint32_t get_alternate_function_define_value(base::gpio::AlternateFunction af);
 

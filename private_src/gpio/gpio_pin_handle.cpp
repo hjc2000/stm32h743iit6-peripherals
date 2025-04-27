@@ -8,7 +8,7 @@
 
 /* #region 初始化帮助方法 */
 
-void base::gpio::gpio_pin_handle::enable_clock()
+void base::gpio::gpio_pin_handle::EnableClock()
 {
 	if (_port == GPIOA)
 	{
@@ -83,7 +83,7 @@ base::gpio::gpio_pin_handle::gpio_pin_handle(base::gpio::PortEnum port, uint32_t
 void base::gpio::gpio_pin_handle::initialize_as_input_mode(base::gpio::PullMode pull_mode,
 														   base::gpio::TriggerEdge trigger_edge)
 {
-	enable_clock();
+	EnableClock();
 	GPIO_InitTypeDef def{};
 	switch (pull_mode)
 	{
@@ -138,7 +138,7 @@ void base::gpio::gpio_pin_handle::initialize_as_input_mode(base::gpio::PullMode 
 void base::gpio::gpio_pin_handle::initialize_as_output_mode(base::gpio::PullMode pull_mode,
 															base::gpio::DriveMode drive_mode)
 {
-	enable_clock();
+	EnableClock();
 	GPIO_InitTypeDef def{};
 	switch (pull_mode)
 	{
@@ -187,7 +187,7 @@ void base::gpio::gpio_pin_handle::initialize_as_alternate_function_mode(base::gp
 																		base::gpio::PullMode pull_mode,
 																		base::gpio::DriveMode drive_mode)
 {
-	enable_clock();
+	EnableClock();
 	GPIO_InitTypeDef def{};
 	def.Alternate = get_alternate_function_define_value(af);
 
