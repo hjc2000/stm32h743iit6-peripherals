@@ -1,24 +1,11 @@
 #pragma once
-#include "base/embedded/gpio/gpio_handle.h" // IWYU pragma: export
-#include "base/task/Mutex.h"
+#include "base/embedded/gpio/gpio_handle.h"
+#include "base/embedded/gpio/GpioPinUsageStateManager.h"
 #include "hal.h"
-#include <array>
-#include <bitset>
 #include <cstdint>
-#include <string>
 
 namespace bsp
 {
-	constexpr int PortCount()
-	{
-		return static_cast<int>(base::gpio::PortEnum::PortP) + 1;
-	}
-
-	inline std::string PinName(base::gpio::PortEnum port, uint32_t pin)
-	{
-		return base::to_string(port) + std::to_string(pin);
-	}
-
 	///
 	/// @brief 将端口枚举转为 HAL 库的端口实例指针。
 	///
@@ -149,52 +136,12 @@ namespace bsp
 		}
 	}
 
-	class UsageStateManager
-	{
-	private:
-		inline static std::array<std::bitset<16>, PortCount()> _states{};
-		inline static base::task::Mutex _lock{};
-
-		base::gpio::PortEnum _port{};
-		uint32_t _pin{};
-
-		void CheckUsage(base::gpio::PortEnum port, uint32_t pin)
-		{
-			if (_states[static_cast<int>(port)][pin])
-			{
-				throw std::runtime_error{CODE_POS_STR + PinName(port, pin) + "已经占用了，无法再次占用。"};
-			}
-		}
-
-	public:
-		UsageStateManager(base::gpio::PortEnum port, uint32_t pin)
-			: _port(port),
-			  _pin(pin)
-		{
-			if (static_cast<int>(port) >= PortCount())
-			{
-				throw std::invalid_argument{CODE_POS_STR};
-			}
-
-			CheckUsage(port, pin);
-			base::task::MutexGuard g{_lock};
-			CheckUsage(port, pin);
-
-			_states[static_cast<int>(port)][pin] = true;
-		}
-
-		~UsageStateManager()
-		{
-			base::task::MutexGuard g{_lock};
-			_states[static_cast<int>(_port)][_pin] = false;
-		}
-	};
 } // namespace bsp
 
 class base::gpio::gpio_pin_handle
 {
 private:
-	bsp::UsageStateManager _usage_state_manager;
+	base::gpio::GpioPinUsageStateManager<static_cast<uint32_t>(base::gpio::PortEnum::PortH) + 1, 16> _usage_state_manager;
 	base::gpio::PortEnum _port_enum{};
 	GPIO_TypeDef *_port = nullptr;
 	uint32_t _pin = 0;
