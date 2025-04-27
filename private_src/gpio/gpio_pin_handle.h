@@ -232,7 +232,7 @@ public:
 		return _port_enum;
 	}
 
-	uint32_t pin() const
+	uint32_t Pin() const
 	{
 		return _pin;
 	}

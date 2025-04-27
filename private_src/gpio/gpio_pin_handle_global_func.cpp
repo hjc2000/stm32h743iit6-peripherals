@@ -41,7 +41,7 @@ base::gpio::PortEnum base::gpio::port(base::gpio::gpio_pin_handle &h)
 
 uint32_t base::gpio::pin(base::gpio::gpio_pin_handle &h)
 {
-	return h.pin();
+	return h.Pin();
 }
 
 /* #endregion */
