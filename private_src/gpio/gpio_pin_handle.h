@@ -239,7 +239,7 @@ public:
 
 	/* #endregion */
 
-	bool read_pin();
+	bool ReadPin();
 	void write_pin(bool value);
 	void toggle_pin();
 

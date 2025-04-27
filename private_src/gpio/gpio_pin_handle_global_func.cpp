@@ -50,7 +50,7 @@ uint32_t base::gpio::pin(base::gpio::gpio_pin_handle &h)
 
 bool base::gpio::read_pin(base::gpio::gpio_pin_handle &h)
 {
-	return h.read_pin();
+	return h.ReadPin();
 }
 
 void base::gpio::write_pin(base::gpio::gpio_pin_handle &h, bool value)

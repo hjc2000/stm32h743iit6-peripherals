@@ -238,7 +238,7 @@ void base::gpio::gpio_pin_handle::InitializeAsAlternateFunctionMode(base::gpio::
 
 /* #region 读写引脚方法 */
 
-bool base::gpio::gpio_pin_handle::read_pin()
+bool base::gpio::gpio_pin_handle::ReadPin()
 {
 	GPIO_PinState pin_state = HAL_GPIO_ReadPin(_port, _pin_define);
 	if (pin_state == GPIO_PinState::GPIO_PIN_SET)
