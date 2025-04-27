@@ -55,7 +55,7 @@ bool base::gpio::read_pin(base::gpio::gpio_pin_handle &h)
 
 void base::gpio::write_pin(base::gpio::gpio_pin_handle &h, bool value)
 {
-	h.write_pin(value);
+	h.WritePin(value);
 }
 
 void base::gpio::toggle_pin(base::gpio::gpio_pin_handle &h)

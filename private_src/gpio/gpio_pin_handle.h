@@ -240,7 +240,7 @@ public:
 	/* #endregion */
 
 	bool ReadPin();
-	void write_pin(bool value);
+	void WritePin(bool value);
 	void toggle_pin();
 
 	void register_interrupt_callback(std::function<void()> const &callback_func);

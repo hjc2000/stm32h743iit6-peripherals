@@ -249,7 +249,7 @@ bool base::gpio::gpio_pin_handle::ReadPin()
 	return false;
 }
 
-void base::gpio::gpio_pin_handle::write_pin(bool value)
+void base::gpio::gpio_pin_handle::WritePin(bool value)
 {
 	GPIO_PinState state = value ? GPIO_PinState::GPIO_PIN_SET : GPIO_PinState::GPIO_PIN_RESET;
 	HAL_GPIO_WritePin(_port, _pin_define, state);
