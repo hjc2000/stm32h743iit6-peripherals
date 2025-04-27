@@ -80,8 +80,8 @@ base::gpio::gpio_pin_handle::gpio_pin_handle(base::gpio::PortEnum port, uint32_t
 
 /* #region 初始化方法 */
 
-void base::gpio::gpio_pin_handle::initialize_as_input_mode(base::gpio::PullMode pull_mode,
-														   base::gpio::TriggerEdge trigger_edge)
+void base::gpio::gpio_pin_handle::InitializeAsInputMode(base::gpio::PullMode pull_mode,
+														base::gpio::TriggerEdge trigger_edge)
 {
 	EnableClock();
 	GPIO_InitTypeDef def{};

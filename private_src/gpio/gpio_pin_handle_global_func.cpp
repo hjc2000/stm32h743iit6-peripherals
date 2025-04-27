@@ -12,7 +12,7 @@ void base::gpio::initialize_as_input_mode(base::gpio::gpio_pin_handle &h,
 										  base::gpio::PullMode pull_mode,
 										  base::gpio::TriggerEdge trigger_edge)
 {
-	h.initialize_as_input_mode(pull_mode, trigger_edge);
+	h.InitializeAsInputMode(pull_mode, trigger_edge);
 }
 
 void base::gpio::initialize_as_output_mode(base::gpio::gpio_pin_handle &h,

@@ -213,8 +213,8 @@ public:
 
 	/* #region 初始化方法 */
 
-	void initialize_as_input_mode(base::gpio::PullMode pull_mode,
-								  base::gpio::TriggerEdge trigger_edge);
+	void InitializeAsInputMode(base::gpio::PullMode pull_mode,
+							   base::gpio::TriggerEdge trigger_edge);
 
 	void initialize_as_output_mode(base::gpio::PullMode pull_mode,
 								   base::gpio::DriveMode drive_mode);
