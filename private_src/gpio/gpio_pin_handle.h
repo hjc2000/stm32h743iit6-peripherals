@@ -5,7 +5,6 @@
 #include "hal.h"
 #include <cstdint>
 
-
 namespace bsp
 {
 	///
@@ -164,6 +163,11 @@ public:
 
 	void InitializeAsInputMode(base::gpio::PullMode pull_mode,
 							   base::gpio::TriggerEdge trigger_edge);
+
+	void InitializeAsInputMode()
+	{
+		InitializeAsInputMode(base::gpio::PullMode::PullUp, base::gpio::TriggerEdge::Disable);
+	}
 
 	void InitializeAsOutputMode(base::gpio::PullMode pull_mode,
 								base::gpio::DriveMode drive_mode);
