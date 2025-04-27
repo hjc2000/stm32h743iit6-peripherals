@@ -243,6 +243,6 @@ public:
 	void WritePin(bool value);
 	void TogglePin();
 
-	void register_interrupt_callback(std::function<void()> const &callback_func);
+	void RegisterInterruptCallback(std::function<void()> const &callback_func);
 	void unregister_interrupt_callback();
 };

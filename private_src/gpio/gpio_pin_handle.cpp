@@ -264,7 +264,7 @@ void base::gpio::gpio_pin_handle::TogglePin()
 
 /* #region 中断回调 */
 
-void base::gpio::gpio_pin_handle::register_interrupt_callback(std::function<void()> const &callback_func)
+void base::gpio::gpio_pin_handle::RegisterInterruptCallback(std::function<void()> const &callback_func)
 {
 	bsp::di::interrupt::ExtiManager().Register(_pin, callback_func);
 }

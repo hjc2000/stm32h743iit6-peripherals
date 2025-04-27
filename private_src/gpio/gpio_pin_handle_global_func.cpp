@@ -70,7 +70,7 @@ void base::gpio::toggle_pin(base::gpio::gpio_pin_handle &h)
 void base::gpio::register_interrupt_callback(base::gpio::gpio_pin_handle &h,
 											 std::function<void()> const &callback_func)
 {
-	h.register_interrupt_callback(callback_func);
+	h.RegisterInterruptCallback(callback_func);
 }
 
 void base::gpio::unregister_interrupt_callback(base::gpio::gpio_pin_handle &h)
