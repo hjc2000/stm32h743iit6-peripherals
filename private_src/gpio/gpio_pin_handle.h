@@ -227,7 +227,7 @@ public:
 
 	/* #region 引脚信息 */
 
-	base::gpio::PortEnum port() const
+	base::gpio::PortEnum Port() const
 	{
 		return _port_enum;
 	}
