@@ -1,20 +1,14 @@
 #include "HseClockSource.h"
-#include "base/define.h"
+#include "base/exception/NotSupportedException.h"
+#include "base/unit/MHz.h"
+#include "hal.h"
 
-PREINIT(bsp::HseClockSource::Instance)
-
-bsp::HseClockSource &bsp::HseClockSource::Instance()
+base::MHz bsp::HseClockSource::Frequency() const
 {
-	static HseClockSource o{};
-	return o;
+	return _frequency;
 }
 
-std::string bsp::HseClockSource::Name() const
-{
-	return "hse";
-}
-
-void bsp::HseClockSource::Open(base::MHz const &crystal_frequency)
+void bsp::HseClockSource::Configure()
 {
 	RCC_OscInitTypeDef def{};
 	def.OscillatorType = RCC_OSCILLATORTYPE_HSE;
@@ -25,8 +19,13 @@ void bsp::HseClockSource::Open(base::MHz const &crystal_frequency)
 		throw std::runtime_error{"打开 hse 时钟源失败。"};
 	}
 
-	_frequency = crystal_frequency;
+	_frequency = base::MHz{25};
 	_state = IClockSource_State::On;
+}
+
+void bsp::HseClockSource::Configure(std::map<uint32_t, uint32_t> const &channel_factor_map)
+{
+	throw base::exception::NotSupportedException{};
 }
 
 void bsp::HseClockSource::SetAsBypass(base::MHz external_clock_frequency)
@@ -64,9 +63,4 @@ void bsp::HseClockSource::Close()
 bsp::IClockSource_State bsp::HseClockSource::State() const
 {
 	return _state;
-}
-
-base::MHz bsp::HseClockSource::Frequency() const
-{
-	return _frequency;
 }

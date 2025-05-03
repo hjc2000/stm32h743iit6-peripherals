@@ -11,7 +11,6 @@ namespace
 	public:
 		DictionaryProvider()
 		{
-			_dic.Add(bsp::HseClockSource::Instance().Name(), &bsp::HseClockSource::Instance());
 			_dic.Add(bsp::PllClockSource::Instance().Name(), &bsp::PllClockSource::Instance());
 		}
 

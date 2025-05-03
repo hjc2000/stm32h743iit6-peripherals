@@ -1,6 +1,7 @@
 #include "base/embedded/core.h"
 #include "base/container/Dictionary.h"
 #include "base/embedded/cache/cache.h"
+#include "base/embedded/clock/ClockSource.h"
 #include "bsp-interface/di/clock.h"
 #include "hal.h"
 
@@ -8,7 +9,8 @@ namespace
 {
 	void InitializeClock()
 	{
-		bsp::di::clock::ClockSourceCollection().Get("hse")->Open(base::MHz{25});
+		base::clock::ClockSource hse{"hse"};
+		hse.Configure();
 
 		{
 			base::Dictionary<std::string, int> factors;
