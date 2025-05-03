@@ -28,7 +28,7 @@ void bsp::HseClockSource::Configure(std::map<std::string, uint32_t> const &chann
 	throw base::exception::NotSupportedException{};
 }
 
-void bsp::HseClockSource::SetAsBypass(base::MHz external_clock_frequency)
+void bsp::HseClockSource::ConfigureAsBypassMode(base::MHz const &bypass_input_frequency)
 {
 	RCC_OscInitTypeDef def{};
 	def.OscillatorType = RCC_OSCILLATORTYPE_HSE;
@@ -40,7 +40,7 @@ void bsp::HseClockSource::SetAsBypass(base::MHz external_clock_frequency)
 		throw std::runtime_error{"设置 hse 时钟源为旁路失败。"};
 	}
 
-	_frequency = external_clock_frequency;
+	_frequency = bypass_input_frequency;
 	_state = IClockSource_State::Bypass;
 }
 

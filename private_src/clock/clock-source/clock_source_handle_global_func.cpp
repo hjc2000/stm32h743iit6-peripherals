@@ -29,3 +29,9 @@ void base::clock::configure(clock_source_handle &h,
 {
 	h.Configure(channel_factor_map);
 }
+
+void base::clock::configure_as_bypass_mode(clock_source_handle &h,
+										   base::MHz const &bypass_input_frequency)
+{
+	h.ConfigureAsBypassMode(bypass_input_frequency);
+}

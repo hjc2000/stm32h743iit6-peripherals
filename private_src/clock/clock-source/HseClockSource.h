@@ -19,15 +19,13 @@ namespace bsp
 
 		virtual void Configure(std::map<std::string, uint32_t> const &channel_factor_map) override;
 
+		virtual void ConfigureAsBypassMode(base::MHz const &bypass_input_frequency) override;
+
 		/// @brief 打开时钟源。
 		/// @note 有的时钟源非常简单，外部振荡器输入后，直接就输出同频率的时钟信号，
 		/// 不支持分频和倍频。本重载用于这种简单的时钟源。
 		/// @param crystal_frequency
 		void Open(base::MHz const &crystal_frequency);
-
-		/// @brief 设置为旁路。
-		/// @param external_clock_frequency 外部时钟频率。
-		void SetAsBypass(base::MHz external_clock_frequency);
 
 		/// @brief 关闭时钟源。
 		void Close();

@@ -11,4 +11,6 @@ public:
 	virtual void Configure() = 0;
 
 	virtual void Configure(std::map<std::string, uint32_t> const &channel_factor_map) = 0;
+
+	virtual void ConfigureAsBypassMode(base::MHz const &bypass_input_frequency) = 0;
 };
