@@ -1,6 +1,7 @@
 #include "PllClockSource.h"
 #include "base/define.h"
 #include "base/embedded/clock/ClockSource.h"
+#include "base/unit/MHz.h"
 
 PREINIT(bsp::PllClockSource::Instance)
 
@@ -97,19 +98,18 @@ void bsp::PllClockSource::Open(std::string const &input_channel_name,
 	{
 		base::clock::ClockSource hse{"hse"};
 		input_freq = hse.Frequency();
-		base::Fraction fraction_input_freq = static_cast<base::Fraction>(input_freq);
 
 		// 经过 m 分频系数分频后输入锁相环，这里需要根据输入锁相环的频率所处的范围来设置参数。
-		fraction_input_freq = fraction_input_freq / m;
-		if (fraction_input_freq < 2)
+		base::MHz divided_input_freq = input_freq / m;
+		if (divided_input_freq < base::MHz{2})
 		{
 			pll_range = RCC_PLL1VCIRANGE_0;
 		}
-		else if (fraction_input_freq >= 2 && fraction_input_freq < 4)
+		else if (divided_input_freq >= base::MHz{2} && divided_input_freq < base::MHz{4})
 		{
 			pll_range = RCC_PLL1VCIRANGE_1;
 		}
-		else if (fraction_input_freq >= 4 && fraction_input_freq < 8)
+		else if (divided_input_freq >= base::MHz{4} && divided_input_freq < base::MHz{8})
 		{
 			pll_range = RCC_PLL1VCIRANGE_2;
 		}
