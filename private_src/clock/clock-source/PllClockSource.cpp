@@ -19,7 +19,8 @@ std::string bsp::PllClockSource::Name() const
 void bsp::PllClockSource::Open(std::string const &input_channel_name,
 							   base::IDictionary<std::string, int> const &factors)
 {
-#pragma region m,n,p,q,r
+	/* #region m,n,p,q,r */
+
 	int m = 1;
 
 	{
@@ -69,9 +70,11 @@ void bsp::PllClockSource::Open(std::string const &input_channel_name,
 			r = *ptr;
 		}
 	}
-#pragma endregion
 
-#pragma region pll_source
+	/* #endregion */
+
+	/* #region pll_source */
+
 	uint32_t pll_source = RCC_PLLSOURCE_HSE;
 	if (input_channel_name == "hse")
 	{
@@ -89,9 +92,11 @@ void bsp::PllClockSource::Open(std::string const &input_channel_name,
 	{
 		throw std::invalid_argument{"不支持该输入通道"};
 	}
-#pragma endregion
 
-#pragma region pll_range
+	/* #endregion */
+
+	/* #region pll_range */
+
 	base::MHz input_freq;
 	int pll_range = RCC_PLL1VCIRANGE_2;
 	if (input_channel_name == "hse")
@@ -130,7 +135,8 @@ void bsp::PllClockSource::Open(std::string const &input_channel_name,
 	{
 		throw std::invalid_argument{"不支持该输入通道"};
 	}
-#pragma endregion
+
+	/* #endregion */
 
 	RCC_OscInitTypeDef def{};
 	def.OscillatorType = RCC_OSCILLATORTYPE_NONE;
