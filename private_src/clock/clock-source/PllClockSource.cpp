@@ -99,8 +99,7 @@ void bsp::PllClockSource::Open(std::string const &input_channel_name,
 		input_freq = hse.Frequency();
 		base::Fraction fraction_input_freq = static_cast<base::Fraction>(input_freq);
 
-		/* 经过 m 分频系数分频后输入锁相环，这里需要根据输入锁相环的频率所处的范围来设置参数。
-		 */
+		// 经过 m 分频系数分频后输入锁相环，这里需要根据输入锁相环的频率所处的范围来设置参数。
 		fraction_input_freq = fraction_input_freq / m;
 		if (fraction_input_freq < 2)
 		{
