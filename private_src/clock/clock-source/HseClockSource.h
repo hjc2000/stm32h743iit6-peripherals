@@ -17,7 +17,7 @@ namespace bsp
 
 		virtual void Configure() override;
 
-		virtual void Configure(std::map<uint32_t, uint32_t> const &channel_factor_map) override;
+		virtual void Configure(std::map<std::string, uint32_t> const &channel_factor_map) override;
 
 		/// @brief 打开时钟源。
 		/// @note 有的时钟源非常简单，外部振荡器输入后，直接就输出同频率的时钟信号，

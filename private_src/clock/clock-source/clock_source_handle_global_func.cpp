@@ -25,7 +25,7 @@ void base::clock::configure(clock_source_handle &h)
 }
 
 void base::clock::configure(clock_source_handle &h,
-							std::map<uint32_t, uint32_t> const &channel_factor_map)
+							std::map<std::string, uint32_t> const &channel_factor_map)
 {
 	h.Configure(channel_factor_map);
 }

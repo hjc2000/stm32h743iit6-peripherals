@@ -23,7 +23,7 @@ void bsp::HseClockSource::Configure()
 	_state = IClockSource_State::On;
 }
 
-void bsp::HseClockSource::Configure(std::map<uint32_t, uint32_t> const &channel_factor_map)
+void bsp::HseClockSource::Configure(std::map<std::string, uint32_t> const &channel_factor_map)
 {
 	throw base::exception::NotSupportedException{};
 }

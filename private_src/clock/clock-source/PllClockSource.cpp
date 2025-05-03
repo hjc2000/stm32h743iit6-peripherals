@@ -1,7 +1,6 @@
 #include "PllClockSource.h"
 #include "base/define.h"
 #include "base/embedded/clock/ClockSource.h"
-#include "bsp-interface/di/clock.h"
 
 PREINIT(bsp::PllClockSource::Instance)
 
