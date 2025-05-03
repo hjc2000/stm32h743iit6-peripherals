@@ -1,5 +1,4 @@
 #pragma once
-#include "bsp-interface/clock/IClockSource.h"
 #include "clock_source_handle.h"
 
 namespace bsp
