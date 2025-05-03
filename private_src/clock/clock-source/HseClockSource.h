@@ -8,7 +8,7 @@ namespace bsp
 		public base::clock::clock_source_handle
 	{
 	private:
-		base::MHz _frequency{};
+		inline static base::MHz _frequency{};
 
 	public:
 		virtual base::MHz Frequency() const override;
