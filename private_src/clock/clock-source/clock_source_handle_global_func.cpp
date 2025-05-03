@@ -35,3 +35,8 @@ void base::clock::configure_as_bypass_mode(clock_source_handle &h,
 {
 	h.ConfigureAsBypassMode(bypass_input_frequency);
 }
+
+void base::clock::turn_off(clock_source_handle &h)
+{
+	h.TurnOff();
+}

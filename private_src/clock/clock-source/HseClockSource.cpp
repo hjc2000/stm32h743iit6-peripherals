@@ -20,7 +20,6 @@ void bsp::HseClockSource::Configure()
 	}
 
 	_frequency = base::MHz{25};
-	_state = IClockSource_State::On;
 }
 
 void bsp::HseClockSource::Configure(std::map<std::string, uint32_t> const &channel_factor_map)
@@ -41,10 +40,9 @@ void bsp::HseClockSource::ConfigureAsBypassMode(base::MHz const &bypass_input_fr
 	}
 
 	_frequency = bypass_input_frequency;
-	_state = IClockSource_State::Bypass;
 }
 
-void bsp::HseClockSource::Close()
+void bsp::HseClockSource::TurnOff()
 {
 	RCC_OscInitTypeDef def{};
 	def.OscillatorType = RCC_OSCILLATORTYPE_HSE;
@@ -57,10 +55,4 @@ void bsp::HseClockSource::Close()
 	}
 
 	_frequency = base::MHz{0};
-	_state = IClockSource_State::Off;
-}
-
-bsp::IClockSource_State bsp::HseClockSource::State() const
-{
-	return _state;
 }
