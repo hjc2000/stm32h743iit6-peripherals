@@ -47,7 +47,16 @@ namespace
 			hclk.Configure(factors);
 		}
 
-		bsp::di::clock::ClockSignalCollection().Get("pclk1")->Open(bsp::IClockSignal_InputDivisionFactor{2});
+		{
+			base::clock::ClockSource pclk1{"pclk1"};
+
+			std::map<std::string, uint32_t> factors{
+				{"in", 2},
+			};
+
+			pclk1.Configure(factors);
+		}
+
 		bsp::di::clock::ClockSignalCollection().Get("pclk2")->Open(bsp::IClockSignal_InputDivisionFactor{2});
 		bsp::di::clock::ClockSignalCollection().Get("d1pclk1")->Open(bsp::IClockSignal_InputDivisionFactor{2});
 		bsp::di::clock::ClockSignalCollection().Get("d3pclk1")->Open(bsp::IClockSignal_InputDivisionFactor{2});

@@ -2,6 +2,7 @@
 #include "clock_source_handle.h"
 #include "HclkClockSignal.h"
 #include "HseClockSource.h"
+#include "Pclk1ClockSignal.h"
 #include "PllClockSource.h"
 #include "SysclkClockSignal.h"
 #include <memory>
@@ -17,13 +18,17 @@ std::shared_ptr<base::clock::clock_source_handle> base::clock::open(std::string 
 	{
 		return std::shared_ptr<base::clock::clock_source_handle>{new bsp::PllClockSource{}};
 	}
+	else if (name == "sysclk")
+	{
+		return std::shared_ptr<base::clock::clock_source_handle>{new bsp::SysclkClockSignal{}};
+	}
 	else if (name == "hclk")
 	{
 		return std::shared_ptr<base::clock::clock_source_handle>{new bsp::HclkClockSignal{}};
 	}
-	else if (name == "sysclk")
+	else if (name == "pclk1")
 	{
-		return std::shared_ptr<base::clock::clock_source_handle>{new bsp::SysclkClockSignal{}};
+		return std::shared_ptr<base::clock::clock_source_handle>{new bsp::Pclk1ClockSignal{}};
 	}
 
 	throw std::invalid_argument{CODE_POS_STR + "没有时钟源名为：" + name};
