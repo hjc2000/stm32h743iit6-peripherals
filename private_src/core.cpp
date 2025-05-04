@@ -6,7 +6,7 @@
 
 namespace
 {
-	void InitializeClock()
+	void initialize_clock()
 	{
 		/* #region hse */
 		{
@@ -130,7 +130,7 @@ void base::core::initialize()
 	HAL_EnableCompensationCell();
 	base::cache::enable();
 
-	InitializeClock();
+	initialize_clock();
 }
 
 void base::core::reset()
