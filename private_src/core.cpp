@@ -2,8 +2,18 @@
 #include "base/embedded/cache/cache.h"
 #include "hal.h"
 
+namespace
+{
+	bool _initialized = false;
+}
+
 void base::core::initialize()
 {
+	if (_initialized)
+	{
+		return;
+	}
+
 	HAL_Init();
 
 	MODIFY_REG(PWR->CR3, PWR_CR3_SCUEN, 0);
@@ -16,6 +26,7 @@ void base::core::initialize()
 	__HAL_RCC_SYSCFG_CLK_ENABLE();
 	HAL_EnableCompensationCell();
 	base::cache::enable();
+	_initialized = true;
 }
 
 void base::core::reset()
