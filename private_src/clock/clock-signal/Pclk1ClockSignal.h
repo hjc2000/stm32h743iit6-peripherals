@@ -12,6 +12,8 @@ namespace bsp
 		public base::clock::clock_source_handle
 	{
 	public:
+		/* #region Frequency */
+
 		virtual base::MHz Frequency() const override
 		{
 			uint32_t value = HAL_RCC_GetPCLK1Freq();
@@ -22,6 +24,8 @@ namespace bsp
 		{
 			throw base::exception::NotSupportedException{};
 		}
+
+		/* #endregion */
 
 		/* #region Configure */
 

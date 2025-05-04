@@ -6,8 +6,12 @@
 class base::clock::clock_source_handle
 {
 public:
+	/* #region Frequency */
+
 	virtual base::MHz Frequency() const = 0;
 	virtual base::MHz Frequency(std::string const &output_channel_name) const = 0;
+
+	/* #endregion */
 
 	/* #region Configure */
 
