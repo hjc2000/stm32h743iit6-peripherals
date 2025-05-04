@@ -1,6 +1,7 @@
 #include "base/string/define.h"
 #include "clock_source_handle.h"
 #include "HseClockSource.h"
+#include "PllClockSource.h"
 #include <memory>
 #include <stdexcept>
 
@@ -9,6 +10,10 @@ std::shared_ptr<base::clock::clock_source_handle> base::clock::open(std::string 
 	if (name == "hse")
 	{
 		return std::shared_ptr<base::clock::clock_source_handle>{new bsp::HseClockSource{}};
+	}
+	else if (name == "pll")
+	{
+		return std::shared_ptr<base::clock::clock_source_handle>{new bsp::PllClockSource{}};
 	}
 
 	throw std::invalid_argument{CODE_POS_STR + "没有时钟源名为：" + name};
@@ -25,9 +30,10 @@ void base::clock::configure(clock_source_handle &h)
 }
 
 void base::clock::configure(clock_source_handle &h,
+							std::string const &input_channel_name,
 							std::map<std::string, uint32_t> const &channel_factor_map)
 {
-	h.Configure(channel_factor_map);
+	h.Configure(input_channel_name, channel_factor_map);
 }
 
 void base::clock::configure_as_bypass_mode(clock_source_handle &h,

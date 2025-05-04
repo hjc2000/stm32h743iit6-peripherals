@@ -1,91 +1,113 @@
 #pragma once
-#include "base/define.h"
 #include "base/embedded/clock/ClockSource.h"
+#include "base/exception/NotSupportedException.h"
 #include "base/unit/MHz.h"
-#include "bsp-interface/clock/IClockSource.h"
+#include "clock_source_handle.h"
 #include "hal.h"
 
 namespace bsp
 {
 	class PllClockSource :
-		public bsp::IClockSource
+		public base::clock::clock_source_handle
 	{
 	private:
 		bool _opened = false;
-		IClockSource_State _state = IClockSource_State::Off;
 		base::MHz _p_freq;
 		base::MHz _q_freq;
 		base::MHz _r_freq;
 
 	public:
-		static_function PllClockSource &Instance()
+		/* #region Frequency */
+
+		virtual base::MHz Frequency() const override
 		{
-			static PllClockSource o{};
-			return o;
+			throw base::exception::NotSupportedException{};
 		}
 
-		/// @brief 本时钟源的名称。
-		/// @return
-		std::string Name() const override
+		virtual base::MHz Frequency(std::string const &output_channel_name) const override
 		{
-			return "pll";
+			if (!_opened)
+			{
+				throw std::runtime_error{"pll 还未打开，无法查看频率"};
+			}
+
+			if (output_channel_name == "p")
+			{
+				return _p_freq;
+			}
+			else if (output_channel_name == "q")
+			{
+				return _q_freq;
+			}
+			else if (output_channel_name == "r")
+			{
+				return _r_freq;
+			}
+			else
+			{
+				throw std::invalid_argument{"没有该输出通道"};
+			}
 		}
 
-		/// @brief 用户自己决定输入通道和各个分频、倍频系数。
-		/// @param input_channel_name 输入通道名。
-		/// @param factor 分频、倍频系数都放在这个字典里，使用不同的名称来区分是什么。
-		void Open(std::string const &input_channel_name,
-				  base::IDictionary<std::string, int> const &factors) override
+		/* #endregion */
+
+		virtual void Configure() override
+		{
+			throw base::exception::NotSupportedException{};
+		}
+
+		virtual void Configure(std::string const &input_channel_name,
+							   std::map<std::string, uint32_t> const &channel_factor_map) override
 		{
 			/* #region m,n,p,q,r */
 
 			int m = 1;
 
 			{
-				int const *ptr = factors.Find("m");
-				if (ptr != nullptr)
+				auto it = channel_factor_map.find("m");
+				if (it != channel_factor_map.end())
 				{
-					m = *ptr;
+					m = it->second;
 				}
 			}
 
 			int n = 1;
 
 			{
-				int const *ptr = factors.Find("n");
-				if (ptr != nullptr)
+				auto it = channel_factor_map.find("n");
+				if (it != channel_factor_map.end())
 				{
-					n = *ptr;
+					n = it->second;
 				}
 			}
 
 			int p = 1;
 
 			{
-				int const *ptr = factors.Find("p");
-				if (ptr != nullptr)
+				auto it = channel_factor_map.find("p");
+				if (it != channel_factor_map.end())
 				{
-					p = *ptr;
+					p = it->second;
 				}
 			}
 
 			int q = 1;
 
 			{
-				int const *ptr = factors.Find("q");
-				if (ptr != nullptr)
+				auto it = channel_factor_map.find("q");
+				if (it != channel_factor_map.end())
 				{
-					q = *ptr;
+					q = it->second;
 				}
 			}
 
 			int r = 1;
 
 			{
-				int const *ptr = factors.Find("r");
-				if (ptr != nullptr)
+				auto it = channel_factor_map.find("r");
+				if (it != channel_factor_map.end())
 				{
-					r = *ptr;
+					r = it->second;
 				}
 			}
 
@@ -182,8 +204,12 @@ namespace bsp
 			_opened = true;
 		}
 
-		/// @brief 关闭时钟源。
-		void Close() override
+		virtual void ConfigureAsBypassMode(base::MHz const &bypass_input_frequency) override
+		{
+			throw base::exception::NotSupportedException{};
+		}
+
+		virtual void TurnOff() override
 		{
 			RCC_OscInitTypeDef def{};
 			def.OscillatorType = RCC_OSCILLATORTYPE_NONE;
@@ -195,41 +221,6 @@ namespace bsp
 			}
 
 			_opened = false;
-		}
-
-		/// @brief 本时钟源当前的状态。
-		/// @return
-		IClockSource_State State() const override
-		{
-			return _state;
-		}
-
-		/// @brief 查看某一个输出通道的频率。有的时钟源会有多个输出通道。
-		/// @param output_channel_name 输出通道名。
-		/// @return
-		base::MHz Frequency(std::string const &output_channel_name) const override
-		{
-			if (!_opened)
-			{
-				throw std::runtime_error{"pll 还未打开，无法查看频率"};
-			}
-
-			if (output_channel_name == "p")
-			{
-				return _p_freq;
-			}
-			else if (output_channel_name == "q")
-			{
-				return _q_freq;
-			}
-			else if (output_channel_name == "r")
-			{
-				return _r_freq;
-			}
-			else
-			{
-				throw std::invalid_argument{"没有该输出通道"};
-			}
 		}
 	};
 } // namespace bsp
