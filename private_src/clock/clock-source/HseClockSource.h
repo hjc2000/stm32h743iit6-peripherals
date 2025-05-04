@@ -1,6 +1,8 @@
 #pragma once
 #include "base/exception/NotSupportedException.h"
+#include "base/unit/MHz.h"
 #include "clock_source_handle.h"
+#include "hal.h"
 
 namespace bsp
 {
@@ -12,22 +14,63 @@ namespace bsp
 		inline static base::MHz _frequency{};
 
 	public:
-		virtual base::MHz Frequency() const override;
+		virtual base::MHz Frequency() const override
+		{
+			return _frequency;
+		}
 
 		virtual base::MHz Frequency(std::string const &output_channel_name) const override
 		{
 			throw base::exception::NotSupportedException{};
 		}
 
-		virtual void Configure() override;
+		virtual void Configure() override
+		{
+			RCC_OscInitTypeDef def{};
+			def.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+			def.HSEState = RCC_HSE_ON;
+			HAL_StatusTypeDef result = HAL_RCC_OscConfig(&def);
+			if (result != HAL_StatusTypeDef::HAL_OK)
+			{
+				throw std::runtime_error{"打开 hse 时钟源失败。"};
+			}
+
+			_frequency = base::MHz{25};
+		}
 
 		virtual void Configure(std::map<std::string, uint32_t> const &channel_factor_map) override
 		{
 			throw base::exception::NotSupportedException{};
 		}
 
-		virtual void ConfigureAsBypassMode(base::MHz const &bypass_input_frequency) override;
+		virtual void ConfigureAsBypassMode(base::MHz const &bypass_input_frequency) override
+		{
+			RCC_OscInitTypeDef def{};
+			def.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+			def.HSEState = RCC_HSE_BYPASS;
 
-		virtual void TurnOff() override;
+			HAL_StatusTypeDef result = HAL_RCC_OscConfig(&def);
+			if (result != HAL_StatusTypeDef::HAL_OK)
+			{
+				throw std::runtime_error{"设置 hse 时钟源为旁路失败。"};
+			}
+
+			_frequency = bypass_input_frequency;
+		}
+
+		virtual void TurnOff() override
+		{
+			RCC_OscInitTypeDef def{};
+			def.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+			def.HSEState = RCC_HSE_OFF;
+
+			HAL_StatusTypeDef result = HAL_RCC_OscConfig(&def);
+			if (result != HAL_StatusTypeDef::HAL_OK)
+			{
+				throw std::runtime_error{"关闭 hse 时钟源失败。"};
+			}
+
+			_frequency = base::MHz{0};
+		}
 	};
 } // namespace bsp
