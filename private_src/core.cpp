@@ -1,7 +1,6 @@
 #include "base/embedded/core.h"
 #include "base/embedded/cache/cache.h"
 #include "base/embedded/clock/ClockSource.h"
-#include "bsp-interface/di/clock.h"
 #include "hal.h"
 #include <cstdint>
 
@@ -89,7 +88,17 @@ namespace
 		}
 		/* #endregion */
 
-		bsp::di::clock::ClockSignalCollection().Get("d3pclk1")->Open(bsp::IClockSignal_InputDivisionFactor{2});
+		/* #region d1pclk1 */
+		{
+			base::clock::ClockSource d3pclk1{"d3pclk1"};
+
+			std::map<std::string, uint32_t> factors{
+				{"in", 2},
+			};
+
+			d3pclk1.Configure(factors);
+		}
+		/* #endregion */
 
 		/* #region sysclk */
 		{
