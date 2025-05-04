@@ -30,6 +30,12 @@ void base::clock::configure(clock_source_handle &h)
 }
 
 void base::clock::configure(clock_source_handle &h,
+							std::map<std::string, uint32_t> const &channel_factor_map)
+{
+	h.Configure(channel_factor_map);
+}
+
+void base::clock::configure(clock_source_handle &h,
 							std::string const &input_channel_name,
 							std::map<std::string, uint32_t> const &channel_factor_map)
 {

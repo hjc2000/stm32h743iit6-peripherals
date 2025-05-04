@@ -38,6 +38,11 @@ namespace bsp
 			_frequency = base::MHz{25};
 		}
 
+		virtual void Configure(std::map<std::string, uint32_t> const &channel_factor_map) override
+		{
+			throw base::exception::NotSupportedException{};
+		}
+
 		virtual void Configure(std::string const &input_channel_name,
 							   std::map<std::string, uint32_t> const &channel_factor_map) override
 		{
