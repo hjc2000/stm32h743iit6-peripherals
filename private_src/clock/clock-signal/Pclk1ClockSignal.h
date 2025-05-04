@@ -1,8 +1,8 @@
 #pragma once
-#include <base/define.h>
-#include <bsp-interface/clock/IClockSignal.h>
-#include <bsp-interface/di/interrupt.h>
-#include <hal.h>
+#include "base/define.h"
+#include "base/unit/Hz.h"
+#include "bsp-interface/clock/IClockSignal.h"
+#include "hal.h"
 
 namespace bsp
 {
@@ -10,19 +10,75 @@ namespace bsp
 		public bsp::IClockSignal
 	{
 	public:
-		static_function Pclk1ClockSignal &Instance();
+		static_function Pclk1ClockSignal &Instance()
+		{
+			static Pclk1ClockSignal o{};
+			return o;
+		}
 
 		/// @brief 时钟信号的名称。
 		/// @return
-		virtual std::string Name() const override;
+		virtual std::string Name() const override
+		{
+			return "pclk1";
+		}
 
 		/// @brief 时钟信号的频率
 		/// @return
-		virtual base::MHz Frequency() const override;
+		virtual base::MHz Frequency() const override
+		{
+			uint32_t value = HAL_RCC_GetPCLK1Freq();
+			return base::MHz{base::Hz{value}};
+		}
 
 		/// @brief 打开时钟信号。
 		/// @note 有的时钟信号只有输入分频，没有输出分频，就使用本重载。
 		/// @param input_division_factor
-		virtual void Open(bsp::IClockSignal_InputDivisionFactor const &input_division_factor) override;
+		virtual void Open(bsp::IClockSignal_InputDivisionFactor const &input_division_factor) override
+		{
+			RCC_ClkInitTypeDef def{};
+			def.ClockType = RCC_CLOCKTYPE_PCLK1;
+
+			switch (input_division_factor.Value())
+			{
+			case 1:
+				{
+					def.APB1CLKDivider = RCC_APB1_DIV1;
+					break;
+				}
+			case 2:
+				{
+					def.APB1CLKDivider = RCC_APB1_DIV2;
+					break;
+				}
+			case 4:
+				{
+					def.APB1CLKDivider = RCC_APB1_DIV4;
+					break;
+				}
+			case 8:
+				{
+					def.APB1CLKDivider = RCC_APB1_DIV8;
+					break;
+				}
+			case 16:
+				{
+					def.APB1CLKDivider = RCC_APB1_DIV16;
+					break;
+				}
+			default:
+				{
+					throw std::invalid_argument{"不支持此分频"};
+				}
+			}
+
+			HAL_StatusTypeDef ret = HAL_RCC_ClockConfig(&def,
+														FLASH_LATENCY_2);
+
+			if (ret != HAL_StatusTypeDef::HAL_OK)
+			{
+				throw std::runtime_error{"时钟信号配置失败"};
+			}
+		}
 	};
 } // namespace bsp
