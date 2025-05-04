@@ -1,59 +1,63 @@
 #pragma once
-#include "base/define.h"
+#include "base/exception/NotSupportedException.h"
+#include "base/string/define.h"
 #include "base/unit/Hz.h"
-#include "bsp-interface/clock/IClockSignal.h"
+#include "clock_source_handle.h"
 #include "hal.h"
+#include <stdexcept>
 
 namespace bsp
 {
 	class SysclkClockSignal :
-		public bsp::IClockSignal
+		public base::clock::clock_source_handle
 	{
 	public:
-		static_function SysclkClockSignal &Instance()
-		{
-			static SysclkClockSignal o{};
-			return o;
-		}
+		/* #region Frequency */
 
-		/// @brief 时钟信号的名称。
-		/// @return
-		virtual std::string Name() const override
-		{
-			return "sysclk";
-		}
-
-		/// @brief 时钟信号的频率
-		/// @return
 		virtual base::MHz Frequency() const override
 		{
 			uint32_t value = HAL_RCC_GetSysClockFreq();
 			return base::MHz{base::Hz{value}};
 		}
 
-		/// @brief 打开时钟信号。
-		/// @param output_division_factor 输出分频系数。
-		/// @param clock_source 时钟源。像 stm32 的系统时钟 sysclk，是时钟源后的第一个时钟信号，输入端连接着
-		/// 各个时钟源，输出端供给各个子时钟信号。本参数用来选择类似 sysclk 这种时钟信号的时钟源。
-		virtual void Open(bsp::IClockSignal_OutputDivisionFactor const &output_division_factor,
-						  IClockSignal_ClockSource const &clock_source) override
+		virtual base::MHz Frequency(std::string const &output_channel_name) const override
+		{
+			throw base::exception::NotSupportedException{};
+		}
+
+		/* #endregion */
+
+		/* #region Configure */
+
+		virtual void Configure() override
+		{
+			throw base::exception::NotSupportedException{};
+		}
+
+		virtual void Configure(std::map<std::string, uint32_t> const &channel_factor_map) override
+		{
+			throw base::exception::NotSupportedException{};
+		}
+
+		virtual void Configure(std::string const &input_channel_name,
+							   std::map<std::string, uint32_t> const &channel_factor_map) override
 		{
 			RCC_ClkInitTypeDef def{};
 			def.ClockType = RCC_CLOCKTYPE_SYSCLK;
 
-			if (clock_source.Value() == "hse")
+			if (input_channel_name == "hse")
 			{
 				def.SYSCLKSource = RCC_SYSCLKSOURCE_HSE;
 			}
-			else if (clock_source.Value() == "hsi")
+			else if (input_channel_name == "hsi")
 			{
 				def.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
 			}
-			else if (clock_source.Value() == "csi")
+			else if (input_channel_name == "csi")
 			{
 				def.SYSCLKSource = RCC_SYSCLKSOURCE_CSI;
 			}
-			else if (clock_source.Value() == "pll")
+			else if (input_channel_name == "pll")
 			{
 				def.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
 			}
@@ -62,7 +66,13 @@ namespace bsp
 				throw std::invalid_argument{"不支持此时钟源"};
 			}
 
-			switch (output_division_factor.Value())
+			auto it = channel_factor_map.find("out");
+			if (it == channel_factor_map.end())
+			{
+				throw std::invalid_argument{CODE_POS_STR + "channel_factor_map 中没有 out 信道。"};
+			}
+
+			switch (it->second)
 			{
 			case 1:
 				{
@@ -122,6 +132,18 @@ namespace bsp
 			{
 				throw std::runtime_error{"时钟信号配置失败"};
 			}
+		}
+
+		/* #endregion */
+
+		virtual void ConfigureAsBypassMode(base::MHz const &bypass_input_frequency) override
+		{
+			throw base::exception::NotSupportedException{};
+		}
+
+		virtual void TurnOff() override
+		{
+			throw base::exception::NotSupportedException{};
 		}
 	};
 } // namespace bsp

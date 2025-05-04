@@ -52,8 +52,15 @@ namespace
 		bsp::di::clock::ClockSignalCollection().Get("d1pclk1")->Open(bsp::IClockSignal_InputDivisionFactor{2});
 		bsp::di::clock::ClockSignalCollection().Get("d3pclk1")->Open(bsp::IClockSignal_InputDivisionFactor{2});
 
-		bsp::di::clock::ClockSignalCollection().Get("sysclk")->Open(bsp::IClockSignal_OutputDivisionFactor{1},
-																	bsp::IClockSignal_ClockSource{"pll"});
+		{
+			base::clock::ClockSource sysclk{"sysclk"};
+
+			std::map<std::string, uint32_t> factors{
+				{"out", 1},
+			};
+
+			sysclk.Configure("pll", factors);
+		}
 	}
 
 } // namespace
