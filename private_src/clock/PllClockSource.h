@@ -51,6 +51,8 @@ namespace bsp
 
 		/* #endregion */
 
+		/* #region Configure */
+
 		virtual void Configure() override
 		{
 			throw base::exception::NotSupportedException{};
@@ -208,6 +210,8 @@ namespace bsp
 
 			_opened = true;
 		}
+
+		/* #endregion */
 
 		virtual void ConfigureAsBypassMode(base::MHz const &bypass_input_frequency) override
 		{
