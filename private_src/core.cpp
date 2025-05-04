@@ -65,7 +65,18 @@ namespace
 		}
 		/* #endregion */
 
-		bsp::di::clock::ClockSignalCollection().Get("pclk2")->Open(bsp::IClockSignal_InputDivisionFactor{2});
+		/* #region pclk2 */
+		{
+			base::clock::ClockSource pclk2{"pclk2"};
+
+			std::map<std::string, uint32_t> factors{
+				{"in", 2},
+			};
+
+			pclk2.Configure(factors);
+		}
+		/* #endregion */
+
 		bsp::di::clock::ClockSignalCollection().Get("d1pclk1")->Open(bsp::IClockSignal_InputDivisionFactor{2});
 		bsp::di::clock::ClockSignalCollection().Get("d3pclk1")->Open(bsp::IClockSignal_InputDivisionFactor{2});
 

@@ -1,45 +1,51 @@
 #pragma once
-#include "base/define.h"
+#include "base/exception/NotSupportedException.h"
+#include "base/string/define.h"
 #include "base/unit/Hz.h"
-#include "bsp-interface/clock/IClockSignal.h"
+#include "clock_source_handle.h"
 #include "hal.h"
+#include <stdexcept>
 
 namespace bsp
 {
 	class Pclk2ClockSignal :
-		public bsp::IClockSignal
+		public base::clock::clock_source_handle
 	{
 	public:
-		static_function Pclk2ClockSignal &Instance()
-		{
-			static Pclk2ClockSignal o{};
-			return o;
-		}
+		/* #region Frequency */
 
-		/// @brief 时钟信号的名称。
-		/// @return
-		virtual std::string Name() const override
-		{
-			return "pclk2";
-		}
-
-		/// @brief 时钟信号的频率
-		/// @return
 		virtual base::MHz Frequency() const override
 		{
 			uint32_t value = HAL_RCC_GetPCLK2Freq();
 			return base::MHz{base::Hz{value}};
 		}
 
-		/// @brief 打开时钟信号。
-		/// @note 有的时钟信号只有输入分频，没有输出分频，就使用本重载。
-		/// @param input_division_factor
-		virtual void Open(bsp::IClockSignal_InputDivisionFactor const &input_division_factor) override
+		virtual base::MHz Frequency(std::string const &output_channel_name) const override
 		{
+			throw base::exception::NotSupportedException{};
+		}
+
+		/* #endregion */
+
+		/* #region Configure */
+
+		virtual void Configure() override
+		{
+			throw base::exception::NotSupportedException{};
+		}
+
+		virtual void Configure(std::map<std::string, uint32_t> const &channel_factor_map) override
+		{
+			auto it = channel_factor_map.find("in");
+			if (it == channel_factor_map.end())
+			{
+				throw std::invalid_argument{CODE_POS_STR + "channel_factor_map 中没有 in 通道。"};
+			}
+
 			RCC_ClkInitTypeDef def{};
 			def.ClockType = RCC_CLOCKTYPE_PCLK2;
 
-			switch (input_division_factor.Value())
+			switch (it->second)
 			{
 			case 1:
 				{
@@ -79,6 +85,24 @@ namespace bsp
 			{
 				throw std::runtime_error{"时钟信号配置失败"};
 			}
+		}
+
+		virtual void Configure(std::string const &input_channel_name,
+							   std::map<std::string, uint32_t> const &channel_factor_map) override
+		{
+			throw base::exception::NotSupportedException{};
+		}
+
+		/* #endregion */
+
+		virtual void ConfigureAsBypassMode(base::MHz const &bypass_input_frequency) override
+		{
+			throw base::exception::NotSupportedException{};
+		}
+
+		virtual void TurnOff() override
+		{
+			throw base::exception::NotSupportedException{};
 		}
 	};
 } // namespace bsp
