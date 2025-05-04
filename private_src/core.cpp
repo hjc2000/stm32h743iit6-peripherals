@@ -9,19 +9,23 @@ namespace
 {
 	void InitializeClock()
 	{
-		base::clock::ClockSource hse{"hse"};
-		hse.Configure();
+		{
+			base::clock::ClockSource hse{"hse"};
+			hse.Configure();
+		}
 
 		{
 			std::map<std::string, uint32_t> factors;
 
-			/**
-			 * HSE 接的是 25MHz 的晶振。
-			 * 		@li m 是对 PLL 输入时钟的分频。25MHz 的晶振分频后是 5MHz.
-			 * 		@li n 是对经过 m 分频后的信号进行倍频。5MHz 被 192 倍频后是 960MHz.
-			 * 		@li p,q,r 是对 n 的输出进行分频。这里是 2 分频，于是得到的都是 480MHz 的时钟信号。
-			 * 			其中 p 的输出作为系统时钟的输入。于是系统时钟频率是 480MHz. 系统时钟直接输入给 CPU.
-			 */
+			///
+			/// HSE 接的是 25MHz 的晶振。
+			///		@note m 是对 PLL 输入时钟的分频。25MHz 的晶振分频后是 5MHz.
+			///
+			/// 	@note n 是对经过 m 分频后的信号进行倍频。5MHz 被 192 倍频后是 960MHz.
+			///
+			/// 	@note p,q,r 是对 n 的输出进行分频。这里是 2 分频，于是得到的都是 480MHz 的时钟信号。
+			/// 	其中 p 的输出作为系统时钟的输入。于是系统时钟频率是 480MHz. 系统时钟直接输入给 CPU.
+			///
 			factors["m"] = 5;
 			factors["n"] = 192;
 			factors["p"] = 2;
