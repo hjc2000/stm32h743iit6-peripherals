@@ -1,5 +1,5 @@
 #include "sdram_controller_handle.h"
-#include "bsp-interface/di/clock.h"
+#include "base/embedded/clock/ClockSource.h"
 
 void base::sdram::sdram_controller_handle::InitializeGPIO()
 {
@@ -141,7 +141,8 @@ void base::sdram::sdram_controller_handle::OpenAsReadBurstMode(base::sdram::ISDR
 
 	// 初始化 _timing
 	{
-		base::MHz hclk_freq = bsp::di::clock::ClockSignalCollection().Get("hclk")->Frequency();
+		base::clock::ClockSource hclk{"hclk"};
+		base::MHz hclk_freq = hclk.Frequency();
 
 		// 分频系数
 		int hclk_div = 2;
