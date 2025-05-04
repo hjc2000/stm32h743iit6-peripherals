@@ -29,6 +29,8 @@ base::MHz base::clock::frequency(clock_source_handle &h)
 	return h.Frequency();
 }
 
+/* #region configure */
+
 void base::clock::configure(clock_source_handle &h)
 {
 	h.Configure();
@@ -46,6 +48,8 @@ void base::clock::configure(clock_source_handle &h,
 {
 	h.Configure(input_channel_name, channel_factor_map);
 }
+
+/* #endregion */
 
 void base::clock::configure_as_bypass_mode(clock_source_handle &h,
 										   base::MHz const &bypass_input_frequency)
