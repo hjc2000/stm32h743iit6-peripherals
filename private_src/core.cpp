@@ -15,7 +15,7 @@ namespace
 		}
 
 		{
-			std::map<std::string, uint32_t> factors;
+			base::clock::ClockSource pll{"pll"};
 
 			///
 			/// HSE 接的是 25MHz 的晶振。
@@ -26,12 +26,14 @@ namespace
 			/// 	@note p,q,r 是对 n 的输出进行分频。这里是 2 分频，于是得到的都是 480MHz 的时钟信号。
 			/// 	其中 p 的输出作为系统时钟的输入。于是系统时钟频率是 480MHz. 系统时钟直接输入给 CPU.
 			///
-			factors["m"] = 5;
-			factors["n"] = 192;
-			factors["p"] = 2;
-			factors["q"] = 2;
-			factors["r"] = 2;
-			base::clock::ClockSource pll{"pll"};
+			std::map<std::string, uint32_t> factors{
+				{"m", 5},
+				{"n", 192},
+				{"p", 2},
+				{"q", 2},
+				{"r", 2},
+			};
+
 			pll.Configure("hse", factors);
 		}
 
