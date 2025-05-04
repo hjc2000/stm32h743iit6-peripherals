@@ -1,5 +1,4 @@
 #include "HseClockSource.h"
-#include "base/exception/NotSupportedException.h"
 #include "base/unit/MHz.h"
 #include "hal.h"
 
@@ -20,11 +19,6 @@ void bsp::HseClockSource::Configure()
 	}
 
 	_frequency = base::MHz{25};
-}
-
-void bsp::HseClockSource::Configure(std::map<std::string, uint32_t> const &channel_factor_map)
-{
-	throw base::exception::NotSupportedException{};
 }
 
 void bsp::HseClockSource::ConfigureAsBypassMode(base::MHz const &bypass_input_frequency)

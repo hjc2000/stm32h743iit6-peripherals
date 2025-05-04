@@ -1,4 +1,5 @@
 #pragma once
+#include "base/exception/NotSupportedException.h"
 #include "clock_source_handle.h"
 
 namespace bsp
@@ -13,9 +14,17 @@ namespace bsp
 	public:
 		virtual base::MHz Frequency() const override;
 
+		virtual base::MHz Frequency(std::string const &output_channel_name) const override
+		{
+			throw base::exception::NotSupportedException{};
+		}
+
 		virtual void Configure() override;
 
-		virtual void Configure(std::map<std::string, uint32_t> const &channel_factor_map) override;
+		virtual void Configure(std::map<std::string, uint32_t> const &channel_factor_map) override
+		{
+			throw base::exception::NotSupportedException{};
+		}
 
 		virtual void ConfigureAsBypassMode(base::MHz const &bypass_input_frequency) override;
 

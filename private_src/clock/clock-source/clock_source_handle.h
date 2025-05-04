@@ -7,6 +7,7 @@ class base::clock::clock_source_handle
 {
 public:
 	virtual base::MHz Frequency() const = 0;
+	virtual base::MHz Frequency(std::string const &output_channel_name) const = 0;
 
 	virtual void Configure() = 0;
 
