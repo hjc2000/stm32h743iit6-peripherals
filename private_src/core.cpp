@@ -9,11 +9,14 @@ namespace
 {
 	void InitializeClock()
 	{
+		/* #region hse */
 		{
 			base::clock::ClockSource hse{"hse"};
 			hse.Configure();
 		}
+		/* #endregion */
 
+		/* #region pll */
 		{
 			base::clock::ClockSource pll{"pll"};
 
@@ -36,7 +39,9 @@ namespace
 
 			pll.Configure("hse", factors);
 		}
+		/* #endregion */
 
+		/* #region hclk */
 		{
 			base::clock::ClockSource hclk{"hclk"};
 
@@ -46,7 +51,9 @@ namespace
 
 			hclk.Configure(factors);
 		}
+		/* #endregion */
 
+		/* #region pclk1 */
 		{
 			base::clock::ClockSource pclk1{"pclk1"};
 
@@ -56,11 +63,13 @@ namespace
 
 			pclk1.Configure(factors);
 		}
+		/* #endregion */
 
 		bsp::di::clock::ClockSignalCollection().Get("pclk2")->Open(bsp::IClockSignal_InputDivisionFactor{2});
 		bsp::di::clock::ClockSignalCollection().Get("d1pclk1")->Open(bsp::IClockSignal_InputDivisionFactor{2});
 		bsp::di::clock::ClockSignalCollection().Get("d3pclk1")->Open(bsp::IClockSignal_InputDivisionFactor{2});
 
+		/* #region sysclk */
 		{
 			base::clock::ClockSource sysclk{"sysclk"};
 
@@ -70,6 +79,7 @@ namespace
 
 			sysclk.Configure("pll", factors);
 		}
+		/* #endregion */
 	}
 
 } // namespace
