@@ -11,7 +11,7 @@ namespace bsp
 		public bsp::IClockSignal
 	{
 	private:
-		uint32_t _division_factor = 1;
+		inline static uint32_t _division_factor = 1;
 
 	public:
 		static_function D3Pclk1ClockSignal &Instance();

@@ -15,7 +15,6 @@ namespace
 	public:
 		DictionaryProvider()
 		{
-			_dic.Add(bsp::D1Pclk1ClockSignal::Instance().Name(), &bsp::D1Pclk1ClockSignal::Instance());
 			_dic.Add(bsp::D3Pclk1ClockSignal::Instance().Name(), &bsp::D3Pclk1ClockSignal::Instance());
 		}
 

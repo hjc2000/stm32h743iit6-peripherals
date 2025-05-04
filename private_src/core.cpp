@@ -77,7 +77,18 @@ namespace
 		}
 		/* #endregion */
 
-		bsp::di::clock::ClockSignalCollection().Get("d1pclk1")->Open(bsp::IClockSignal_InputDivisionFactor{2});
+		/* #region d1pclk1 */
+		{
+			base::clock::ClockSource d1pclk1{"d1pclk1"};
+
+			std::map<std::string, uint32_t> factors{
+				{"in", 2},
+			};
+
+			d1pclk1.Configure(factors);
+		}
+		/* #endregion */
+
 		bsp::di::clock::ClockSignalCollection().Get("d3pclk1")->Open(bsp::IClockSignal_InputDivisionFactor{2});
 
 		/* #region sysclk */
