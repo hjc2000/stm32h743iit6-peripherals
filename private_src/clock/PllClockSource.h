@@ -11,10 +11,10 @@ namespace bsp
 		public base::clock::clock_source_handle
 	{
 	private:
-		bool _opened = false;
-		base::MHz _p_freq;
-		base::MHz _q_freq;
-		base::MHz _r_freq;
+		inline static bool _opened = false;
+		inline static base::MHz _p_freq;
+		inline static base::MHz _q_freq;
+		inline static base::MHz _r_freq;
 
 	public:
 		/* #region Frequency */
