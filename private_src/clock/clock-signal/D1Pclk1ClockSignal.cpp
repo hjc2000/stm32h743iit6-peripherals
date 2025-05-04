@@ -1,6 +1,4 @@
 #include "D1Pclk1ClockSignal.h"
-#include "base/define.h"
-#include <base/unit/Hz.h>
 
 PREINIT(bsp::D1Pclk1ClockSignal::Instance)
 
