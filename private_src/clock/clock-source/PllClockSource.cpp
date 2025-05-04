@@ -1,7 +1,4 @@
 #include "PllClockSource.h"
-#include "base/define.h"
-#include "base/embedded/clock/ClockSource.h"
-#include "base/unit/MHz.h"
 
 PREINIT(bsp::PllClockSource::Instance)
 

@@ -1,8 +1,10 @@
 #pragma once
-#include <base/define.h>
-#include <bsp-interface/clock/IClockSource.h>
-#include <bsp-interface/di/interrupt.h>
-#include <hal.h>
+#include "base/define.h"
+#include "base/embedded/clock/ClockSource.h"
+#include "base/unit/MHz.h"
+#include "bsp-interface/clock/IClockSource.h"
+#include "bsp-interface/di/interrupt.h"
+#include "hal.h"
 
 namespace bsp
 {
