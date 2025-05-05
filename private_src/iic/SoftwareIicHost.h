@@ -4,14 +4,14 @@
 
 namespace bsp
 {
-	class SoftwareIicHost1 :
+	class SoftwareIicHost :
 		public base::iic::iic_host_handle
 	{
 	private:
 		base::iic::SoftwareIicHost _iic_host;
 
 	public:
-		SoftwareIicHost1(std::shared_ptr<base::iic::ISoftwareIicHostPinDriver> const &pin_driver)
+		SoftwareIicHost(std::shared_ptr<base::iic::ISoftwareIicHostPinDriver> const &pin_driver)
 			: _iic_host(pin_driver)
 		{
 		}

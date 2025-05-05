@@ -1,9 +1,9 @@
 #include "iic_host_handle.h"
-#include "SoftwareIicHost1.h"
+#include "SoftwareIicHost.h"
 
 std::shared_ptr<base::iic::iic_host_handle> base::iic::open(std::shared_ptr<base::iic::ISoftwareIicHostPinDriver> const &pin_driver)
 {
-	return std::shared_ptr<base::iic::iic_host_handle>{new bsp::SoftwareIicHost1{pin_driver}};
+	return std::shared_ptr<base::iic::iic_host_handle>{new bsp::SoftwareIicHost{pin_driver}};
 }
 
 void base::iic::initialize(base::iic::iic_host_handle &h,
