@@ -1,6 +1,5 @@
 #include "bsp-interface/di/interrupt.h"
 #include "base/embedded/interrupt/interrupt.h"
-#include "Exti.h"
 #include "hal.h"
 
 void base::interrupt::disable_interrupt(int32_t irq) noexcept
@@ -31,9 +30,4 @@ void base::interrupt::disable_global_interrupt() noexcept
 void base::interrupt::enable_global_interrupt() noexcept
 {
 	__enable_irq();
-}
-
-bsp::IExtiManager &bsp::di::interrupt::ExtiManager()
-{
-	return hal::Exti::Instance();
 }

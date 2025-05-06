@@ -1,7 +1,7 @@
 #include "gpio_pin_handle.h"
 #include "base/embedded/gpio/gpio_parameter.h"
+#include "base/embedded/interrupt/exti.h"
 #include "base/string/define.h"
-#include "bsp-interface/di/interrupt.h"
 #include "stm32h7xx_hal_gpio.h"
 #include <cstdint>
 #include <stdexcept>
@@ -266,12 +266,12 @@ void base::gpio::gpio_pin_handle::TogglePin()
 
 void base::gpio::gpio_pin_handle::RegisterInterruptCallback(std::function<void()> const &callback_func)
 {
-	bsp::di::interrupt::ExtiManager().Register(_pin, callback_func);
+	base::exti::register_callback(_pin, callback_func);
 }
 
 void base::gpio::gpio_pin_handle::UnregisterInterruptCallback()
 {
-	bsp::di::interrupt::ExtiManager().Unregister(_pin);
+	base::exti::unregister_callback(_pin);
 }
 
 /* #endregion */
