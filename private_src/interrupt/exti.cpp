@@ -9,6 +9,7 @@ namespace
 	std::function<void()> _on_exti2_interrupt;
 	std::function<void()> _on_exti3_interrupt;
 	std::function<void()> _on_exti4_interrupt;
+	std::function<void()> _on_exti13_interrupt;
 
 } // namespace
 
@@ -51,6 +52,13 @@ void base::exti::register_callback(int line_id, std::function<void()> const &cal
 			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI4_IRQn), 4);
 			break;
 		}
+	case 13:
+		{
+			base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI15_10_IRQn));
+			_on_exti13_interrupt = callback;
+			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI15_10_IRQn), 4);
+			break;
+		}
 	default:
 		{
 			throw std::invalid_argument{"pin 超出范围。"};
@@ -90,6 +98,12 @@ void base::exti::unregister_callback(int line_id)
 		{
 			base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI4_IRQn));
 			_on_exti4_interrupt = nullptr;
+			break;
+		}
+	case 13:
+		{
+			base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI15_10_IRQn));
+			_on_exti13_interrupt = nullptr;
 			break;
 		}
 	default:
@@ -158,6 +172,17 @@ extern "C"
 		}
 	}
 
+	void EXTI15_10_IRQHandler()
+	{
+		try
+		{
+			HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
+		}
+		catch (...)
+		{
+		}
+	}
+
 	/* #endregion */
 
 	///
@@ -210,6 +235,15 @@ extern "C"
 				if (_on_exti4_interrupt)
 				{
 					_on_exti4_interrupt();
+				}
+
+				break;
+			}
+		case GPIO_PIN_13:
+			{
+				if (_on_exti13_interrupt)
+				{
+					_on_exti13_interrupt();
 				}
 
 				break;
