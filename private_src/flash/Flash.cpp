@@ -1,6 +1,6 @@
 #include "Flash.h"
 #include "base/define.h"
-#include <bsp-interface/di/interrupt.h>
+#include "base/embedded/interrupt/interrupt.h"
 #include <stdexcept>
 
 extern "C"
@@ -25,7 +25,7 @@ extern "C"
 
 bsp::Flash::Flash()
 {
-	bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(IRQn_Type::FLASH_IRQn));
+	base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::FLASH_IRQn));
 }
 
 uint32_t bsp::Flash::SectorIndexToDefine(int32_t index)

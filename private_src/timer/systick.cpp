@@ -1,10 +1,10 @@
 #include "base/embedded/systick/systick.h"
+#include "base/embedded/interrupt/interrupt.h"
 #include "base/task/delay.h"
 #include "base/unit/Hz.h"
 #include "base/unit/MHz.h"
 #include "base/unit/Nanoseconds.h"
 #include "base/unit/Seconds.h"
-#include "bsp-interface/di/interrupt.h"
 #include "hal.h"
 #include <chrono>
 #include <cstdint>
@@ -36,7 +36,7 @@ uint64_t base::systick::reload_value()
 
 void base::systick::set_elapsed_handler(std::function<void()> func)
 {
-	bsp::di::interrupt::GlobalInterruptGuard g;
+	base::interrupt::GlobalInterruptionGuard g;
 	_elapsed_handler = func;
 }
 

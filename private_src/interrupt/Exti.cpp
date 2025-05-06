@@ -1,6 +1,6 @@
 #include "Exti.h"
 #include "base/define.h"
-#include <bsp-interface/di/interrupt.h>
+#include "base/embedded/interrupt/interrupt.h"
 #include <stdexcept>
 
 hal::Exti::Exti()
@@ -46,36 +46,36 @@ hal::Exti &hal::Exti::Instance()
 
 void hal::Exti::Register(int line_id, std::function<void()> callback)
 {
-	bsp::di::interrupt::GlobalInterruptGuard g;
+	base::interrupt::GlobalInterruptionGuard g;
 	switch (line_id)
 	{
 	case 0:
 		{
-			bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(IRQn_Type::EXTI0_IRQn), 4);
+			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI0_IRQn), 4);
 			_on_exti0_interrupt = callback;
 			break;
 		}
 	case 1:
 		{
-			bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(IRQn_Type::EXTI1_IRQn), 4);
+			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI1_IRQn), 4);
 			_on_exti1_interrupt = callback;
 			break;
 		}
 	case 2:
 		{
-			bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(IRQn_Type::EXTI2_IRQn), 4);
+			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI2_IRQn), 4);
 			_on_exti2_interrupt = callback;
 			break;
 		}
 	case 3:
 		{
-			bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(IRQn_Type::EXTI3_IRQn), 4);
+			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI3_IRQn), 4);
 			_on_exti3_interrupt = callback;
 			break;
 		}
 	case 4:
 		{
-			bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(IRQn_Type::EXTI4_IRQn), 4);
+			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI4_IRQn), 4);
 			_on_exti4_interrupt = callback;
 			break;
 		}
@@ -88,36 +88,36 @@ void hal::Exti::Register(int line_id, std::function<void()> callback)
 
 void hal::Exti::Unregister(int line_id)
 {
-	bsp::di::interrupt::GlobalInterruptGuard g;
+	base::interrupt::GlobalInterruptionGuard g;
 	switch (line_id)
 	{
 	case 0:
 		{
-			bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::EXTI0_IRQn));
+			base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI0_IRQn));
 			_on_exti0_interrupt = nullptr;
 			break;
 		}
 	case 1:
 		{
-			bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::EXTI1_IRQn));
+			base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI1_IRQn));
 			_on_exti1_interrupt = nullptr;
 			break;
 		}
 	case 2:
 		{
-			bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::EXTI2_IRQn));
+			base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI2_IRQn));
 			_on_exti2_interrupt = nullptr;
 			break;
 		}
 	case 3:
 		{
-			bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::EXTI3_IRQn));
+			base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI3_IRQn));
 			_on_exti3_interrupt = nullptr;
 			break;
 		}
 	case 4:
 		{
-			bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::EXTI4_IRQn));
+			base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI4_IRQn));
 			_on_exti4_interrupt = nullptr;
 			break;
 		}

@@ -1,8 +1,8 @@
 #include "Serial1.h"
+#include "base/embedded/interrupt/interrupt.h"
 #include "base/embedded/serial/serial_handle.h"
 #include "base/string/define.h"
 #include "base/task/Mutex.h"
-#include "bsp-interface/di/interrupt.h"
 #include <functional>
 #include <stdexcept>
 
@@ -240,9 +240,9 @@ void bsp::Serial1::InitializeUart()
 
 void bsp::Serial1::InitializeInterrupt()
 {
-	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
-	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
-	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
+	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
+	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
+	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
 
 	_uart1_isr = [this]()
 	{
@@ -259,9 +259,9 @@ void bsp::Serial1::InitializeInterrupt()
 		HAL_DMA_IRQHandler(_handle_context._uart_handle.hdmarx);
 	};
 
-	bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn), 10);
-	bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn), 10);
-	bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn), 10);
+	base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn), 10);
+	base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn), 10);
+	base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn), 10);
 }
 
 /* #endregion */
@@ -309,9 +309,9 @@ void bsp::Serial1::SetReadTimeoutByBaudCount(uint32_t value)
 bsp::Serial1::~Serial1()
 {
 	HAL_UART_DMAStop(&_handle_context._uart_handle);
-	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
-	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
-	bsp::di::interrupt::DisableInterrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
+	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
+	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
+	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
 }
 
 int32_t bsp::Serial1::Read(base::Span const &span)
@@ -325,7 +325,7 @@ int32_t bsp::Serial1::Read(base::Span const &span)
 	while (true)
 	{
 		{
-			bsp::di::interrupt::GlobalInterruptGuard g;
+			base::interrupt::GlobalInterruptionGuard g;
 
 			// HAL_UART_Receive_DMA
 			// HAL_UARTEx_ReceiveToIdle_DMA

@@ -1,6 +1,7 @@
 #include "ethernet_controller_handle.h"
 #include "base/Console.h"
 #include "base/embedded/cache/cache.h"
+#include "base/embedded/interrupt/interrupt.h"
 #include "bsp-interface/di/interrupt.h"
 #include "hal.h"
 
@@ -245,7 +246,7 @@ void base::ethernet::ethernet_controller_handle::Open(base::ethernet::InterfaceT
 	/* 这里的中断优先级必须设置在 freertos 能够屏蔽的优先级范围内，不然不知道什么原因，
 	 * 会导致 freertos 的 queue.c 中报错。
 	 */
-	bsp::di::interrupt::EnableInterrupt(static_cast<uint32_t>(ETH_IRQn), 7);
+	base::interrupt::enable_interrupt(static_cast<uint32_t>(ETH_IRQn), 7);
 
 	bsp::di::interrupt::IsrManager().AddIsr(static_cast<uint32_t>(ETH_IRQn),
 											[&]()
