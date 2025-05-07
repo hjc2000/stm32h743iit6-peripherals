@@ -69,7 +69,6 @@ namespace bsp
 			/* #region m,n,p,q,r */
 
 			int m = 1;
-
 			{
 				auto it = channel_factor_map.find("m");
 				if (it != channel_factor_map.end())
@@ -79,7 +78,6 @@ namespace bsp
 			}
 
 			int n = 1;
-
 			{
 				auto it = channel_factor_map.find("n");
 				if (it != channel_factor_map.end())
@@ -89,7 +87,6 @@ namespace bsp
 			}
 
 			int p = 1;
-
 			{
 				auto it = channel_factor_map.find("p");
 				if (it != channel_factor_map.end())
@@ -99,7 +96,6 @@ namespace bsp
 			}
 
 			int q = 1;
-
 			{
 				auto it = channel_factor_map.find("q");
 				if (it != channel_factor_map.end())
@@ -109,7 +105,6 @@ namespace bsp
 			}
 
 			int r = 1;
-
 			{
 				auto it = channel_factor_map.find("r");
 				if (it != channel_factor_map.end())
@@ -142,15 +137,29 @@ namespace bsp
 
 			/* #endregion */
 
-			/* #region pll_range */
-
 			base::MHz input_freq;
-			int pll_range = RCC_PLL1VCIRANGE_2;
 			if (input_channel_name == "hse")
 			{
 				base::clock::ClockSource hse{"hse"};
 				input_freq = hse.Frequency();
+			}
+			else if (input_channel_name == "hsi")
+			{
+				throw std::invalid_argument{"不支持该输入通道"};
+			}
+			else if (input_channel_name == "csi")
+			{
+				throw std::invalid_argument{"不支持该输入通道"};
+			}
+			else
+			{
+				throw std::invalid_argument{"不支持该输入通道"};
+			}
 
+			/* #region pll_range */
+
+			int pll_range = RCC_PLL1VCIRANGE_2;
+			{
 				// 经过 m 分频系数分频后输入锁相环，这里需要根据输入锁相环的频率所处的范围来设置参数。
 				base::MHz divided_input_freq = input_freq / m;
 				if (divided_input_freq < base::MHz{2})
@@ -169,18 +178,6 @@ namespace bsp
 				{
 					pll_range = RCC_PLL1VCIRANGE_3;
 				}
-			}
-			else if (input_channel_name == "hsi")
-			{
-				throw std::invalid_argument{"不支持该输入通道"};
-			}
-			else if (input_channel_name == "csi")
-			{
-				throw std::invalid_argument{"不支持该输入通道"};
-			}
-			else
-			{
-				throw std::invalid_argument{"不支持该输入通道"};
 			}
 
 			/* #endregion */
