@@ -20,7 +20,7 @@ namespace
 base::MHz base::systick::frequency()
 {
 	base::MHz ret{base::Hz{HAL_RCC_GetSysClockFreq()}};
-	if ((SysTick->CTRL & base::bit::Bit(2)) == 0)
+	if (base::bit::ReadBit(SysTick->CTRL, 2) == 0)
 	{
 		ret /= 8;
 	}
