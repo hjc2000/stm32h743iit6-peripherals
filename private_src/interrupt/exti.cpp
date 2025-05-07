@@ -13,7 +13,7 @@ namespace
 
 } // namespace
 
-void base::exti::register_callback(int line_id, std::function<void()> const &callback)
+void base::exti::register_callback(int32_t line_id, std::function<void()> const &callback)
 {
 	switch (line_id)
 	{
@@ -66,7 +66,7 @@ void base::exti::register_callback(int line_id, std::function<void()> const &cal
 	}
 }
 
-void base::exti::unregister_callback(int line_id)
+void base::exti::unregister_callback(int32_t line_id)
 {
 	switch (line_id)
 	{
