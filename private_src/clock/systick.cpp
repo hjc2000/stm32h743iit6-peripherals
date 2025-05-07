@@ -1,4 +1,5 @@
 #include "base/embedded/systick/systick.h"
+#include "base/bit/bit.h"
 #include "base/embedded/interrupt/interrupt.h"
 #include "base/task/delay.h"
 #include "base/unit/Hz.h"
@@ -18,8 +19,13 @@ namespace
 
 base::MHz base::systick::frequency()
 {
-	// stm32h743 不支持 8 分频。
-	return base::MHz{base::Hz{HAL_RCC_GetSysClockFreq()}};
+	base::MHz ret{base::Hz{HAL_RCC_GetSysClockFreq()}};
+	if ((SysTick->CTRL & base::bit::Bit(2)) == 0)
+	{
+		ret /= 8;
+	}
+
+	return ret;
 }
 
 uint64_t base::systick::current_value()
