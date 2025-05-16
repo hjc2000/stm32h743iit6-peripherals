@@ -34,7 +34,35 @@ public:
 		bsp::gpio::enable_clock(_port);
 		GPIO_InitTypeDef def{};
 		def.Pull = bsp::gpio::to_defined_value(pull_mode);
-		def.Mode = bsp::gpio::to_defined_value(trigger_edge);
+
+		switch (trigger_edge)
+		{
+		case base::gpio::TriggerEdge::Disable:
+			{
+				def.Mode = GPIO_MODE_INPUT;
+				break;
+			}
+		case base::gpio::TriggerEdge::RisingEdge:
+			{
+				def.Mode = GPIO_MODE_IT_RISING;
+				break;
+			}
+		case base::gpio::TriggerEdge::FallingEdge:
+			{
+				def.Mode = GPIO_MODE_IT_FALLING;
+				break;
+			}
+		case base::gpio::TriggerEdge::BothEdge:
+			{
+				def.Mode = GPIO_MODE_IT_RISING_FALLING;
+				break;
+			}
+		default:
+			{
+				throw std::invalid_argument{CODE_POS_STR + "非法 TriggerEdge."};
+			}
+		}
+
 		def.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 		def.Pin = _pin_define;
 		HAL_GPIO_Init(_port, &def);
