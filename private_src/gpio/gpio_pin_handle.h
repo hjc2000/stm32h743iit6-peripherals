@@ -158,12 +158,71 @@ private:
 	/* #endregion */
 
 public:
-	gpio_pin_handle(base::gpio::PortEnum port, uint32_t pin);
+	gpio_pin_handle(base::gpio::PortEnum port, uint32_t pin)
+		: _usage_state_manager(port, pin)
+	{
+		_port_enum = port;
+		_port = bsp::ToPort(port);
+		_pin = pin;
+		_pin_define = bsp::ToPinDefineValue(pin);
+	}
 
 	/* #region 初始化方法 */
 
 	void InitializeAsInputMode(base::gpio::PullMode pull_mode,
-							   base::gpio::TriggerEdge trigger_edge);
+							   base::gpio::TriggerEdge trigger_edge)
+	{
+		EnableClock();
+		GPIO_InitTypeDef def{};
+		switch (pull_mode)
+		{
+		default:
+		case base::gpio::PullMode::NoPull:
+			{
+				def.Pull = GPIO_NOPULL;
+				break;
+			}
+		case base::gpio::PullMode::PullUp:
+			{
+				def.Pull = GPIO_PULLUP;
+				break;
+			}
+		case base::gpio::PullMode::PullDown:
+			{
+				def.Pull = GPIO_PULLDOWN;
+				break;
+			}
+		}
+
+		switch (trigger_edge)
+		{
+		default:
+		case base::gpio::TriggerEdge::Disable:
+			{
+				def.Mode = GPIO_MODE_INPUT;
+				break;
+			}
+		case base::gpio::TriggerEdge::RisingEdge:
+			{
+				def.Mode = GPIO_MODE_IT_RISING;
+				break;
+			}
+		case base::gpio::TriggerEdge::FallingEdge:
+			{
+				def.Mode = GPIO_MODE_IT_FALLING;
+				break;
+			}
+		case base::gpio::TriggerEdge::BothEdge:
+			{
+				def.Mode = GPIO_MODE_IT_RISING_FALLING;
+				break;
+			}
+		}
+
+		def.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+		def.Pin = _pin_define;
+		HAL_GPIO_Init(_port, &def);
+	}
 
 	void InitializeAsInputMode()
 	{
@@ -171,7 +230,52 @@ public:
 	}
 
 	void InitializeAsOutputMode(base::gpio::PullMode pull_mode,
-								base::gpio::DriveMode drive_mode);
+								base::gpio::DriveMode drive_mode)
+	{
+		EnableClock();
+		GPIO_InitTypeDef def{};
+		switch (pull_mode)
+		{
+		default:
+		case base::gpio::PullMode::NoPull:
+			{
+				def.Pull = GPIO_NOPULL;
+				break;
+			}
+		case base::gpio::PullMode::PullUp:
+			{
+				def.Pull = GPIO_PULLUP;
+				break;
+			}
+		case base::gpio::PullMode::PullDown:
+			{
+				def.Pull = GPIO_PULLDOWN;
+				break;
+			}
+		}
+
+		switch (drive_mode)
+		{
+		case base::gpio::DriveMode::PushPull:
+			{
+				def.Mode = GPIO_MODE_OUTPUT_PP;
+				break;
+			}
+		case base::gpio::DriveMode::OpenDrain:
+			{
+				def.Mode = GPIO_MODE_OUTPUT_OD;
+				break;
+			}
+		default:
+			{
+				throw std::invalid_argument{CODE_POS_STR + "不支持的驱动模式。"};
+			}
+		}
+
+		def.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+		def.Pin = _pin_define;
+		HAL_GPIO_Init(_port, &def);
+	}
 
 	void InitializeAsOutputMode()
 	{
@@ -180,7 +284,54 @@ public:
 
 	void InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction af,
 										   base::gpio::PullMode pull_mode,
-										   base::gpio::DriveMode drive_mode);
+										   base::gpio::DriveMode drive_mode)
+	{
+		EnableClock();
+		GPIO_InitTypeDef def{};
+		def.Alternate = GetAlternateFunctionDefineValue(af);
+
+		switch (pull_mode)
+		{
+		default:
+		case base::gpio::PullMode::NoPull:
+			{
+				def.Pull = GPIO_NOPULL;
+				break;
+			}
+		case base::gpio::PullMode::PullUp:
+			{
+				def.Pull = GPIO_PULLUP;
+				break;
+			}
+		case base::gpio::PullMode::PullDown:
+			{
+				def.Pull = GPIO_PULLDOWN;
+				break;
+			}
+		}
+
+		switch (drive_mode)
+		{
+		case base::gpio::DriveMode::PushPull:
+			{
+				def.Mode = GPIO_MODE_AF_PP;
+				break;
+			}
+		case base::gpio::DriveMode::OpenDrain:
+			{
+				def.Mode = GPIO_MODE_AF_OD;
+				break;
+			}
+		default:
+			{
+				throw std::invalid_argument{"不支持的 Driver"};
+			}
+		}
+
+		def.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+		def.Pin = _pin_define;
+		HAL_GPIO_Init(_port, &def);
+	}
 
 	/* #endregion */
 
