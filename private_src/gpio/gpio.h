@@ -1,8 +1,6 @@
 #pragma once
 #include "base/embedded/gpio/gpio_parameter.h"
-#include "base/string/define.h"
 #include "hal.h"
-#include <stdexcept>
 
 namespace bsp
 {

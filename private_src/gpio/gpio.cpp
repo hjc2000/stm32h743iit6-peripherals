@@ -1,4 +1,6 @@
 #include "gpio.h"
+#include "base/string/define.h"
+#include <stdexcept>
 
 void bsp::gpio::enable_clock(GPIO_TypeDef *port)
 {
