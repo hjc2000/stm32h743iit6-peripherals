@@ -2,6 +2,7 @@
 #include "base/embedded/gpio/gpio_handle.h"
 #include "base/embedded/gpio/gpio_parameter.h"
 #include "base/embedded/gpio/GpioPinUsageStateManager.h"
+#include "base/embedded/interrupt/exti.h"
 #include "hal.h"
 #include <cstdint>
 
@@ -197,12 +198,48 @@ public:
 
 	/* #endregion */
 
-	bool ReadPin();
-	void WritePin(bool value);
-	void TogglePin();
+	/* #region 读写引脚方法 */
 
-	void RegisterInterruptCallback(int32_t priority, std::function<void()> const &callback_func);
+	bool ReadPin()
+	{
+		GPIO_PinState pin_state = HAL_GPIO_ReadPin(_port, _pin_define);
+		if (pin_state == GPIO_PinState::GPIO_PIN_SET)
+		{
+			return true;
+		}
 
-	void RegisterInterruptCallback(std::function<void()> const &callback_func);
-	void UnregisterInterruptCallback();
+		return false;
+	}
+
+	void WritePin(bool value)
+	{
+		GPIO_PinState state = value ? GPIO_PinState::GPIO_PIN_SET : GPIO_PinState::GPIO_PIN_RESET;
+		HAL_GPIO_WritePin(_port, _pin_define, state);
+	}
+
+	void TogglePin()
+	{
+		HAL_GPIO_TogglePin(_port, _pin_define);
+	}
+
+	/* #endregion */
+
+	/* #region 中断回调 */
+
+	void RegisterInterruptCallback(int32_t priority, std::function<void()> const &callback_func)
+	{
+		base::exti::register_callback(_pin, priority, callback_func);
+	}
+
+	void RegisterInterruptCallback(std::function<void()> const &callback_func)
+	{
+		base::exti::register_callback(_pin, callback_func);
+	}
+
+	void UnregisterInterruptCallback()
+	{
+		base::exti::unregister_callback(_pin);
+	}
+
+	/* #endregion */
 };
