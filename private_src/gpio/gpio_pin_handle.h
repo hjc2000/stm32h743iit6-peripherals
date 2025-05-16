@@ -3,6 +3,7 @@
 #include "base/embedded/gpio/gpio_parameter.h"
 #include "base/embedded/gpio/GpioPinUsageStateManager.h"
 #include "base/embedded/interrupt/exti.h"
+#include "gpio.h"
 #include "hal.h"
 #include <cstdint>
 
@@ -149,13 +150,7 @@ private:
 	uint32_t _pin = 0;
 	uint32_t _pin_define = 0;
 
-	/* #region 初始化帮助方法 */
-
-	void EnableClock();
-
 	uint32_t GetAlternateFunctionDefineValue(base::gpio::AlternateFunction af);
-
-	/* #endregion */
 
 public:
 	gpio_pin_handle(base::gpio::PortEnum port, uint32_t pin)
@@ -172,7 +167,7 @@ public:
 	void InitializeAsInputMode(base::gpio::PullMode pull_mode,
 							   base::gpio::TriggerEdge trigger_edge)
 	{
-		EnableClock();
+		bsp::gpio::enable_clock(_port);
 		GPIO_InitTypeDef def{};
 		switch (pull_mode)
 		{
@@ -232,7 +227,7 @@ public:
 	void InitializeAsOutputMode(base::gpio::PullMode pull_mode,
 								base::gpio::DriveMode drive_mode)
 	{
-		EnableClock();
+		bsp::gpio::enable_clock(_port);
 		GPIO_InitTypeDef def{};
 		switch (pull_mode)
 		{
@@ -286,7 +281,7 @@ public:
 										   base::gpio::PullMode pull_mode,
 										   base::gpio::DriveMode drive_mode)
 	{
-		EnableClock();
+		bsp::gpio::enable_clock(_port);
 		GPIO_InitTypeDef def{};
 		def.Alternate = GetAlternateFunctionDefineValue(af);
 

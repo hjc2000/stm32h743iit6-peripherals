@@ -3,5 +3,9 @@
 
 namespace bsp
 {
-	void EnableClock(GPIO_TypeDef *port);
+	namespace gpio
+	{
+		void enable_clock(GPIO_TypeDef *port);
+
+	} // namespace gpio
 } // namespace bsp

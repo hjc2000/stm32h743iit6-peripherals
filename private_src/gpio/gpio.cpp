@@ -1,6 +1,6 @@
 #include "gpio.h"
 
-void bsp::EnableClock(GPIO_TypeDef *port)
+void bsp::gpio::enable_clock(GPIO_TypeDef *port)
 {
 	if (port == GPIOA)
 	{
