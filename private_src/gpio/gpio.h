@@ -221,5 +221,32 @@ namespace bsp
 			}
 		}
 
+		constexpr uint32_t to_defined_value(base::gpio::TriggerEdge trigger_edge)
+		{
+			switch (trigger_edge)
+			{
+			case base::gpio::TriggerEdge::Disable:
+				{
+					return GPIO_MODE_INPUT;
+				}
+			case base::gpio::TriggerEdge::RisingEdge:
+				{
+					return GPIO_MODE_IT_RISING;
+				}
+			case base::gpio::TriggerEdge::FallingEdge:
+				{
+					return GPIO_MODE_IT_FALLING;
+				}
+			case base::gpio::TriggerEdge::BothEdge:
+				{
+					return GPIO_MODE_IT_RISING_FALLING;
+				}
+			default:
+				{
+					throw std::invalid_argument{CODE_POS_STR + "非法 TriggerEdge."};
+				}
+			}
+		}
+
 	} // namespace gpio
 } // namespace bsp
