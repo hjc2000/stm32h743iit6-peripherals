@@ -150,7 +150,28 @@ private:
 	uint32_t _pin = 0;
 	uint32_t _pin_define = 0;
 
-	uint32_t GetAlternateFunctionDefineValue(base::gpio::AlternateFunction af);
+	uint32_t GetAlternateFunctionDefineValue(base::gpio::AlternateFunction af)
+	{
+		switch (af)
+		{
+		case base::gpio::AlternateFunction::UART1:
+			{
+				return GPIO_AF7_USART1;
+			}
+		case base::gpio::AlternateFunction::SDRAM1:
+			{
+				return GPIO_AF12_FMC;
+			}
+		case base::gpio::AlternateFunction::TIMER3:
+			{
+				return GPIO_AF2_TIM3;
+			}
+		default:
+			{
+				return 0;
+			}
+		}
+	}
 
 public:
 	gpio_pin_handle(base::gpio::PortEnum port, uint32_t pin)
