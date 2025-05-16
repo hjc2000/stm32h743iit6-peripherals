@@ -264,6 +264,11 @@ void base::gpio::gpio_pin_handle::TogglePin()
 
 /* #region 中断回调 */
 
+void base::gpio::gpio_pin_handle::RegisterInterruptCallback(int32_t priority, std::function<void()> const &callback_func)
+{
+	base::exti::register_callback(_pin, priority, callback_func);
+}
+
 void base::gpio::gpio_pin_handle::RegisterInterruptCallback(std::function<void()> const &callback_func)
 {
 	base::exti::register_callback(_pin, callback_func);

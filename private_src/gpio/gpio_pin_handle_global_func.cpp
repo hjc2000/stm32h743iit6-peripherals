@@ -78,6 +78,13 @@ void base::gpio::toggle_pin(base::gpio::gpio_pin_handle &h)
 /* #region 中断回调 */
 
 void base::gpio::register_interrupt_callback(base::gpio::gpio_pin_handle &h,
+											 int32_t priority,
+											 std::function<void()> const &callback_func)
+{
+	h.RegisterInterruptCallback(priority, callback_func);
+}
+
+void base::gpio::register_interrupt_callback(base::gpio::gpio_pin_handle &h,
 											 std::function<void()> const &callback_func)
 {
 	h.RegisterInterruptCallback(callback_func);

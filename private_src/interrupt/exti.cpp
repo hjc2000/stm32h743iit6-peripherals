@@ -26,6 +26,8 @@ void base::exti::set_default_priority(int32_t priority)
 	_default_priority = priority;
 }
 
+/* #region 注册回调 */
+
 void base::exti::register_callback(int32_t line_id,
 								   int32_t priority,
 								   std::function<void()> const &callback)
@@ -101,6 +103,8 @@ void base::exti::register_callback(int32_t line_id, std::function<void()> const 
 {
 	base::exti::register_callback(line_id, _default_priority, callback);
 }
+
+/* #endregion */
 
 void base::exti::unregister_callback(int32_t line_id)
 {

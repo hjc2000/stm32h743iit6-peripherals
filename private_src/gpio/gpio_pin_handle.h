@@ -201,6 +201,8 @@ public:
 	void WritePin(bool value);
 	void TogglePin();
 
+	void RegisterInterruptCallback(int32_t priority, std::function<void()> const &callback_func);
+
 	void RegisterInterruptCallback(std::function<void()> const &callback_func);
 	void UnregisterInterruptCallback();
 };
