@@ -2,14 +2,33 @@
 #include "base/embedded/interrupt/interrupt.h"
 #include "base/string/define.h"
 #include "hal.h"
+#include <cstdint>
 
 namespace
 {
+	///
+	/// @brief 默认的中断优先级。
+	///
+	///
+	int32_t _default_priority = 0;
+
 	std::function<void()> _exti_interrupt_callback_handlers[16]{};
 
 } // namespace
 
-void base::exti::register_callback(int32_t line_id, std::function<void()> const &callback)
+int32_t base::exti::default_priority()
+{
+	return _default_priority;
+}
+
+void base::exti::set_default_priority(int32_t priority)
+{
+	_default_priority = priority;
+}
+
+void base::exti::register_callback(int32_t line_id,
+								   int32_t priority,
+								   std::function<void()> const &callback)
 {
 	switch (line_id)
 	{
@@ -17,35 +36,35 @@ void base::exti::register_callback(int32_t line_id, std::function<void()> const 
 		{
 			base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI0_IRQn));
 			_exti_interrupt_callback_handlers[0] = callback;
-			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI0_IRQn), 4);
+			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI0_IRQn), priority);
 			break;
 		}
 	case 1:
 		{
 			base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI1_IRQn));
 			_exti_interrupt_callback_handlers[1] = callback;
-			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI1_IRQn), 4);
+			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI1_IRQn), priority);
 			break;
 		}
 	case 2:
 		{
 			base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI2_IRQn));
 			_exti_interrupt_callback_handlers[2] = callback;
-			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI2_IRQn), 4);
+			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI2_IRQn), priority);
 			break;
 		}
 	case 3:
 		{
 			base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI3_IRQn));
 			_exti_interrupt_callback_handlers[3] = callback;
-			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI3_IRQn), 4);
+			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI3_IRQn), priority);
 			break;
 		}
 	case 4:
 		{
 			base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI4_IRQn));
 			_exti_interrupt_callback_handlers[4] = callback;
-			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI4_IRQn), 4);
+			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI4_IRQn), priority);
 			break;
 		}
 	case 5:
@@ -56,7 +75,7 @@ void base::exti::register_callback(int32_t line_id, std::function<void()> const 
 		{
 			base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI9_5_IRQn));
 			_exti_interrupt_callback_handlers[line_id] = callback;
-			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI9_5_IRQn), 4);
+			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI9_5_IRQn), priority);
 			break;
 		}
 	case 10:
@@ -68,7 +87,7 @@ void base::exti::register_callback(int32_t line_id, std::function<void()> const 
 		{
 			base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI15_10_IRQn));
 			_exti_interrupt_callback_handlers[line_id] = callback;
-			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI15_10_IRQn), 4);
+			base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::EXTI15_10_IRQn), priority);
 			break;
 		}
 	default:
@@ -76,6 +95,11 @@ void base::exti::register_callback(int32_t line_id, std::function<void()> const 
 			throw std::invalid_argument{CODE_POS_STR + "pin 超出范围。"};
 		}
 	}
+}
+
+void base::exti::register_callback(int32_t line_id, std::function<void()> const &callback)
+{
+	base::exti::register_callback(line_id, _default_priority, callback);
 }
 
 void base::exti::unregister_callback(int32_t line_id)
