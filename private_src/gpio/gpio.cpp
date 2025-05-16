@@ -156,6 +156,29 @@ uint32_t bsp::gpio::to_pin_define_value(uint32_t pin)
 	}
 }
 
+uint32_t bsp::gpio::to_defined_value(base::gpio::PullMode pull_mode)
+{
+	switch (pull_mode)
+	{
+	case base::gpio::PullMode::NoPull:
+		{
+			return GPIO_NOPULL;
+		}
+	case base::gpio::PullMode::PullUp:
+		{
+			return GPIO_PULLUP;
+		}
+	case base::gpio::PullMode::PullDown:
+		{
+			return GPIO_PULLDOWN;
+		}
+	default:
+		{
+			throw std::invalid_argument{CODE_POS_STR + "非法 PullMode"};
+		}
+	}
+}
+
 uint32_t bsp::gpio::to_defined_value(base::gpio::AlternateFunction af)
 {
 	switch (af)

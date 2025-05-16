@@ -1,6 +1,9 @@
 #pragma once
 #include "base/embedded/gpio/gpio_parameter.h"
+#include "base/string/define.h"
 #include "hal.h"
+#include <cstdint>
+#include <stdexcept>
 
 namespace bsp
 {
@@ -23,6 +26,8 @@ namespace bsp
 		/// @return
 		///
 		uint32_t to_pin_define_value(uint32_t pin);
+
+		uint32_t to_defined_value(base::gpio::PullMode pull_mode);
 
 		uint32_t to_defined_value(base::gpio::AlternateFunction af);
 

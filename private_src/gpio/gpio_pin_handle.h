@@ -33,25 +33,7 @@ public:
 	{
 		bsp::gpio::enable_clock(_port);
 		GPIO_InitTypeDef def{};
-		switch (pull_mode)
-		{
-		default:
-		case base::gpio::PullMode::NoPull:
-			{
-				def.Pull = GPIO_NOPULL;
-				break;
-			}
-		case base::gpio::PullMode::PullUp:
-			{
-				def.Pull = GPIO_PULLUP;
-				break;
-			}
-		case base::gpio::PullMode::PullDown:
-			{
-				def.Pull = GPIO_PULLDOWN;
-				break;
-			}
-		}
+		def.Pull = bsp::gpio::to_defined_value(pull_mode);
 
 		switch (trigger_edge)
 		{
@@ -93,25 +75,7 @@ public:
 	{
 		bsp::gpio::enable_clock(_port);
 		GPIO_InitTypeDef def{};
-		switch (pull_mode)
-		{
-		default:
-		case base::gpio::PullMode::NoPull:
-			{
-				def.Pull = GPIO_NOPULL;
-				break;
-			}
-		case base::gpio::PullMode::PullUp:
-			{
-				def.Pull = GPIO_PULLUP;
-				break;
-			}
-		case base::gpio::PullMode::PullDown:
-			{
-				def.Pull = GPIO_PULLDOWN;
-				break;
-			}
-		}
+		def.Pull = bsp::gpio::to_defined_value(pull_mode);
 
 		switch (drive_mode)
 		{
@@ -148,26 +112,7 @@ public:
 		bsp::gpio::enable_clock(_port);
 		GPIO_InitTypeDef def{};
 		def.Alternate = bsp::gpio::to_defined_value(af);
-
-		switch (pull_mode)
-		{
-		default:
-		case base::gpio::PullMode::NoPull:
-			{
-				def.Pull = GPIO_NOPULL;
-				break;
-			}
-		case base::gpio::PullMode::PullUp:
-			{
-				def.Pull = GPIO_PULLUP;
-				break;
-			}
-		case base::gpio::PullMode::PullDown:
-			{
-				def.Pull = GPIO_PULLDOWN;
-				break;
-			}
-		}
+		def.Pull = bsp::gpio::to_defined_value(pull_mode);
 
 		switch (drive_mode)
 		{
