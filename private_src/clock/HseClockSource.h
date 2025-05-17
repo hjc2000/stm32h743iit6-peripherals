@@ -1,5 +1,4 @@
 #pragma once
-#include "base/exception/NotSupportedException.h"
 #include "base/unit/MHz.h"
 #include "clock_source_handle.h"
 #include "hal.h"
@@ -19,11 +18,6 @@ namespace bsp
 			return _frequency;
 		}
 
-		virtual base::MHz Frequency(std::string const &output_channel_name) const override
-		{
-			throw base::exception::NotSupportedException{};
-		}
-
 		virtual void Configure() override
 		{
 			RCC_OscInitTypeDef def{};
@@ -36,17 +30,6 @@ namespace bsp
 			}
 
 			_frequency = base::MHz{25};
-		}
-
-		virtual void Configure(std::map<std::string, uint32_t> const &channel_factor_map) override
-		{
-			throw base::exception::NotSupportedException{};
-		}
-
-		virtual void Configure(std::string const &input_channel_name,
-							   std::map<std::string, uint32_t> const &channel_factor_map) override
-		{
-			throw base::exception::NotSupportedException{};
 		}
 
 		virtual void ConfigureAsBypassMode(base::MHz const &bypass_input_frequency) override

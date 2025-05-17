@@ -1,6 +1,5 @@
 #pragma once
 #include "base/embedded/clock/ClockSource.h"
-#include "base/exception/NotSupportedException.h"
 #include "base/unit/MHz.h"
 #include "clock_source_handle.h"
 #include "hal.h"
@@ -18,11 +17,6 @@ namespace bsp
 
 	public:
 		/* #region Frequency */
-
-		virtual base::MHz Frequency() const override
-		{
-			throw base::exception::NotSupportedException{};
-		}
 
 		virtual base::MHz Frequency(std::string const &output_channel_name) const override
 		{
@@ -52,16 +46,6 @@ namespace bsp
 		/* #endregion */
 
 		/* #region Configure */
-
-		virtual void Configure() override
-		{
-			throw base::exception::NotSupportedException{};
-		}
-
-		virtual void Configure(std::map<std::string, uint32_t> const &channel_factor_map) override
-		{
-			throw base::exception::NotSupportedException{};
-		}
 
 		virtual void Configure(std::string const &input_channel_name,
 							   std::map<std::string, uint32_t> const &channel_factor_map) override
@@ -209,11 +193,6 @@ namespace bsp
 		}
 
 		/* #endregion */
-
-		virtual void ConfigureAsBypassMode(base::MHz const &bypass_input_frequency) override
-		{
-			throw base::exception::NotSupportedException{};
-		}
 
 		virtual void TurnOff() override
 		{

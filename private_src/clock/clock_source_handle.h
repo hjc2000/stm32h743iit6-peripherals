@@ -1,5 +1,6 @@
 #pragma once
 #include "base/embedded/clock/clock_source_handle.h"
+#include "base/exception/NotSupportedException.h"
 #include "base/unit/MHz.h"
 #include <string>
 
@@ -8,23 +9,45 @@ class base::clock::clock_source_handle
 public:
 	/* #region Frequency */
 
-	virtual base::MHz Frequency() const = 0;
-	virtual base::MHz Frequency(std::string const &output_channel_name) const = 0;
+	virtual base::MHz Frequency() const
+	{
+		throw base::exception::NotSupportedException{};
+	}
+
+	virtual base::MHz Frequency(std::string const &output_channel_name) const
+	{
+		throw base::exception::NotSupportedException{};
+	}
 
 	/* #endregion */
 
 	/* #region Configure */
 
-	virtual void Configure() = 0;
+	virtual void Configure()
+	{
+		throw base::exception::NotSupportedException{};
+	}
 
-	virtual void Configure(std::map<std::string, uint32_t> const &channel_factor_map) = 0;
+	virtual void Configure(std::map<std::string, uint32_t> const &channel_factor_map)
+	{
+		throw base::exception::NotSupportedException{};
+	}
 
 	virtual void Configure(std::string const &input_channel_name,
-						   std::map<std::string, uint32_t> const &channel_factor_map) = 0;
+						   std::map<std::string, uint32_t> const &channel_factor_map)
+	{
+		throw base::exception::NotSupportedException{};
+	}
 
 	/* #endregion */
 
-	virtual void ConfigureAsBypassMode(base::MHz const &bypass_input_frequency) = 0;
+	virtual void ConfigureAsBypassMode(base::MHz const &bypass_input_frequency)
+	{
+		throw base::exception::NotSupportedException{};
+	}
 
-	virtual void TurnOff() = 0;
+	virtual void TurnOff()
+	{
+		throw base::exception::NotSupportedException{};
+	}
 };
