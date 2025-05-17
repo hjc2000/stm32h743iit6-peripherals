@@ -2,6 +2,7 @@
 #include "base/embedded/gpio/gpio_parameter.h"
 #include "base/string/define.h"
 #include "hal.h"
+#include <array>
 #include <cstdint>
 #include <stdexcept>
 
@@ -32,77 +33,31 @@ namespace bsp
 		///
 		constexpr uint32_t to_pin_define_value(uint32_t pin)
 		{
-			switch (pin)
+			std::array<uint32_t, 16> const pin_define_value{
+				GPIO_PIN_0,
+				GPIO_PIN_1,
+				GPIO_PIN_2,
+				GPIO_PIN_3,
+				GPIO_PIN_4,
+				GPIO_PIN_5,
+				GPIO_PIN_6,
+				GPIO_PIN_7,
+				GPIO_PIN_8,
+				GPIO_PIN_9,
+				GPIO_PIN_10,
+				GPIO_PIN_11,
+				GPIO_PIN_12,
+				GPIO_PIN_13,
+				GPIO_PIN_14,
+				GPIO_PIN_15,
+			};
+
+			if (pin > 15)
 			{
-			case 0:
-				{
-					return GPIO_PIN_0;
-				}
-			case 1:
-				{
-					return GPIO_PIN_1;
-				}
-			case 2:
-				{
-					return GPIO_PIN_2;
-				}
-			case 3:
-				{
-					return GPIO_PIN_3;
-				}
-			case 4:
-				{
-					return GPIO_PIN_4;
-				}
-			case 5:
-				{
-					return GPIO_PIN_5;
-				}
-			case 6:
-				{
-					return GPIO_PIN_6;
-				}
-			case 7:
-				{
-					return GPIO_PIN_7;
-				}
-			case 8:
-				{
-					return GPIO_PIN_8;
-				}
-			case 9:
-				{
-					return GPIO_PIN_9;
-				}
-			case 10:
-				{
-					return GPIO_PIN_10;
-				}
-			case 11:
-				{
-					return GPIO_PIN_11;
-				}
-			case 12:
-				{
-					return GPIO_PIN_12;
-				}
-			case 13:
-				{
-					return GPIO_PIN_13;
-				}
-			case 14:
-				{
-					return GPIO_PIN_14;
-				}
-			case 15:
-				{
-					return GPIO_PIN_15;
-				}
-			default:
-				{
-					throw std::invalid_argument{CODE_POS_STR + "非法引脚号。"};
-				}
+				throw std::invalid_argument{CODE_POS_STR + "非法引脚号。"};
 			}
+
+			return pin_define_value[pin];
 		}
 
 		constexpr uint32_t to_defined_value(base::gpio::PullMode pull_mode)
