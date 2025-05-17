@@ -33,7 +33,7 @@ namespace bsp
 		///
 		constexpr uint32_t to_pin_define_value(uint32_t pin)
 		{
-			std::array<uint32_t, 16> const pin_define_value{
+			constexpr std::array<uint32_t, 16> pin_define_value{
 				GPIO_PIN_0,
 				GPIO_PIN_1,
 				GPIO_PIN_2,
