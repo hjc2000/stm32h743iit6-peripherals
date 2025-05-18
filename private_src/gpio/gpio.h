@@ -87,15 +87,15 @@ namespace bsp
 		{
 			switch (af)
 			{
-			case base::gpio::AlternateFunction::UART1:
+			case base::gpio::AlternateFunction::Uart1:
 				{
 					return GPIO_AF7_USART1;
 				}
-			case base::gpio::AlternateFunction::SDRAM1:
+			case base::gpio::AlternateFunction::Sdram1:
 				{
 					return GPIO_AF12_FMC;
 				}
-			case base::gpio::AlternateFunction::TIMER3:
+			case base::gpio::AlternateFunction::Timer3:
 				{
 					return GPIO_AF2_TIM3;
 				}

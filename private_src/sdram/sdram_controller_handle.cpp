@@ -5,7 +5,7 @@ void base::sdram::sdram_controller_handle::InitializeGPIO()
 {
 	for (auto &pin : _pins)
 	{
-		pin.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::SDRAM1,
+		pin.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::Sdram1,
 											  base::gpio::PullMode::PullUp,
 											  base::gpio::DriveMode::PushPull);
 	}
