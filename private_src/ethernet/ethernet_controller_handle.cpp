@@ -243,10 +243,9 @@ void base::ethernet::ethernet_controller_handle::Open(base::ethernet::InterfaceT
 								 NULL);
 	}
 
-	/* 这里的中断优先级必须设置在 freertos 能够屏蔽的优先级范围内，不然不知道什么原因，
-	 * 会导致 freertos 的 queue.c 中报错。
-	 */
-	base::interrupt::enable_interrupt(static_cast<uint32_t>(ETH_IRQn), 7);
+	// 中断优先级必须设置在 freertos 能够屏蔽的优先级范围内。
+	// freertos 无法屏蔽的中断中禁止使用 freertos 的 API.
+	base::interrupt::enable_interrupt(static_cast<uint32_t>(ETH_IRQn), 5);
 
 	bsp::di::interrupt::IsrManager().AddIsr(static_cast<uint32_t>(ETH_IRQn),
 											[&]()
