@@ -10,7 +10,7 @@ namespace
 	/// @brief 默认的中断优先级。
 	///
 	///
-	int32_t _default_priority = 0;
+	int32_t _default_priority = 5;
 
 	std::function<void()> _exti_interrupt_callback_handlers[16]{};
 
