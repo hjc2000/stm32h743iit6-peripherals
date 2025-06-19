@@ -46,11 +46,6 @@ void base::systick::set_elapsed_handler(std::function<void()> func)
 	_elapsed_handler = func;
 }
 
-///
-/// @brief 系统时间戳。
-///
-/// @return
-///
 base::Nanoseconds base::systick::system_time_stamp()
 {
 	base::Nanoseconds clock_period{base::systick::frequency()};
