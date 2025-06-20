@@ -32,6 +32,7 @@ namespace bsp
 		base::task::BinarySemaphore _sending_completion_signal{false};
 		base::task::BinarySemaphore _receiving_completion_signal{false};
 		base::task::Mutex _read_lock{};
+		base::task::Mutex _write_lock{};
 		DMA_HandleTypeDef _rx_dma_handle{};
 		DMA_HandleTypeDef _tx_dma_handle{};
 		base::gpio::GpioPin _pa9{base::gpio::PortEnum::PortA, 9};

@@ -346,7 +346,7 @@ int32_t bsp::Serial1::Read(base::Span const &span)
 
 void bsp::Serial1::Write(base::ReadOnlySpan const &span)
 {
-	_sending_completion_signal.Acquire();
+	base::task::MutexGuard l{_write_lock};
 
 	HAL_StatusTypeDef ret = HAL_UART_Transmit_DMA(&_handle_context._uart_handle,
 												  span.Buffer(),
@@ -356,6 +356,8 @@ void bsp::Serial1::Write(base::ReadOnlySpan const &span)
 	{
 		throw std::runtime_error{CODE_POS_STR + "发送失败"};
 	}
+
+	_sending_completion_signal.Acquire();
 }
 
 void bsp::Serial1::Start(base::serial::Direction direction,
@@ -372,12 +374,6 @@ void bsp::Serial1::Start(base::serial::Direction direction,
 	_stop_bits = stop_bits;
 	_hardware_flow_control = hardware_flow_control;
 
-	/*
-	 * 先立刻释放一次信号量，等会 Write 方法被调用时直接通过，不被阻塞。
-	 * 然后在发送完成之前，第二次 Write 就会被阻塞了，这还能防止 Write
-	 * 被多线程同时调用。
-	 */
-	_sending_completion_signal.Release();
 	InitializeGpio();
 	InitializeRxDma();
 	InitializeTxDma();
