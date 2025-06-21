@@ -1,6 +1,7 @@
 #include "Serial1.h"
 #include "base/embedded/interrupt/interrupt.h"
 #include "base/embedded/serial/serial_handle.h"
+#include "base/stream/ReadOnlySpan.h"
 #include "base/string/define.h"
 #include "base/task/Mutex.h"
 #include <functional>
