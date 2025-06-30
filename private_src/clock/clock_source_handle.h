@@ -11,12 +11,12 @@ public:
 
 	virtual base::MHz Frequency() const
 	{
-		throw base::exception::NotSupportedException{};
+		throw base::NotSupportedException{};
 	}
 
 	virtual base::MHz Frequency(std::string const &output_channel_name) const
 	{
-		throw base::exception::NotSupportedException{};
+		throw base::NotSupportedException{};
 	}
 
 	/* #endregion */
@@ -25,29 +25,29 @@ public:
 
 	virtual void Configure()
 	{
-		throw base::exception::NotSupportedException{};
+		throw base::NotSupportedException{};
 	}
 
 	virtual void Configure(std::map<std::string, uint32_t> const &channel_factor_map)
 	{
-		throw base::exception::NotSupportedException{};
+		throw base::NotSupportedException{};
 	}
 
 	virtual void Configure(std::string const &input_channel_name,
 						   std::map<std::string, uint32_t> const &channel_factor_map)
 	{
-		throw base::exception::NotSupportedException{};
+		throw base::NotSupportedException{};
 	}
 
 	/* #endregion */
 
 	virtual void ConfigureAsBypassMode(base::MHz const &bypass_input_frequency)
 	{
-		throw base::exception::NotSupportedException{};
+		throw base::NotSupportedException{};
 	}
 
 	virtual void TurnOff()
 	{
-		throw base::exception::NotSupportedException{};
+		throw base::NotSupportedException{};
 	}
 };
