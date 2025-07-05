@@ -83,28 +83,5 @@ namespace bsp
 			}
 		}
 
-		constexpr uint32_t to_defined_value(base::gpio::AlternateFunction af)
-		{
-			switch (af)
-			{
-			case base::gpio::AlternateFunction::Uart1:
-				{
-					return GPIO_AF7_USART1;
-				}
-			case base::gpio::AlternateFunction::Sdram1:
-				{
-					return GPIO_AF12_FMC;
-				}
-			case base::gpio::AlternateFunction::Timer3:
-				{
-					return GPIO_AF2_TIM3;
-				}
-			default:
-				{
-					throw std::invalid_argument{CODE_POS_STR + "非法复用功能。"};
-				}
-			}
-		}
-
 	} // namespace gpio
 } // namespace bsp

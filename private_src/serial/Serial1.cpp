@@ -58,12 +58,12 @@ void bsp::Serial1::InitializeGpio()
 	__HAL_RCC_USART1_CLK_ENABLE();
 
 	// 发送引脚 PA9
-	_pa9.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::Uart1,
+	_pa9.InitializeAsAlternateFunctionMode(GPIO_AF7_USART1,
 										   base::gpio::PullMode::PullUp,
 										   base::gpio::DriveMode::PushPull);
 
 	// 接收引脚 PA10
-	_pa10.InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction::Uart1,
+	_pa10.InitializeAsAlternateFunctionMode(GPIO_AF7_USART1,
 											base::gpio::PullMode::PullUp,
 											base::gpio::DriveMode::PushPull);
 }

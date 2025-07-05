@@ -108,13 +108,13 @@ public:
 		InitializeAsOutputMode(base::gpio::PullMode::PullUp, base::gpio::DriveMode::PushPull);
 	}
 
-	void InitializeAsAlternateFunctionMode(base::gpio::AlternateFunction af,
+	void InitializeAsAlternateFunctionMode(uint32_t alternate_function_index,
 										   base::gpio::PullMode pull_mode,
 										   base::gpio::DriveMode drive_mode)
 	{
 		bsp::gpio::enable_clock(_port);
 		GPIO_InitTypeDef def{};
-		def.Alternate = bsp::gpio::to_defined_value(af);
+		def.Alternate = alternate_function_index;
 		def.Pull = bsp::gpio::to_defined_value(pull_mode);
 
 		switch (drive_mode)
