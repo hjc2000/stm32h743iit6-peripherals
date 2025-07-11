@@ -47,48 +47,6 @@ public:
 	/// @return
 	virtual base::serial::HardwareFlowControl HardwareFlowControl() const = 0;
 
-	///
-	/// @brief 本流能否读取。
-	///
-	/// @return true 能读取。
-	/// @return false 不能读取。
-	///
-	bool CanRead() const
-	{
-		if (Direction() == base::serial::Direction::RX)
-		{
-			return true;
-		}
-
-		if (Direction() == base::serial::Direction::RX_TX)
-		{
-			return true;
-		}
-
-		return false;
-	}
-
-	///
-	/// @brief 本流能否写入。
-	///
-	/// @return true 能写入。
-	/// @return false 不能写入。
-	///
-	bool CanWrite() const
-	{
-		if (Direction() == base::serial::Direction::TX)
-		{
-			return true;
-		}
-
-		if (Direction() == base::serial::Direction::RX_TX)
-		{
-			return true;
-		}
-
-		return false;
-	}
-
 	/* #endregion */
 
 	///

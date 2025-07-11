@@ -54,16 +54,6 @@ base::serial::HardwareFlowControl base::serial::hardware_flow_control(base::seri
 	return h.HardwareFlowControl();
 }
 
-bool base::serial::can_read(base::serial::serial_handle &h)
-{
-	return h.CanRead();
-}
-
-bool base::serial::can_write(base::serial::serial_handle &h)
-{
-	return h.CanWrite();
-}
-
 /* #endregion */
 
 int32_t base::serial::read(base::serial::serial_handle &h, base::Span const &span)
