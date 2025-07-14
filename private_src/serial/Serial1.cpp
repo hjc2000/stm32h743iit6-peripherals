@@ -270,7 +270,7 @@ void bsp::Serial1::InitializeInterrupt()
 
 int32_t bsp::Serial1::HaveRead()
 {
-	return _handle_context._uart_handle.RxXferSize - _handle_context._uart_handle.RxXferCount;
+	return _handle_context._uart_handle.RxXferSize - __HAL_DMA_GET_COUNTER(&_rx_dma_handle);
 }
 
 /* #region 被中断处理函数回调的函数 */
