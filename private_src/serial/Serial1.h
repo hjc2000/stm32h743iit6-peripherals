@@ -7,6 +7,7 @@
 #include "base/UsageStateManager.h"
 #include "hal.h"
 #include "serial_handle.h"
+#include <atomic>
 
 namespace bsp
 {
@@ -37,6 +38,8 @@ namespace bsp
 		DMA_HandleTypeDef _tx_dma_handle{};
 		base::gpio::GpioPin _pa9{base::gpio::PortEnum::PortA, 9};
 		base::gpio::GpioPin _pa10{base::gpio::PortEnum::PortA, 10};
+		std::atomic_bool _closed = false;
+
 		base::serial::Direction _direction;
 		uint32_t _baud_rate;
 		uint8_t _data_bits;
@@ -150,5 +153,12 @@ namespace bsp
 		/// @param span
 		///
 		virtual void Write(base::ReadOnlySpan const &span) override;
+
+		virtual void Close() override
+		{
+			_closed = true;
+			_receiving_completion_signal.Release();
+			_sending_completion_signal.Release();
+		}
 	};
 } // namespace bsp

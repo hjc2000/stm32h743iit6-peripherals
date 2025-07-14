@@ -1,6 +1,7 @@
 #include "Serial1.h"
 #include "base/embedded/interrupt/interrupt.h"
 #include "base/embedded/serial/serial_handle.h"
+#include "base/IDisposable.h"
 #include "base/stream/ReadOnlySpan.h"
 #include "base/string/define.h"
 #include "base/task/Mutex.h"
@@ -317,6 +318,11 @@ bsp::Serial1::~Serial1()
 
 int32_t bsp::Serial1::Read(base::Span const &span)
 {
+	if (_closed)
+	{
+		return 0;
+	}
+
 	if (span.Size() > UINT16_MAX)
 	{
 		throw std::invalid_argument{"count 太大"};
@@ -325,6 +331,11 @@ int32_t bsp::Serial1::Read(base::Span const &span)
 	base::task::MutexGuard l{_read_lock};
 	while (true)
 	{
+		if (_closed)
+		{
+			return 0;
+		}
+
 		{
 			base::interrupt::GlobalInterruptionGuard g;
 
@@ -347,6 +358,11 @@ int32_t bsp::Serial1::Read(base::Span const &span)
 
 void bsp::Serial1::Write(base::ReadOnlySpan const &span)
 {
+	if (_closed)
+	{
+		throw base::ObjectDisposedException{CODE_POS_STR + "串口已关闭，无法写入。"};
+	}
+
 	base::task::MutexGuard l{_write_lock};
 
 	HAL_StatusTypeDef ret = HAL_UART_Transmit_DMA(&_handle_context._uart_handle,

@@ -69,4 +69,6 @@ public:
 	/// @param span
 	///
 	virtual void Write(base::ReadOnlySpan const &span) = 0;
+
+	virtual void Close() = 0;
 };
