@@ -8,6 +8,8 @@
 #include <functional>
 #include <stdexcept>
 
+/* #region 中断处理函数 */
+
 namespace
 {
 	std::function<void()> _uart1_isr;
@@ -51,6 +53,8 @@ extern "C"
 		}
 	}
 }
+
+/* #endregion */
 
 /* #region 初始化 */
 
@@ -270,6 +274,12 @@ void bsp::Serial1::InitializeInterrupt()
 
 int32_t bsp::Serial1::HaveRead()
 {
+	// 经过测试，使用 HAL_UART_Receive_DMA 函数配合硬件接收超时时，一定要这么计算
+	// 已经接收的长度，不能使用
+	//
+	// _handle_context._uart_handle.RxXferSize - _handle_context._uart_handle.RxXferCount
+	//
+	// 似乎是因为 HAL 库在超时时算作错误，然后错误会把 RxXferCount 赋值为 0.
 	return _handle_context._uart_handle.RxXferSize - __HAL_DMA_GET_COUNTER(&_rx_dma_handle);
 }
 
