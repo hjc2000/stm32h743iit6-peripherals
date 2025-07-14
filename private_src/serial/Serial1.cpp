@@ -310,10 +310,7 @@ void bsp::Serial1::SetReadTimeoutByBaudCount(uint32_t value)
 
 bsp::Serial1::~Serial1()
 {
-	HAL_UART_DMAStop(&_handle_context._uart_handle);
-	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
-	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
-	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
+	Close();
 }
 
 int32_t bsp::Serial1::Read(base::Span const &span)
@@ -396,4 +393,21 @@ void bsp::Serial1::Start(base::serial::Direction direction,
 	InitializeTxDma();
 	InitializeUart();
 	InitializeInterrupt();
+}
+
+void bsp::Serial1::Close()
+{
+	if (_closed)
+	{
+		return;
+	}
+
+	_closed = true;
+	_receiving_completion_signal.Release();
+	_sending_completion_signal.Release();
+
+	HAL_UART_DMAStop(&_handle_context._uart_handle);
+	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
+	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
+	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
 }

@@ -154,11 +154,6 @@ namespace bsp
 		///
 		virtual void Write(base::ReadOnlySpan const &span) override;
 
-		virtual void Close() override
-		{
-			_closed = true;
-			_receiving_completion_signal.Release();
-			_sending_completion_signal.Release();
-		}
+		virtual void Close() override;
 	};
 } // namespace bsp
