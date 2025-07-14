@@ -69,3 +69,8 @@ void base::serial::write(base::serial::serial_handle &h, base::ReadOnlySpan cons
 void base::serial::flush(base::serial::serial_handle &h)
 {
 }
+
+void base::serial::close(base::serial::serial_handle &h)
+{
+	h.Close();
+}
