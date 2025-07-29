@@ -18,8 +18,8 @@ bsp::IndependentWatchDog &bsp::IndependentWatchDog::Instance()
 
 void bsp::IndependentWatchDog::Open(std::chrono::milliseconds value)
 {
-	base::unit::Seconds inner_clock_source_interval{InnerClockSourceFreq()};
-	base::unit::Seconds timeout{value};
+	base::unit::Second inner_clock_source_interval{InnerClockSourceFreq()};
+	base::unit::Second timeout{value};
 
 	// 所需的 (分频器计数值 + 计数器计数值)
 	int64_t total_count = static_cast<int64_t>(timeout / inner_clock_source_interval);
@@ -59,8 +59,8 @@ void bsp::IndependentWatchDog::Close()
 std::chrono::milliseconds bsp::IndependentWatchDog::Timeout() const
 {
 	base::unit::Hz count_freq = InnerClockSourceFreq() / _config.GetPrescalerByUint32();
-	base::unit::Seconds count_period{count_freq};
-	base::unit::Seconds timeout = _config.ReloadValue() * count_period;
+	base::unit::Second count_period{count_freq};
+	base::unit::Second timeout = _config.ReloadValue() * count_period;
 	return static_cast<std::chrono::milliseconds>(timeout);
 }
 

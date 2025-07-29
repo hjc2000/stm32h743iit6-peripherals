@@ -4,8 +4,8 @@
 #include "base/task/delay.h"
 #include "base/unit/Hz.h"
 #include "base/unit/MHz.h"
-#include "base/unit/Nanoseconds.h"
-#include "base/unit/Seconds.h"
+#include "base/unit/Nanosecond.h"
+#include "base/unit/Second.h"
 #include "hal.h"
 #include <chrono>
 #include <cstdint>
@@ -46,10 +46,10 @@ void base::systick::set_elapsed_handler(std::function<void()> func)
 	_elapsed_handler = func;
 }
 
-base::unit::Nanoseconds base::systick::system_time_stamp()
+base::unit::Nanosecond base::systick::system_time_stamp()
 {
-	base::unit::Nanoseconds clock_period{base::systick::frequency()};
-	base::unit::Nanoseconds elapsed_period = clock_period * base::systick::reload_value();
+	base::unit::Nanosecond clock_period{base::systick::frequency()};
+	base::unit::Nanosecond elapsed_period = clock_period * base::systick::reload_value();
 	return _total_tick * elapsed_period;
 }
 

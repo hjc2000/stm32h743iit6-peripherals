@@ -10,8 +10,8 @@ public:
 	/// @param scl_cycle
 	/// @param waiting_for_ack_signal_timeout
 	///
-	virtual void Initialize(base::unit::Nanoseconds const &scl_cycle,
-							base::unit::Nanoseconds const &waiting_for_ack_signal_timeout) = 0;
+	virtual void Initialize(base::unit::Nanosecond const &scl_cycle,
+							base::unit::Nanosecond const &waiting_for_ack_signal_timeout) = 0;
 
 	///
 	/// @brief 发送 IIC 启动信号。

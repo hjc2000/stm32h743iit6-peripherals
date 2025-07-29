@@ -1,7 +1,7 @@
 #pragma once
 #include <base/define.h>
 #include <base/unit/Hz.h>
-#include <base/unit/Seconds.h>
+#include <base/unit/Second.h>
 #include <bsp-interface/di/interrupt.h>
 #include <bsp-interface/timer/IIndependentWatchDog.h>
 #include <chrono>
