@@ -22,8 +22,8 @@ namespace bsp
 		/// @param scl_cycle
 		/// @param waiting_for_ack_signal_timeout
 		///
-		virtual void Initialize(base::Nanoseconds const &scl_cycle,
-								base::Nanoseconds const &waiting_for_ack_signal_timeout) override
+		virtual void Initialize(base::unit::Nanoseconds const &scl_cycle,
+								base::unit::Nanoseconds const &waiting_for_ack_signal_timeout) override
 		{
 			_iic_host.Initialize(scl_cycle,
 								 waiting_for_ack_signal_timeout);

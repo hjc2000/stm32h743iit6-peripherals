@@ -11,14 +11,14 @@ namespace bsp
 	{
 	private:
 		inline static bool _opened = false;
-		inline static base::MHz _p_freq;
-		inline static base::MHz _q_freq;
-		inline static base::MHz _r_freq;
+		inline static base::unit::MHz _p_freq;
+		inline static base::unit::MHz _q_freq;
+		inline static base::unit::MHz _r_freq;
 
 	public:
 		/* #region Frequency */
 
-		virtual base::MHz Frequency(std::string const &output_channel_name) const override
+		virtual base::unit::MHz Frequency(std::string const &output_channel_name) const override
 		{
 			if (!_opened)
 			{
@@ -121,7 +121,7 @@ namespace bsp
 
 			/* #endregion */
 
-			base::MHz input_freq;
+			base::unit::MHz input_freq;
 			if (input_channel_name == "hse")
 			{
 				base::clock::ClockSource hse{"hse"};
@@ -145,16 +145,16 @@ namespace bsp
 			int pll_range = RCC_PLL1VCIRANGE_2;
 			{
 				// 经过 m 分频系数分频后输入锁相环，这里需要根据输入锁相环的频率所处的范围来设置参数。
-				base::MHz divided_input_freq = input_freq / m;
-				if (divided_input_freq < base::MHz{2})
+				base::unit::MHz divided_input_freq = input_freq / m;
+				if (divided_input_freq < base::unit::MHz{2})
 				{
 					pll_range = RCC_PLL1VCIRANGE_0;
 				}
-				else if (divided_input_freq >= base::MHz{2} && divided_input_freq < base::MHz{4})
+				else if (divided_input_freq >= base::unit::MHz{2} && divided_input_freq < base::unit::MHz{4})
 				{
 					pll_range = RCC_PLL1VCIRANGE_1;
 				}
-				else if (divided_input_freq >= base::MHz{4} && divided_input_freq < base::MHz{8})
+				else if (divided_input_freq >= base::unit::MHz{4} && divided_input_freq < base::unit::MHz{8})
 				{
 					pll_range = RCC_PLL1VCIRANGE_2;
 				}

@@ -2,10 +2,10 @@
 #include "base/Console.h"
 #include "base/define.h"
 
-base::Hz bsp::IndependentWatchDog::InnerClockSourceFreq() const
+base::unit::Hz bsp::IndependentWatchDog::InnerClockSourceFreq() const
 {
 	// 独立看门狗具有 40 kHz 的内部时钟。
-	return base::Hz{40 * 1000};
+	return base::unit::Hz{40 * 1000};
 }
 
 PREINIT(bsp::IndependentWatchDog::Instance);
@@ -18,8 +18,8 @@ bsp::IndependentWatchDog &bsp::IndependentWatchDog::Instance()
 
 void bsp::IndependentWatchDog::Open(std::chrono::milliseconds value)
 {
-	base::Seconds inner_clock_source_interval{InnerClockSourceFreq()};
-	base::Seconds timeout{value};
+	base::unit::Seconds inner_clock_source_interval{InnerClockSourceFreq()};
+	base::unit::Seconds timeout{value};
 
 	// 所需的 (分频器计数值 + 计数器计数值)
 	int64_t total_count = static_cast<int64_t>(timeout / inner_clock_source_interval);
@@ -58,9 +58,9 @@ void bsp::IndependentWatchDog::Close()
 
 std::chrono::milliseconds bsp::IndependentWatchDog::Timeout() const
 {
-	base::Hz count_freq = InnerClockSourceFreq() / _config.GetPrescalerByUint32();
-	base::Seconds count_period{count_freq};
-	base::Seconds timeout = _config.ReloadValue() * count_period;
+	base::unit::Hz count_freq = InnerClockSourceFreq() / _config.GetPrescalerByUint32();
+	base::unit::Seconds count_period{count_freq};
+	base::unit::Seconds timeout = _config.ReloadValue() * count_period;
 	return static_cast<std::chrono::milliseconds>(timeout);
 }
 

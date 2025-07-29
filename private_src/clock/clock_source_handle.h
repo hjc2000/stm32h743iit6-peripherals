@@ -9,12 +9,12 @@ class base::clock::clock_source_handle
 public:
 	/* #region Frequency */
 
-	virtual base::MHz Frequency() const
+	virtual base::unit::MHz Frequency() const
 	{
 		throw base::NotSupportedException{};
 	}
 
-	virtual base::MHz Frequency(std::string const &output_channel_name) const
+	virtual base::unit::MHz Frequency(std::string const &output_channel_name) const
 	{
 		throw base::NotSupportedException{};
 	}
@@ -41,7 +41,7 @@ public:
 
 	/* #endregion */
 
-	virtual void ConfigureAsBypassMode(base::MHz const &bypass_input_frequency)
+	virtual void ConfigureAsBypassMode(base::unit::MHz const &bypass_input_frequency)
 	{
 		throw base::NotSupportedException{};
 	}

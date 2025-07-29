@@ -21,7 +21,7 @@ namespace bsp
 
 		/// @brief 内部时钟信号的频率。还要经过预分频才会输入到计数器。
 		/// @return
-		base::Hz InnerClockSourceFreq() const;
+		base::unit::Hz InnerClockSourceFreq() const;
 
 	public:
 		static_function IndependentWatchDog &Instance();

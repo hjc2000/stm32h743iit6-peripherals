@@ -232,7 +232,7 @@ void base::ethernet::ethernet_controller_handle::Open(base::ethernet::InterfaceT
 	// MDC时钟
 	HAL_ETH_SetMDIOClockRange(&_handle_context._handle);
 
-	using buffer_type = uint8_t(*)[ETH_MAX_PACKET_SIZE];
+	using buffer_type = uint8_t (*)[ETH_MAX_PACKET_SIZE];
 	buffer_type buffer = reinterpret_cast<buffer_type>(0x30040200);
 
 	for (int idx = 0; idx < static_cast<int>(ETH_RX_DESC_CNT); idx++)
@@ -283,13 +283,13 @@ void base::ethernet::ethernet_controller_handle::WritePHYRegister(uint32_t regis
 	}
 }
 
-void base::ethernet::ethernet_controller_handle::Start(base::ethernet::DuplexMode duplex_mode, base::Mbps const &speed)
+void base::ethernet::ethernet_controller_handle::Start(base::ethernet::DuplexMode duplex_mode, base::unit::Mbps const &speed)
 {
 	{
 		ETH_MACConfigTypeDef def{};
 		HAL_ETH_GetMACConfig(&_handle_context._handle, &def);
 
-		if (speed == base::Mbps{10})
+		if (speed == base::unit::Mbps{10})
 		{
 			def.Speed = ETH_SPEED_10M;
 		}

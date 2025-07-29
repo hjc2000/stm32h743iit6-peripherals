@@ -142,7 +142,7 @@ void base::sdram::sdram_controller_handle::OpenAsReadBurstMode(base::sdram::ISDR
 	// 初始化 _timing
 	{
 		base::clock::ClockSource hclk{"hclk"};
-		base::MHz hclk_freq = hclk.Frequency();
+		base::unit::MHz hclk_freq = hclk.Frequency();
 
 		// 分频系数
 		int hclk_div = 2;
@@ -154,7 +154,7 @@ void base::sdram::sdram_controller_handle::OpenAsReadBurstMode(base::sdram::ISDR
 			_handle.Init.SDClockPeriod = FMC_SDRAM_CLOCK_PERIOD_3;
 		}
 
-		_timing = timing_provider.GetTiming(base::MHz{hclk_freq / hclk_div});
+		_timing = timing_provider.GetTiming(base::unit::MHz{hclk_freq / hclk_div});
 	}
 
 	switch (_timing.cas_latency())

@@ -7,8 +7,8 @@ std::shared_ptr<base::iic::iic_host_handle> base::iic::open(std::shared_ptr<base
 }
 
 void base::iic::initialize(base::iic::iic_host_handle &h,
-						   base::Nanoseconds const &scl_cycle,
-						   base::Nanoseconds const &waiting_for_ack_signal_timeout)
+						   base::unit::Nanoseconds const &scl_cycle,
+						   base::unit::Nanoseconds const &waiting_for_ack_signal_timeout)
 {
 	h.Initialize(scl_cycle,
 				 waiting_for_ack_signal_timeout);

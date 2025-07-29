@@ -17,9 +17,9 @@ namespace
 
 } // namespace
 
-base::MHz base::systick::frequency()
+base::unit::MHz base::systick::frequency()
 {
-	base::MHz ret{base::Hz{HAL_RCC_GetSysClockFreq()}};
+	base::unit::MHz ret{base::unit::Hz{HAL_RCC_GetSysClockFreq()}};
 	if (base::bit::ReadBit(SysTick->CTRL, 2) == 0)
 	{
 		ret /= 8;
@@ -46,10 +46,10 @@ void base::systick::set_elapsed_handler(std::function<void()> func)
 	_elapsed_handler = func;
 }
 
-base::Nanoseconds base::systick::system_time_stamp()
+base::unit::Nanoseconds base::systick::system_time_stamp()
 {
-	base::Nanoseconds clock_period{base::systick::frequency()};
-	base::Nanoseconds elapsed_period = clock_period * base::systick::reload_value();
+	base::unit::Nanoseconds clock_period{base::systick::frequency()};
+	base::unit::Nanoseconds elapsed_period = clock_period * base::systick::reload_value();
 	return _total_tick * elapsed_period;
 }
 

@@ -49,7 +49,7 @@ std::shared_ptr<base::clock::clock_source_handle> base::clock::open(std::string 
 	throw std::invalid_argument{CODE_POS_STR + "没有时钟源名为：" + name};
 }
 
-base::MHz base::clock::frequency(clock_source_handle &h)
+base::unit::MHz base::clock::frequency(clock_source_handle &h)
 {
 	return h.Frequency();
 }
@@ -77,7 +77,7 @@ void base::clock::configure(clock_source_handle &h,
 /* #endregion */
 
 void base::clock::configure_as_bypass_mode(clock_source_handle &h,
-										   base::MHz const &bypass_input_frequency)
+										   base::unit::MHz const &bypass_input_frequency)
 {
 	h.ConfigureAsBypassMode(bypass_input_frequency);
 }

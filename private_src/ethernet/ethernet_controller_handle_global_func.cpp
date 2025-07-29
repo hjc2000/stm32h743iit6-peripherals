@@ -48,7 +48,7 @@ void base::ethernet::write_phy_register(base::ethernet::ethernet_controller_hand
 ///
 void base::ethernet::start(base::ethernet::ethernet_controller_handle &h,
 						   base::ethernet::DuplexMode duplex_mode,
-						   base::Mbps const &speed)
+						   base::unit::Mbps const &speed)
 {
 	h.Start(duplex_mode, speed);
 }

@@ -10,10 +10,10 @@ namespace bsp
 		public base::clock::clock_source_handle
 	{
 	private:
-		inline static base::MHz _frequency{};
+		inline static base::unit::MHz _frequency{};
 
 	public:
-		virtual base::MHz Frequency() const override
+		virtual base::unit::MHz Frequency() const override
 		{
 			return _frequency;
 		}
@@ -29,10 +29,10 @@ namespace bsp
 				throw std::runtime_error{"打开 hse 时钟源失败。"};
 			}
 
-			_frequency = base::MHz{25};
+			_frequency = base::unit::MHz{25};
 		}
 
-		virtual void ConfigureAsBypassMode(base::MHz const &bypass_input_frequency) override
+		virtual void ConfigureAsBypassMode(base::unit::MHz const &bypass_input_frequency) override
 		{
 			RCC_OscInitTypeDef def{};
 			def.OscillatorType = RCC_OSCILLATORTYPE_HSE;
@@ -59,7 +59,7 @@ namespace bsp
 				throw std::runtime_error{"关闭 hse 时钟源失败。"};
 			}
 
-			_frequency = base::MHz{0};
+			_frequency = base::unit::MHz{0};
 		}
 	};
 } // namespace bsp

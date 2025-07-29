@@ -76,7 +76,7 @@ public:
 	/// @param duplex_mode
 	/// @param speed
 	void Start(base::ethernet::DuplexMode duplex_mode,
-			   base::Mbps const &speed);
+			   base::unit::Mbps const &speed);
 
 	/// @brief 发送。
 	/// @param spans

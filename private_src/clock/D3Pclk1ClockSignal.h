@@ -14,10 +14,10 @@ namespace bsp
 	public:
 		/* #region Frequency */
 
-		virtual base::MHz Frequency() const override
+		virtual base::unit::MHz Frequency() const override
 		{
 			uint32_t value = HAL_RCC_GetHCLKFreq() / _division_factor;
-			return base::MHz{base::Hz{value}};
+			return base::unit::MHz{base::unit::Hz{value}};
 		}
 
 		/* #endregion */
