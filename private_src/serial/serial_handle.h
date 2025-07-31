@@ -62,7 +62,7 @@ public:
 	///
 	/// @return
 	///
-	virtual int32_t Read(base::Span const &span) = 0;
+	virtual int64_t Read(base::Span const &span) = 0;
 
 	///
 	/// @brief 调用后临时启动 DMA 进行一次发送。

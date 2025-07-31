@@ -146,7 +146,7 @@ namespace bsp
 		///
 		/// @return
 		///
-		virtual int32_t Read(base::Span const &span) override;
+		virtual int64_t Read(base::Span const &span) override;
 
 		///
 		/// @brief 调用后临时启动 DMA 进行一次发送。

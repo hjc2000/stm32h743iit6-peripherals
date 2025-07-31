@@ -323,7 +323,7 @@ bsp::Serial1::~Serial1()
 	Close();
 }
 
-int32_t bsp::Serial1::Read(base::Span const &span)
+int64_t bsp::Serial1::Read(base::Span const &span)
 {
 	if (_closed)
 	{

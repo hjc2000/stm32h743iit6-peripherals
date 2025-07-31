@@ -56,7 +56,7 @@ base::serial::HardwareFlowControl base::serial::hardware_flow_control(base::seri
 
 /* #endregion */
 
-int32_t base::serial::read(base::serial::serial_handle &h, base::Span const &span)
+int64_t base::serial::read(base::serial::serial_handle &h, base::Span const &span)
 {
 	return h.Read(span);
 }
