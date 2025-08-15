@@ -31,7 +31,7 @@ extern "C"
 		}
 	}
 
-	void DMA_STR0_IRQHandler()
+	void DMA1_Stream0_IRQHandler()
 	{
 		try
 		{
@@ -42,7 +42,7 @@ extern "C"
 		}
 	}
 
-	void DMA_STR1_IRQHandler()
+	void DMA1_Stream1_IRQHandler()
 	{
 		try
 		{
