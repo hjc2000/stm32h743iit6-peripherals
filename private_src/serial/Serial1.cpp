@@ -352,9 +352,15 @@ int64_t bsp::Serial1::Read(base::Span const &span)
 			// HAL_UARTEx_ReceiveToIdle_DMA
 			HAL_UART_Receive_DMA(&_handle_context._uart_handle, span.Buffer(), span.Size());
 
-			// 通过赋值为空指针，把传输半满回调给禁用，不然接收的数据较长，超过缓冲区一半时，
-			// 即使是一次性接收的，UART 也会回调 OnReceiveEventCallback 两次。
-			_handle_context._uart_handle.hdmarx->XferHalfCpltCallback = nullptr;
+			// 禁用传输半满中断。
+			//
+			// 如果不禁用，接收半满的时候 DMA 触发半满回调，HAL 的 UART 模块处理这个回调后会触发一次
+			// 串口事件回调，导致我的本类的 OnReceiveEventCallback 方法在接收半满的时候被回调一次，释放
+			// _receiving_completion_signal 信号，然后等一下传输完整或者超时后又释放一次。
+			//
+			// _receiving_completion_signal 信号的本意是接收完整后或者超时后释放一次，因此必须禁止
+			// DMA 的传输半满回调。
+			__HAL_DMA_DISABLE_IT(&_rx_dma_handle, DMA_IT_HT);
 		}
 
 		_receiving_completion_signal.Acquire();
