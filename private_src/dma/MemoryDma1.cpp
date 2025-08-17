@@ -34,6 +34,12 @@ void bsp::MemoryDma1::InitializeInterrupt()
 	base::interrupt::enable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream2_IRQn), 10);
 }
 
+bsp::MemoryDma1::~MemoryDma1()
+{
+	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream2_IRQn));
+	_dma1_stream2_isr = nullptr;
+}
+
 void bsp::MemoryDma1::Initialize()
 {
 	__HAL_RCC_DMA1_CLK_ENABLE();

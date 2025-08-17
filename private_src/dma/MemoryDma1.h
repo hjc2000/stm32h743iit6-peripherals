@@ -15,6 +15,8 @@ namespace bsp
 		void InitializeInterrupt();
 
 	public:
+		~MemoryDma1();
+
 		virtual void Initialize() override;
 
 		virtual void Copy(uint8_t const *begin,
