@@ -1,5 +1,6 @@
 #pragma once
 #include "base/task/BinarySemaphore.h"
+#include "base/task/Mutex.h"
 #include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
 #include "memory_dma_handle.h"
@@ -25,6 +26,7 @@ namespace bsp
 
 		base::UsageStateManager<MemoryDma1> _usage_state_manager{};
 		handle_context _handle_context{this};
+		base::task::Mutex _lock{};
 		base::task::BinarySemaphore _complete_signal{false};
 
 		void InitializeCallback();
@@ -54,6 +56,8 @@ namespace bsp
 						  uint8_t const *end,
 						  uint8_t *dst) override
 		{
+			base::task::MutexGuard g{_lock};
+
 			HAL_DMA_Start_IT(&_handle_context._handle,
 							 reinterpret_cast<uint32_t>(begin),
 							 reinterpret_cast<uint32_t>(dst),
