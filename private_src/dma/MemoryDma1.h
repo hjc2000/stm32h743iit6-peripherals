@@ -3,6 +3,7 @@
 #include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
 #include "memory_dma_handle.h"
+#include <cstdint>
 
 namespace bsp
 {
@@ -53,6 +54,12 @@ namespace bsp
 						  uint8_t const *end,
 						  uint8_t *dst) override
 		{
+			HAL_DMA_Start_IT(&_handle_context._handle,
+							 reinterpret_cast<uint32_t>(begin),
+							 reinterpret_cast<uint32_t>(dst),
+							 static_cast<uint32_t>(end - begin));
+
+			_complete_signal.Acquire();
 		}
 	};
 
