@@ -419,7 +419,11 @@ void bsp::Serial1::Close()
 	_sending_completion_signal.Release();
 
 	HAL_UART_DMAStop(&_handle_context._uart_handle);
+
 	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::USART1_IRQn));
 	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream0_IRQn));
 	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream1_IRQn));
+	_uart1_isr = nullptr;
+	_dma1_stream0_isr = nullptr;
+	_dma1_stream1_isr = nullptr;
 }
