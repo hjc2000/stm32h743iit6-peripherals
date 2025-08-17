@@ -75,8 +75,9 @@ void bsp::Serial1::InitializeGpio()
 
 void bsp::Serial1::InitializeRxDma()
 {
-	_rx_dma_handle.Instance = DMA1_Stream1;
 	__HAL_RCC_DMA1_CLK_ENABLE();
+
+	_rx_dma_handle.Instance = DMA1_Stream1;
 	_rx_dma_handle.Init.Direction = DMA_PERIPH_TO_MEMORY;
 	_rx_dma_handle.Init.Request = DMA_REQUEST_USART1_RX;
 	_rx_dma_handle.Init.Mode = DMA_NORMAL;
@@ -97,8 +98,9 @@ void bsp::Serial1::InitializeRxDma()
 
 void bsp::Serial1::InitializeTxDma()
 {
-	_tx_dma_handle.Instance = DMA1_Stream0;
 	__HAL_RCC_DMA1_CLK_ENABLE();
+
+	_tx_dma_handle.Instance = DMA1_Stream0;
 	_tx_dma_handle.Init.Direction = DMA_MEMORY_TO_PERIPH;
 	_tx_dma_handle.Init.Request = DMA_REQUEST_USART1_TX;
 	_tx_dma_handle.Init.Mode = DMA_NORMAL;
