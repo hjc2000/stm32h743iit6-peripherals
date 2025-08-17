@@ -1,5 +1,6 @@
 #include "MemoryDma1.h" // IWYU pragma: keep
 #include "base/embedded/interrupt/interrupt.h"
+#include "stm32h7xx_hal_dma.h"
 #include <functional>
 
 namespace
@@ -45,6 +46,9 @@ void bsp::MemoryDma1::InitializeCallback()
 
 void bsp::MemoryDma1::InitializeInterrupt()
 {
+	// 启用传输完成中断
+	__HAL_DMA_ENABLE_IT(&_handle_context._handle, DMA_IT_TC);
+
 	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream2_IRQn));
 
 	_dma1_stream2_isr = [this]()
@@ -57,6 +61,7 @@ void bsp::MemoryDma1::InitializeInterrupt()
 
 bsp::MemoryDma1::~MemoryDma1()
 {
+	__HAL_DMA_DISABLE_IT(&_handle_context._handle, DMA_IT_TC);
 	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream2_IRQn));
 	_dma1_stream2_isr = nullptr;
 }
