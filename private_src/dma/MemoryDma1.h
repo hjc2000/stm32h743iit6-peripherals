@@ -1,4 +1,5 @@
 #pragma once
+#include "base/task/BinarySemaphore.h"
 #include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
 #include "memory_dma_handle.h"
@@ -9,10 +10,39 @@ namespace bsp
 		public base::memory_dma::memory_dma_handle
 	{
 	private:
-		base::UsageStateManager<MemoryDma1> _usage_state_manager{};
-		DMA_HandleTypeDef _handle{};
+		class handle_context
+		{
+		public:
+			handle_context(MemoryDma1 *self)
+			{
+				_self = self;
+			}
 
+			DMA_HandleTypeDef _handle{};
+			MemoryDma1 *_self{};
+		};
+
+		base::UsageStateManager<MemoryDma1> _usage_state_manager{};
+		handle_context _handle_context{this};
+		base::task::BinarySemaphore _complete_signal{false};
+
+		void InitializeCallback();
 		void InitializeInterrupt();
+
+		void OnCompleteCallback()
+		{
+			_complete_signal.ReleaseFromIsr();
+		}
+
+		void OnErrorCallback()
+		{
+			_complete_signal.ReleaseFromIsr();
+		}
+
+		void OnAbortCallback()
+		{
+			_complete_signal.ReleaseFromIsr();
+		}
 
 	public:
 		~MemoryDma1();
