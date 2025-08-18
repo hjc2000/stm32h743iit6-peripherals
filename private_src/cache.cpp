@@ -1,5 +1,6 @@
 #include "base/embedded/cache/cache.h"
 #include "hal.h"
+#include <cstddef>
 #include <cstdint>
 
 void base::cache::enable()
