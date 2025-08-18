@@ -30,6 +30,8 @@ namespace bsp
 		base::task::Mutex _lock{};
 		base::task::BinarySemaphore _complete_signal{false};
 		size_t _align = 4;
+		bool _is_error = false;
+		bool _is_abort = false;
 
 		void InitializeCallback();
 		void InitializeInterrupt();
@@ -41,11 +43,13 @@ namespace bsp
 
 		void OnErrorCallback()
 		{
+			_is_error = true;
 			_complete_signal.ReleaseFromIsr();
 		}
 
 		void OnAbortCallback()
 		{
+			_is_abort = true;
 			_complete_signal.ReleaseFromIsr();
 		}
 

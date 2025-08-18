@@ -1,8 +1,10 @@
 #include "MemoryDma1.h" // IWYU pragma: keep
 #include "base/embedded/cache/cache.h"
 #include "base/embedded/interrupt/interrupt.h"
+#include "base/string/define.h"
 #include "stm32h7xx_hal_dma.h"
 #include <functional>
+#include <stdexcept>
 
 namespace
 {
@@ -127,6 +129,9 @@ void bsp::MemoryDma1::Copy(uint8_t const *begin, uint8_t const *end, uint8_t *ds
 
 	base::cache::clean_d_cache(begin, end - begin);
 
+	_is_error = false;
+	_is_abort = false;
+
 	HAL_StatusTypeDef result = HAL_DMA_Start_IT(&_handle_context._handle,
 												reinterpret_cast<uint32_t>(begin),
 												reinterpret_cast<uint32_t>(dst),
@@ -138,6 +143,15 @@ void bsp::MemoryDma1::Copy(uint8_t const *begin, uint8_t const *end, uint8_t *ds
 	}
 
 	_complete_signal.Acquire();
+	if (_is_error)
+	{
+		throw std::runtime_error{CODE_POS_STR + "DMA 传输发生错误。"};
+	}
+
+	if (_is_abort)
+	{
+		throw std::runtime_error{CODE_POS_STR + "DMA 传输被中止。"};
+	}
 
 	base::cache::invalidate_d_cache(dst, end - begin);
 }
