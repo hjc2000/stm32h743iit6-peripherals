@@ -111,7 +111,11 @@ void bsp::MemoryDma1::Initialize(size_t align)
 		}
 	}
 
-	HAL_DMA_Init(&_handle_context._handle);
+	HAL_StatusTypeDef result = HAL_DMA_Init(&_handle_context._handle);
+	if (result != HAL_StatusTypeDef::HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "初始化 DMA 失败。"};
+	}
 
 	InitializeCallback();
 	InitializeInterrupt();
