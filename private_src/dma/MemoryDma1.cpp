@@ -27,20 +27,20 @@ void bsp::MemoryDma1::InitializeCallback()
 {
 	_handle_context._handle.XferCpltCallback = [](DMA_HandleTypeDef *handle)
 	{
-		MemoryDma1 *self = reinterpret_cast<MemoryDma1 *>(handle);
-		self->OnCompleteCallback();
+		handle_context *context = reinterpret_cast<handle_context *>(handle);
+		context->_self->OnCompleteCallback();
 	};
 
 	_handle_context._handle.XferErrorCallback = [](DMA_HandleTypeDef *handle)
 	{
-		MemoryDma1 *self = reinterpret_cast<MemoryDma1 *>(handle);
-		self->OnErrorCallback();
+		handle_context *context = reinterpret_cast<handle_context *>(handle);
+		context->_self->OnCompleteCallback();
 	};
 
 	_handle_context._handle.XferAbortCallback = [](DMA_HandleTypeDef *handle)
 	{
-		MemoryDma1 *self = reinterpret_cast<MemoryDma1 *>(handle);
-		self->OnAbortCallback();
+		handle_context *context = reinterpret_cast<handle_context *>(handle);
+		context->_self->OnCompleteCallback();
 	};
 }
 
