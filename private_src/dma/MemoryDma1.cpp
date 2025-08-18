@@ -77,7 +77,7 @@ void bsp::MemoryDma1::Initialize(size_t align)
 	_handle_context._handle.Init.Direction = DMA_MEMORY_TO_MEMORY;
 	_handle_context._handle.Init.Request = DMA_REQUEST_MEM2MEM;
 	_handle_context._handle.Init.Mode = DMA_NORMAL;
-	_handle_context._handle.Init.FIFOMode = DMA_FIFOMODE_ENABLE;
+	_handle_context._handle.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
 	_handle_context._handle.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
 	_handle_context._handle.Init.MemBurst = DMA_MBURST_SINGLE;
 	_handle_context._handle.Init.PeriphBurst = DMA_PBURST_SINGLE;
