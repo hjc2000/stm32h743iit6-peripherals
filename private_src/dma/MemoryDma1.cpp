@@ -70,6 +70,7 @@ void bsp::MemoryDma1::Initialize()
 
 void bsp::MemoryDma1::Initialize(size_t align)
 {
+	_align = align;
 	__HAL_RCC_DMA1_CLK_ENABLE();
 
 	_handle_context._handle.Instance = DMA1_Stream2;
@@ -122,10 +123,15 @@ void bsp::MemoryDma1::Copy(uint8_t const *begin, uint8_t const *end, uint8_t *ds
 
 	base::cache::clean_d_cache(begin, end - begin);
 
-	HAL_DMA_Start_IT(&_handle_context._handle,
-					 reinterpret_cast<uint32_t>(begin),
-					 reinterpret_cast<uint32_t>(dst),
-					 static_cast<uint32_t>(end - begin));
+	HAL_StatusTypeDef result = HAL_DMA_Start_IT(&_handle_context._handle,
+												reinterpret_cast<uint32_t>(begin),
+												reinterpret_cast<uint32_t>(dst),
+												static_cast<uint32_t>((end - begin) / _align));
+
+	if (result != HAL_StatusTypeDef::HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "DMA 启动失败。"};
+	}
 
 	_complete_signal.Acquire();
 

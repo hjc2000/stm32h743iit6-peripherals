@@ -4,6 +4,7 @@
 #include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
 #include "memory_dma_handle.h"
+#include <cstddef>
 #include <cstdint>
 
 namespace bsp
@@ -28,6 +29,7 @@ namespace bsp
 		handle_context _handle_context{this};
 		base::task::Mutex _lock{};
 		base::task::BinarySemaphore _complete_signal{false};
+		size_t _align = 4;
 
 		void InitializeCallback();
 		void InitializeInterrupt();
