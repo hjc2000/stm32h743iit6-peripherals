@@ -346,6 +346,10 @@ int64_t bsp::Serial1::Read(base::Span const &span)
 			return 0;
 		}
 
+		// 如果 CPU 修改了 span 的数据，要先清理缓存，否则等会儿 DMA 向 RAM 写入数据后
+		// 无效化缓存，会把 CPU 修改的脏数据丢弃，让 DMA 写入 RAM 的数据强行覆盖到缓存中。
+		//
+		// 所以这里要清理缓存比较保险。
 		base::cache::clean_d_cache(span.Buffer(), HaveRead());
 
 		{
