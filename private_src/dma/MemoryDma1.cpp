@@ -128,6 +128,11 @@ void bsp::MemoryDma1::Copy(uint8_t const *begin, uint8_t const *end, uint8_t *ds
 	base::task::MutexGuard g{_lock};
 
 	base::cache::clean_d_cache(begin, end - begin);
+
+	// 如果 CPU 修改了 dst 处的数据，要先清理缓存，否则等会儿 DMA 向 RAM 写入数据后
+	// 无效化缓存，会把 CPU 修改的脏数据丢弃，让 DMA 写入 RAM 的数据强行覆盖到缓存中。
+	//
+	// 所以这里要清理缓存比较保险。
 	base::cache::clean_d_cache(dst, end - begin);
 
 	_is_error = false;
