@@ -11,6 +11,11 @@ void base::memory_dma::initialize(base::memory_dma::memory_dma_handle &self)
 	self.Initialize();
 }
 
+void base::memory_dma::initialize(base::memory_dma::memory_dma_handle &self, size_t align)
+{
+	self.Initialize(align);
+}
+
 void base::memory_dma::copy(base::memory_dma::memory_dma_handle &self,
 							uint8_t const *begin,
 							uint8_t const *end,

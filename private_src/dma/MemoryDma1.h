@@ -1,5 +1,4 @@
 #pragma once
-#include "base/embedded/cache/cache.h"
 #include "base/task/BinarySemaphore.h"
 #include "base/task/Mutex.h"
 #include "base/UsageStateManager.h"
@@ -53,23 +52,9 @@ namespace bsp
 
 		virtual void Initialize() override;
 
-		virtual void Copy(uint8_t const *begin,
-						  uint8_t const *end,
-						  uint8_t *dst) override
-		{
-			base::task::MutexGuard g{_lock};
+		virtual void Initialize(size_t align) override;
 
-			base::cache::clean_d_cache(begin, end - begin);
-
-			HAL_DMA_Start_IT(&_handle_context._handle,
-							 reinterpret_cast<uint32_t>(begin),
-							 reinterpret_cast<uint32_t>(dst),
-							 static_cast<uint32_t>(end - begin));
-
-			_complete_signal.Acquire();
-
-			base::cache::invalidate_d_cache(dst, end - begin);
-		}
+		virtual void Copy(uint8_t const *begin, uint8_t const *end, uint8_t *dst) override;
 	};
 
 } // namespace bsp
