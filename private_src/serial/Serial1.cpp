@@ -1,4 +1,5 @@
 #include "Serial1.h"
+#include "base/embedded/cache/cache.h"
 #include "base/embedded/interrupt/interrupt.h"
 #include "base/embedded/serial/serial_handle.h"
 #include "base/IDisposable.h"
@@ -366,6 +367,7 @@ int64_t bsp::Serial1::Read(base::Span const &span)
 		_receiving_completion_signal.Acquire();
 		if (HaveRead() > 0)
 		{
+			base::cache::invalidate_d_cache(span.Buffer(), HaveRead());
 			return HaveRead();
 		}
 	}
@@ -379,6 +381,8 @@ void bsp::Serial1::Write(base::ReadOnlySpan const &span)
 	}
 
 	base::task::MutexGuard l{_write_lock};
+
+	base::cache::clean_d_cache(span.Buffer(), span.Size());
 
 	HAL_StatusTypeDef ret = HAL_UART_Transmit_DMA(&_handle_context._uart_handle,
 												  span.Buffer(),
