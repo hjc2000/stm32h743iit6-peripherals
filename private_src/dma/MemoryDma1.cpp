@@ -128,6 +128,7 @@ void bsp::MemoryDma1::Copy(uint8_t const *begin, uint8_t const *end, uint8_t *ds
 	base::task::MutexGuard g{_lock};
 
 	base::cache::clean_d_cache(begin, end - begin);
+	base::cache::clean_d_cache(dst, end - begin);
 
 	_is_error = false;
 	_is_abort = false;
