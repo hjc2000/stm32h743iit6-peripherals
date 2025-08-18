@@ -6,7 +6,11 @@ void base::cache::enable()
 {
 	SCB_EnableICache();
 	SCB_EnableDCache();
-	SCB->CACR |= 1 << 2;
+
+	// 启用下面的语句可以开启写透传。即写入数据会清理 cache 并重新将内存数据加载到
+	// cache.
+	//
+	// SCB->CACR |= 1 << 2;
 }
 
 void base::cache::disable()
