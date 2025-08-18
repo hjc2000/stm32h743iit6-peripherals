@@ -78,7 +78,7 @@ private:
 		mpu_region_init_handle.DisableExec = de;               /* 是否允许指令访问 */
 		mpu_region_init_handle.Size = size;                    /* 设置保护区域大小 */
 		mpu_region_init_handle.SubRegionDisable = 0X00;        /* 禁止子区域 */
-		mpu_region_init_handle.TypeExtField = MPU_TEX_LEVEL0;  /* 设置类型扩展域为level0 */
+		mpu_region_init_handle.TypeExtField = MPU_TEX_LEVEL1;  /* 设置类型扩展域为level0 */
 		mpu_region_init_handle.AccessPermission = (uint8_t)ap; /* 设置访问权限, */
 		mpu_region_init_handle.IsShareable = sen;              /* 是否共用? */
 		mpu_region_init_handle.IsCacheable = cen;              /* 是否cache? */
