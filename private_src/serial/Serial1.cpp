@@ -346,6 +346,8 @@ int64_t bsp::Serial1::Read(base::Span const &span)
 			return 0;
 		}
 
+		base::cache::clean_d_cache(span.Buffer(), HaveRead());
+
 		{
 			base::interrupt::GlobalInterruptionGuard g;
 
