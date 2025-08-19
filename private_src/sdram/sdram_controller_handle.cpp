@@ -13,7 +13,7 @@ void base::sdram::sdram_controller_handle::InitializeGPIO()
 
 void base::sdram::sdram_controller_handle::StartAutoSendingAutoRefreshCommand(base::sdram::sdram_timing const &timing)
 {
-	int refresh_count = timing.auto_refresh_command_clock_count() - 50;
+	int refresh_count = timing.auto_refresh_command_clock_cycle_count() - 50;
 	if (refresh_count < 50)
 	{
 		throw std::runtime_error{"FMC 的频率过低导致几乎一直都要处于发送自动刷新命令的状态。"};
