@@ -186,8 +186,8 @@ void base::sdram::sdram_controller_handle::OpenAsReadBurstMode(base::sdram::ISDR
 	timing_def.SelfRefreshTime = _timing.t_ras_clock_cycle_count();
 	timing_def.RowCycleDelay = _timing.t_rc_clock_cycle_count();
 	timing_def.WriteRecoveryTime = _timing.t_wr_clock_cycle_count();
-	timing_def.RPDelay = _timing.t_rp_clock_count();
-	timing_def.RCDDelay = _timing.t_rcd_clock_count();
+	timing_def.RPDelay = _timing.t_rp_clock_cycle_count();
+	timing_def.RCDDelay = _timing.t_rcd_clock_cycle_count();
 
 	HAL_SDRAM_Init(&_handle, &timing_def);
 	PowerUp();
