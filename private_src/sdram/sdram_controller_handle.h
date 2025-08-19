@@ -90,10 +90,6 @@ private:
 
 	void InitializeGPIO();
 
-	/// @brief 开始自动发送 “自动刷新” 命令。
-	/// @param timing
-	void StartAutoSendingAutoRefreshCommand(base::sdram::sdram_timing const &timing);
-
 public:
 	/// @brief 将 SDRAM 控制器以读突发的模式打开。写不突发。
 	/// @param timing_provider

@@ -11,17 +11,6 @@ void base::sdram::sdram_controller_handle::InitializeGPIO()
 	}
 }
 
-void base::sdram::sdram_controller_handle::StartAutoSendingAutoRefreshCommand(base::sdram::sdram_timing const &timing)
-{
-	int refresh_count = timing.auto_refresh_command_clock_cycle_count() - 50;
-	if (refresh_count < 50)
-	{
-		throw std::runtime_error{"FMC 的频率过低导致几乎一直都要处于发送自动刷新命令的状态。"};
-	}
-
-	HAL_SDRAM_ProgramRefreshRate(&_handle, refresh_count);
-}
-
 void base::sdram::sdram_controller_handle::OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
 															   base::sdram::BankCount const &bank_count,
 															   base::sdram::RowBitCount const &row_bit_count,
@@ -191,7 +180,17 @@ void base::sdram::sdram_controller_handle::OpenAsReadBurstMode(base::sdram::ISDR
 
 	HAL_SDRAM_Init(&_handle, &timing_def);
 	PowerUp();
-	StartAutoSendingAutoRefreshCommand(_timing);
+
+	{
+		// 启动 SDRAM 控制器，开始定时发送自动刷新命令。
+		int refresh_count = _timing.auto_refresh_command_clock_cycle_count() - 50;
+		if (refresh_count < 50)
+		{
+			throw std::runtime_error{"FMC 的频率过低导致几乎一直都要处于发送自动刷新命令的状态。"};
+		}
+
+		HAL_SDRAM_ProgramRefreshRate(&_handle, refresh_count);
+	}
 }
 
 void base::sdram::sdram_controller_handle::PowerUp()
