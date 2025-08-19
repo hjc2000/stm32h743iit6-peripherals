@@ -35,11 +35,11 @@ void base::gpio::initialize_as_output_mode(base::gpio::gpio_pin_handle &h)
 }
 
 void base::gpio::initialize_as_alternate_function_mode(base::gpio::gpio_pin_handle &h,
-													   uint32_t alternate_function_index,
+													   uint32_t alternate_function_id,
 													   base::gpio::PullMode pull_mode,
 													   base::gpio::DriveMode drive_mode)
 {
-	h.InitializeAsAlternateFunctionMode(alternate_function_index, pull_mode, drive_mode);
+	h.InitializeAsAlternateFunctionMode(alternate_function_id, pull_mode, drive_mode);
 }
 
 /* #endregion */
