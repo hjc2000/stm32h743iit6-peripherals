@@ -88,7 +88,7 @@ private:
 		return 0;
 	}
 
-	void InitializeGPIO();
+	void InitializeGpioPins();
 
 public:
 	/// @brief 将 SDRAM 控制器以读突发的模式打开。写不突发。
