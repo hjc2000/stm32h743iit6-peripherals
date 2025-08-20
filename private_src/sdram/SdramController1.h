@@ -52,13 +52,16 @@ namespace bsp
 			base::sdram::msp_initialize_callback(1);
 		}
 
+		///
 		/// @brief 将 SDRAM 控制器以读突发的模式打开。写不突发。
+		///
 		/// @param timing_provider
 		/// @param bank_count
 		/// @param row_bit_count
 		/// @param column_bit_count
 		/// @param data_width
 		/// @param read_burst_length
+		///
 		void OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
 								 base::sdram::BankCount const &bank_count,
 								 base::sdram::RowBitCount const &row_bit_count,
@@ -66,26 +69,41 @@ namespace bsp
 								 base::sdram::DataWidth const &data_width,
 								 base::sdram::ReadBurstLength const &read_burst_length);
 
+		///
 		/// @brief 将输入信号置于空操作命令状态，然后开始向 SDRAM 提供 CLK 信号。
+		///
 		void PowerUp();
 
+		///
 		/// @brief 发送：“预充电所有 BANK” 的命令。
+		///
 		void PrechargeAll();
 
+		///
 		/// @brief 发送自动刷新命令。
+		///
 		void AutoRefresh();
 
+		///
 		/// @brief 写模式寄存器。
+		///
 		/// @param value
+		///
 		void WriteModeRegister(uint32_t value);
 
+		///
 		/// @brief 控制器被打开后所使用的时序。
+		///
 		/// @return
+		///
 		base::sdram::sdram_timing const &Timing() const;
 
+		///
 		/// @brief 此 SDRAM 控制器所管理的内存段的起始地址。打开 SDRAM 后，对着这个地址开始往后的内存区域
 		/// 读写数据即可读写 SDRAM 的内容。
+		///
 		/// @return
+		///
 		uint8_t *StartAddress() const
 		{
 			return reinterpret_cast<uint8_t *>(0xC0000000);
