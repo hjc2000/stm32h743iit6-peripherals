@@ -1,12 +1,9 @@
 #pragma once
-#include "base/embedded/gpio/gpio_parameter.h"
-#include "base/embedded/gpio/GpioPin.h"
 #include "base/embedded/sdram/sdram_controller_handle.h"
 #include "base/embedded/sdram/sdram_timing.h"
 #include "base/UsageStateManager.h"
 #include <base/define.h>
 #include <hal.h>
-#include <vector>
 
 /// @brief 封装 FMC 接口。
 class base::sdram::sdram_controller_handle
@@ -14,48 +11,6 @@ class base::sdram::sdram_controller_handle
 private:
 	base::UsageStateManager<sdram_controller_handle> _usage_manager{};
 	SDRAM_HandleTypeDef _handle{};
-
-	std::vector<base::gpio::GpioPin> _pins{
-		base::gpio::GpioPin{base::gpio::PortEnum::PortC, 0},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortC, 2},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortC, 3},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortD, 0},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortD, 1},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortD, 8},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortD, 9},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortD, 10},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortD, 14},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortD, 15},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortE, 0},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortE, 1},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortE, 7},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortE, 8},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortE, 9},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortE, 10},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortE, 11},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortE, 12},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortE, 13},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortE, 14},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortE, 15},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortF, 0},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortF, 1},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortF, 2},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortF, 3},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortF, 4},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortF, 5},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortF, 11},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortF, 12},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortF, 13},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortF, 14},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortF, 15},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortG, 0},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortG, 1},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortG, 2},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortG, 4},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortG, 5},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortG, 8},
-		base::gpio::GpioPin{base::gpio::PortEnum::PortG, 15},
-	};
 
 	base::sdram::sdram_timing _timing{};
 
@@ -87,8 +42,6 @@ private:
 		HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);                /* 开启MPU */
 		return 0;
 	}
-
-	void InitializeGpioPins();
 
 public:
 	/// @brief 将 SDRAM 控制器以读突发的模式打开。写不突发。

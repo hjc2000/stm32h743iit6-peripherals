@@ -1,16 +1,6 @@
 #include "sdram_controller_handle.h"
 #include "base/embedded/clock/ClockSource.h"
 
-void base::sdram::sdram_controller_handle::InitializeGpioPins()
-{
-	for (auto &pin : _pins)
-	{
-		pin.InitializeAsAlternateFunctionMode(GPIO_AF12_FMC,
-											  base::gpio::PullMode::PullUp,
-											  base::gpio::DriveMode::PushPull);
-	}
-}
-
 void base::sdram::sdram_controller_handle::OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
 															   base::sdram::BankCount const &bank_count,
 															   base::sdram::RowBitCount const &row_bit_count,
@@ -28,7 +18,6 @@ void base::sdram::sdram_controller_handle::OpenAsReadBurstMode(base::sdram::ISDR
 					   MPU_ACCESS_BUFFERABLE);   /* 允许缓冲 */
 
 	__HAL_RCC_FMC_CLK_ENABLE();
-	InitializeGpioPins();
 
 	_handle.Instance = FMC_SDRAM_DEVICE;
 	_handle.Init.SDBank = FMC_SDRAM_BANK1;
