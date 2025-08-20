@@ -1,7 +1,5 @@
 #pragma once
 #include "base/define.h"
-#include "base/embedded/gpio/gpio_parameter.h"
-#include "base/embedded/gpio/GpioPin.h"
 #include "base/embedded/serial/serial_handle.h"
 #include "base/task/BinarySemaphore.h"
 #include "base/task/Mutex.h"
@@ -37,8 +35,6 @@ namespace bsp
 		base::task::Mutex _write_lock{};
 		DMA_HandleTypeDef _rx_dma_handle{};
 		DMA_HandleTypeDef _tx_dma_handle{};
-		base::gpio::GpioPin _pa9{base::gpio::PortEnum::PortA, 9};
-		base::gpio::GpioPin _pa10{base::gpio::PortEnum::PortA, 10};
 		std::atomic_bool _closed = false;
 
 		base::serial::Direction _direction;
@@ -49,7 +45,6 @@ namespace bsp
 		base::serial::HardwareFlowControl _hardware_flow_control;
 
 		/* #region 初始化 */
-		void InitializeGpio();
 		void InitializeRxDma();
 		void InitializeTxDma();
 		void InitializeUart();

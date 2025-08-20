@@ -59,21 +59,6 @@ extern "C"
 
 /* #region 初始化 */
 
-void bsp::Serial1::InitializeGpio()
-{
-	__HAL_RCC_USART1_CLK_ENABLE();
-
-	// 发送引脚 PA9
-	_pa9.InitializeAsAlternateFunctionMode(GPIO_AF7_USART1,
-										   base::gpio::PullMode::PullUp,
-										   base::gpio::DriveMode::PushPull);
-
-	// 接收引脚 PA10
-	_pa10.InitializeAsAlternateFunctionMode(GPIO_AF7_USART1,
-											base::gpio::PullMode::PullUp,
-											base::gpio::DriveMode::PushPull);
-}
-
 void bsp::Serial1::InitializeRxDma()
 {
 	__HAL_RCC_DMA1_CLK_ENABLE();
@@ -122,6 +107,8 @@ void bsp::Serial1::InitializeTxDma()
 
 void bsp::Serial1::InitializeUart()
 {
+	__HAL_RCC_USART1_CLK_ENABLE();
+
 	_handle_context._uart_handle.Instance = USART1;
 
 	switch (_direction)
@@ -416,7 +403,6 @@ void bsp::Serial1::Start(base::serial::Direction direction,
 	_stop_bits = stop_bits;
 	_hardware_flow_control = hardware_flow_control;
 
-	InitializeGpio();
 	InitializeRxDma();
 	InitializeTxDma();
 	InitializeUart();
