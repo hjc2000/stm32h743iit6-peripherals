@@ -30,7 +30,7 @@ void bsp::IndependentWatchDog::Open(std::chrono::milliseconds value)
 		// 从 2^2 = 4 开始，到 2^8 = 256，通过移位实现幂。i 代表的是 2 的幂
 		uint16_t prescaler_value = static_cast<uint16_t>(1 << i);
 		_config.SetReloadValue(total_count / prescaler_value);
-		if (_config.ReloadValue() > 0X0FFF && i == 8)
+		if (_config.ReloadValue() > 0x0FFF && i == 8)
 		{
 			// 最大分频和最大计数都无法表示这个时间，就按照能达到的最大值来。
 			_config.SetReloadValue(0X0FFF);
