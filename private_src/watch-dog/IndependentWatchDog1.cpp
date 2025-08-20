@@ -6,7 +6,7 @@ void bsp::IndependentWatchDog1::Initialize(std::chrono::milliseconds const &time
 	_handle.Instance = IWDG1;
 
 	// 将窗口设置为计数器最大值，这样只要不超时，何时喂狗都可以，没有窗口的限制。
-	_handle.Init.Window = 0x0FFF;
+	_handle.Init.Window = 0x0fff;
 
 	base::unit::Second inner_clock_source_interval{_inner_clock_frequency};
 	base::unit::Second timeout_second{timeout};
@@ -21,7 +21,7 @@ void bsp::IndependentWatchDog1::Initialize(std::chrono::milliseconds const &time
 		int64_t remain_count = total_count / GetPrescalerFactor(i);
 		_handle.Init.Prescaler = _prescaler_defines[i];
 
-		if (remain_count <= 0x0FFF)
+		if (remain_count <= 0x0fff)
 		{
 			_handle.Init.Reload = remain_count;
 			break;
@@ -32,7 +32,7 @@ void bsp::IndependentWatchDog1::Initialize(std::chrono::milliseconds const &time
 		{
 			// 已经达到最大分频了
 			// 让计数器的重装载值尽量接近要求。但是完全符合这么大的超时时间的要求是绝不可能的。
-			_handle.Init.Reload = 0x0FFF;
+			_handle.Init.Reload = 0x0fff;
 			break;
 		}
 	}
