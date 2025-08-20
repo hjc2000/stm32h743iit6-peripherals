@@ -44,6 +44,11 @@ private:
 	}
 
 public:
+	sdram_controller_handle()
+	{
+		base::sdram::msp_initialize_callback(1);
+	}
+
 	/// @brief 将 SDRAM 控制器以读突发的模式打开。写不突发。
 	/// @param timing_provider
 	/// @param bank_count
