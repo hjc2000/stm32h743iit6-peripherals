@@ -1,4 +1,5 @@
 #include "independent_watch_dog_handle.h" // IWYU pragma: keep
+#include "IndependentWatchDog1.h"
 
 ///
 /// @brief 打开独立看门狗。
@@ -6,7 +7,10 @@
 /// @param id
 /// @return
 ///
-std::shared_ptr<base::independent_watch_dog::independent_watch_dog_handle> base::independent_watch_dog::open(uint32_t id);
+std::shared_ptr<base::independent_watch_dog::independent_watch_dog_handle> base::independent_watch_dog::open(uint32_t id)
+{
+	return std::shared_ptr<base::independent_watch_dog::independent_watch_dog_handle>{new bsp::IndependentWatchDog1{}};
+}
 
 ///
 /// @brief 初始化独立看门狗。
