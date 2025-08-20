@@ -2,6 +2,7 @@
 #include "base/define.h"
 #include "base/embedded/gpio/gpio_parameter.h"
 #include "base/embedded/gpio/GpioPin.h"
+#include "base/embedded/serial/serial_handle.h"
 #include "base/task/BinarySemaphore.h"
 #include "base/task/Mutex.h"
 #include "base/UsageStateManager.h"
@@ -68,6 +69,11 @@ namespace bsp
 		void SetReadTimeoutByBaudCount(uint32_t value);
 
 	public:
+		Serial1()
+		{
+			base::serial::msp_initialize_callback(1);
+		}
+
 		~Serial1();
 
 		///
