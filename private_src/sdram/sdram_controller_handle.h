@@ -4,6 +4,8 @@
 class base::sdram::sdram_controller_handle
 {
 public:
+	virtual ~sdram_controller_handle() = default;
+
 	///
 	/// @brief 将 SDRAM 控制器以读突发的模式打开。写不突发。
 	///
