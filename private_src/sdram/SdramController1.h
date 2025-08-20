@@ -67,36 +67,36 @@ namespace bsp
 								 base::sdram::RowBitCount const &row_bit_count,
 								 base::sdram::ColumnBitCount const &column_bit_count,
 								 base::sdram::DataWidth const &data_width,
-								 base::sdram::ReadBurstLength const &read_burst_length);
+								 base::sdram::ReadBurstLength const &read_burst_length) override;
 
 		///
 		/// @brief 将输入信号置于空操作命令状态，然后开始向 SDRAM 提供 CLK 信号。
 		///
-		void PowerUp();
+		void PowerUp() override;
 
 		///
 		/// @brief 发送：“预充电所有 BANK” 的命令。
 		///
-		void PrechargeAll();
+		void PrechargeAll() override;
 
 		///
 		/// @brief 发送自动刷新命令。
 		///
-		void AutoRefresh();
+		void AutoRefresh() override;
 
 		///
 		/// @brief 写模式寄存器。
 		///
 		/// @param value
 		///
-		void WriteModeRegister(uint32_t value);
+		void WriteModeRegister(uint32_t value) override;
 
 		///
 		/// @brief 控制器被打开后所使用的时序。
 		///
 		/// @return
 		///
-		base::sdram::sdram_timing const &Timing() const;
+		base::sdram::sdram_timing const &Timing() const override;
 
 		///
 		/// @brief 此 SDRAM 控制器所管理的内存段的起始地址。打开 SDRAM 后，对着这个地址开始往后的内存区域
@@ -104,7 +104,7 @@ namespace bsp
 		///
 		/// @return
 		///
-		uint8_t *StartAddress() const
+		uint8_t *StartAddress() const override
 		{
 			return reinterpret_cast<uint8_t *>(0xC0000000);
 		}
