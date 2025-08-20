@@ -10,7 +10,7 @@ void base::ethernet::initialize(base::ethernet::ethernet_controller_handle &h,
 								uint32_t phy_address,
 								base::Mac const &mac)
 {
-	h.Open(type, phy_address, mac);
+	h.Initialize(type, phy_address, mac);
 }
 
 base::Mac base::ethernet::mac(base::ethernet::ethernet_controller_handle &h)

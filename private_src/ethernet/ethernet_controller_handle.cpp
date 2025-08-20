@@ -192,9 +192,9 @@ base::Mac base::ethernet::ethernet_controller_handle::Mac() const
 	return _mac;
 }
 
-void base::ethernet::ethernet_controller_handle::Open(base::ethernet::InterfaceType interface_type,
-													  uint32_t phy_address,
-													  base::Mac const &mac)
+void base::ethernet::ethernet_controller_handle::Initialize(base::ethernet::InterfaceType interface_type,
+															uint32_t phy_address,
+															base::Mac const &mac)
 {
 	_interface_type = interface_type;
 	_phy_address = phy_address;

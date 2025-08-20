@@ -58,9 +58,9 @@ public:
 	/// @param interface_type 连接着 PHY 的接口类型。（使用的是 MII 还是 RMII）
 	/// @param phy_address PHY 的地址。
 	/// @param mac MAC 地址。
-	void Open(base::ethernet::InterfaceType interface_type,
-			  uint32_t phy_address,
-			  base::Mac const &mac);
+	void Initialize(base::ethernet::InterfaceType interface_type,
+					uint32_t phy_address,
+					base::Mac const &mac);
 
 	/// @brief 读 PHY 的寄存器
 	/// @param register_index 寄存器索引。
