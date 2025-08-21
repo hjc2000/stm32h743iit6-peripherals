@@ -3,23 +3,6 @@
 
 extern "C"
 {
-
-	/* #region 定时器中断 */
-
-	void TIM3_IRQHandler()
-	{
-		std::function<void()> &func = bsp::di::interrupt::IsrManager().GetIsr(static_cast<uint32_t>(IRQn_Type::TIM3_IRQn));
-		try
-		{
-			func();
-		}
-		catch (...)
-		{
-		}
-	}
-
-	/* #endregion */
-
 	void WWDG1_IRQHandler()
 	{
 		std::function<void()> &func = bsp::di::interrupt::IsrManager().GetIsr(static_cast<uint32_t>(IRQn_Type::WWDG_IRQn));
