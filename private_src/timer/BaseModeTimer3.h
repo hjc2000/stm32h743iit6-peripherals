@@ -2,7 +2,7 @@
 
 namespace bsp
 {
-	class BaseTimer3
+	class BaseModeTimer3
 	{
 	public:
 	};
