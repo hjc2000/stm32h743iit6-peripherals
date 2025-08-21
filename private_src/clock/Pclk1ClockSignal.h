@@ -17,4 +17,5 @@ namespace bsp
 
 		virtual void Configure(std::map<std::string, uint32_t> const &channel_factor_map) override;
 	};
+
 } // namespace bsp
