@@ -98,13 +98,13 @@ void bsp::MemoryDma1::Initialize(size_t align)
 	case 2:
 		{
 			_handle_context._handle.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
-			_handle_context._handle.Init.MemDataAlignment = DMA_PDATAALIGN_HALFWORD;
+			_handle_context._handle.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
 			break;
 		}
 	case 4:
 		{
 			_handle_context._handle.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
-			_handle_context._handle.Init.MemDataAlignment = DMA_PDATAALIGN_WORD;
+			_handle_context._handle.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
 			break;
 		}
 	default:
