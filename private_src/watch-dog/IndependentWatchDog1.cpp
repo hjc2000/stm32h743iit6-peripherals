@@ -1,4 +1,6 @@
 #include "IndependentWatchDog1.h" // IWYU pragma: keep
+#include "base/string/define.h"
+#include <stdexcept>
 
 void bsp::IndependentWatchDog1::Initialize(std::chrono::milliseconds const &timeout)
 {
@@ -27,13 +29,13 @@ void bsp::IndependentWatchDog1::Initialize(std::chrono::milliseconds const &time
 			break;
 		}
 
+		// remain_count > 0x0fff
 		// 分频器分频后，剩余的计数交给计数器，计数器承受不了。
 		if (_prescaler_defines[i] == IWDG_PRESCALER_256)
 		{
 			// 已经达到最大分频了
-			// 让计数器的重装载值尽量接近要求。但是完全符合这么大的超时时间的要求是绝不可能的。
-			_handle.Init.Reload = 0x0fff;
-			break;
+			// 让计数器满足这么大的超时时间的要求是绝不可能的。
+			throw std::out_of_range{CODE_POS_STR + "超时时间过长，无法满足。"};
 		}
 	}
 
