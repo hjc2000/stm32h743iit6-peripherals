@@ -14,6 +14,11 @@ void bsp::IndependentWatchDog1::Initialize(std::chrono::milliseconds const &time
 
 	// 所需的 (分频器计数值 + 计数器计数值)
 	int64_t total_count = static_cast<int64_t>(base::unit::Second{timeout} / inner_clock_source_interval);
+	if (total_count <= 0)
+	{
+		// 超时时间短得都小于看门狗时钟源周期了。
+		throw std::invalid_argument{CODE_POS_STR + "超时时间过短，无法满足。"};
+	}
 
 	for (size_t i = 0; i < _prescaler_defines_count; i++)
 	{
@@ -34,7 +39,7 @@ void bsp::IndependentWatchDog1::Initialize(std::chrono::milliseconds const &time
 		{
 			// 已经达到最大分频了
 			// 让计数器满足这么大的超时时间的要求是绝不可能的。
-			throw std::out_of_range{CODE_POS_STR + "超时时间过长，无法满足。"};
+			throw std::invalid_argument{CODE_POS_STR + "超时时间过长，无法满足。"};
 		}
 	}
 
