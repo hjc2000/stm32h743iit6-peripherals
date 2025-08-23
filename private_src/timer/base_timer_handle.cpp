@@ -1,5 +1,6 @@
 #include "base_timer_handle.h" // IWYU pragma: keep
 #include "base/string/define.h"
+#include "BaseTimer3.h"
 #include "BaseTimer6.h"
 #include <stdexcept>
 
@@ -7,6 +8,10 @@ std::shared_ptr<base::base_timer::base_timer_handle> base::base_timer::open(uint
 {
 	switch (id)
 	{
+	case 3:
+		{
+			return std::shared_ptr<base::base_timer::base_timer_handle>{new bsp::BaseTimer3{}};
+		}
 	case 6:
 		{
 			return std::shared_ptr<base::base_timer::base_timer_handle>{new bsp::BaseTimer6{}};
