@@ -18,26 +18,31 @@ void bsp::Pclk1ClockSignal::Configure(std::map<std::string, uint32_t> const &cha
 	case 1:
 		{
 			def.APB1CLKDivider = RCC_APB1_DIV1;
+			_input_divider = 1;
 			break;
 		}
 	case 2:
 		{
 			def.APB1CLKDivider = RCC_APB1_DIV2;
+			_input_divider = 2;
 			break;
 		}
 	case 4:
 		{
 			def.APB1CLKDivider = RCC_APB1_DIV4;
+			_input_divider = 4;
 			break;
 		}
 	case 8:
 		{
 			def.APB1CLKDivider = RCC_APB1_DIV8;
+			_input_divider = 8;
 			break;
 		}
 	case 16:
 		{
 			def.APB1CLKDivider = RCC_APB1_DIV16;
+			_input_divider = 16;
 			break;
 		}
 	default:
@@ -53,4 +58,7 @@ void bsp::Pclk1ClockSignal::Configure(std::map<std::string, uint32_t> const &cha
 	{
 		throw std::runtime_error{"时钟信号配置失败"};
 	}
+
+	// 配置成功，设置为已配置状态。
+	_configured = true;
 }
