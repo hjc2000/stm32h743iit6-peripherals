@@ -1,6 +1,6 @@
 #include "BaseTimer6.h" // IWYU pragma: keep
-#include "base/bit/bit.h"
 #include "base/embedded/interrupt/interrupt.h"
+#include "base/math/FactorExtractor.h"
 #include "base/math/pow.h"
 #include "base/string/define.h"
 #include "base/unit/Nanosecond.h"
@@ -57,67 +57,18 @@ void bsp::BaseTimer6::InitializePeriod(std::chrono::nanoseconds const &period)
 		throw std::invalid_argument{CODE_POS_STR + "定时周期过小，小于分辨率。"};
 	}
 
-	if (total_cycle_count > base::pow<uint64_t>(2, 32))
-	{
-		// 超出范围了，这么大的计数，分频器和计数器都计数到最大值也还是小于。
-		throw std::invalid_argument{CODE_POS_STR + "时间间隔过大，定时器无法满足。"};
-	}
+	base::FactorExtractor<uint64_t> factor_extractor{total_cycle_count};
+	factor_extractor.Extract(2, base::pow<uint64_t>(2, 16));
+	factor_extractor.Extract(3, base::pow<uint64_t>(2, 16));
+	factor_extractor.Extract(5, base::pow<uint64_t>(2, 16));
 
-	// 计数器的进制数。
-	// 即计数器能从 0 计数到 counter_base -1.
-	uint64_t counter_base = total_cycle_count;
-
-	// 分频系数，或者说是 counter_base 的倍数。即要计数多少个 counter_base 的值
-	// 才能达到 total_cycle_count.
-	//
-	// 即
-	// 		multiple * counter_base = total_cycle_count
-	// 这个表达式需要始终成立。
-	uint64_t multiple = 1;
-
-	uint32_t lowest_one_bit_index = base::bit::LowestOneBitIndex(counter_base);
-	if (lowest_one_bit_index > 0)
-	{
-		// 比如说 lowest_one_bit_index = 1, 即最低位的 1 的索引是 1, 则至少需要 2 分频，
-		multiple <<= lowest_one_bit_index;
-		counter_base >>= lowest_one_bit_index;
-	}
-
-	// 处理 counter_base 是 5 的整数倍的情况。
-	uint64_t factor = 5;
-	while (counter_base > factor && counter_base % factor == 0)
-	{
-		if (multiple * factor >= base::pow<uint64_t>(2, 16))
-		{
-			break;
-		}
-
-		counter_base /= factor;
-		multiple *= factor;
-	}
-
-	// 处理 counter_base 是 3 的整数倍的情况。
-	factor = 3;
-	while (counter_base > factor && counter_base % factor == 0)
-	{
-		if (multiple * factor >= base::pow<uint64_t>(2, 16))
-		{
-			break;
-		}
-
-		counter_base /= factor;
-		multiple *= factor;
-	}
-
-	// 剩下的 counter_base 如果还大于计数器的承受范围，就很有可能无法在不损失精度的情况下通过
-	// 分频来达到定时周期了。
-	if (counter_base > base::pow<uint64_t>(2, 16))
+	if (factor_extractor.Base() > base::pow<uint64_t>(2, 16))
 	{
 		throw std::out_of_range{CODE_POS_STR + "无法在不损失定时精度的情况下定时。"};
 	}
 
-	_handle_context._handle.Init.Prescaler = multiple - 1;
-	_handle_context._handle.Init.Period = counter_base - 1;
+	_handle_context._handle.Init.Prescaler = factor_extractor.Factor() - 1;
+	_handle_context._handle.Init.Period = factor_extractor.Base() - 1;
 }
 
 void bsp::BaseTimer6::InitializeInterrupt()
