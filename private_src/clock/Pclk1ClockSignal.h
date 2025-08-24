@@ -1,8 +1,10 @@
 #pragma once
+#include "base/string/define.h"
 #include "base/unit/Hz.h"
 #include "clock_source_handle.h"
 #include "hal.h"
 #include <cstdint>
+#include <stdexcept>
 
 namespace bsp
 {
