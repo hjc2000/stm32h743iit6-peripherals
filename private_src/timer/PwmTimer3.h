@@ -38,13 +38,9 @@ namespace bsp
 	public:
 		virtual void InitializeAsUpMode(base::unit::Hz const &frequency) override;
 
-		virtual void InitializeAsDownMode(base::unit::Hz const &frequency) override
-		{
-		}
+		virtual void InitializeAsDownMode(base::unit::Hz const &frequency) override;
 
-		virtual void InitializeAsUpDownMode(base::unit::Hz const &frequency) override
-		{
-		}
+		virtual void InitializeAsUpDownMode(base::unit::Hz const &frequency) override;
 
 		virtual uint32_t Cycle() override
 		{

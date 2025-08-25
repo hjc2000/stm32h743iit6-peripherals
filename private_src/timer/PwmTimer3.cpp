@@ -102,3 +102,67 @@ void bsp::PwmTimer3::InitializeAsUpMode(base::unit::Hz const &frequency)
 		// }
 	}
 }
+
+void bsp::PwmTimer3::InitializeAsDownMode(base::unit::Hz const &frequency)
+{
+	__HAL_RCC_TIM3_CLK_ENABLE();
+	_handle_context._handle.Instance = TIM3;
+	_handle_context._handle.Init.CounterMode = TIM_COUNTERMODE_DOWN;
+	_handle_context._handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+
+	base::unit::Nanosecond period{frequency};
+	if (period < base::unit::Nanosecond{1})
+	{
+		throw std::invalid_argument{CODE_POS_STR + "频率过高。"};
+	}
+
+	InitializePeriod(static_cast<std::chrono::nanoseconds>(period));
+
+	if (HAL_TIM_PWM_Init(&_handle_context._handle) != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
+	}
+
+	TIM_MasterConfigTypeDef sMasterConfig{};
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	if (HAL_TIMEx_MasterConfigSynchronization(&_handle_context._handle, &sMasterConfig) != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
+	}
+}
+
+void bsp::PwmTimer3::InitializeAsUpDownMode(base::unit::Hz const &frequency)
+{
+	__HAL_RCC_TIM3_CLK_ENABLE();
+	_handle_context._handle.Instance = TIM3;
+	_handle_context._handle.Init.CounterMode = TIM_COUNTERMODE_CENTERALIGNED1;
+	_handle_context._handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+
+	base::unit::Nanosecond period{frequency};
+
+	// 中心对齐模式先从 0 开始向上计数到重装载值，然后向下计数到 0. 如此往复，
+	// 所以周期是重装载值的 2 倍。
+	//
+	// 所以想要设置到指定的频率，需要先将周期除以 2, 然后再计算出需要的重装载值。
+	period /= 2;
+	if (period < base::unit::Nanosecond{1})
+	{
+		throw std::invalid_argument{CODE_POS_STR + "频率过高。"};
+	}
+
+	InitializePeriod(static_cast<std::chrono::nanoseconds>(period));
+
+	if (HAL_TIM_PWM_Init(&_handle_context._handle) != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
+	}
+
+	TIM_MasterConfigTypeDef sMasterConfig{};
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	if (HAL_TIMEx_MasterConfigSynchronization(&_handle_context._handle, &sMasterConfig) != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
+	}
+}
