@@ -225,6 +225,17 @@ void bsp::PwmTimer3::Start(uint32_t channel_id)
 	}
 }
 
+void bsp::PwmTimer3::Start()
+{
+	HAL_StatusTypeDef result = HAL_TIM_PWM_Start(&_handle_context._handle,
+												 TIM_CHANNEL_ALL);
+
+	if (result != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "启动 PWM 输出失败。"};
+	}
+}
+
 void bsp::PwmTimer3::ChangeCompareValue(uint32_t channel_id, uint32_t value)
 {
 	switch (channel_id)

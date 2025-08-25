@@ -60,6 +60,11 @@ void base::pwm_timer::start(base::pwm_timer::pwm_timer_handle &self, uint32_t ch
 	self.Start(channel_id);
 }
 
+void base::pwm_timer::start(base::pwm_timer::pwm_timer_handle &self)
+{
+	self.Start();
+}
+
 void base::pwm_timer::change_compare_value(base::pwm_timer::pwm_timer_handle &self,
 										   uint32_t channel_id,
 										   uint32_t value)
