@@ -4,6 +4,7 @@
 #include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
 #include "pwm_timer_handle.h"
+#include <chrono>
 
 namespace bsp
 {
@@ -33,10 +34,7 @@ namespace bsp
 
 	public:
 		virtual void InitializeAsUpMode(base::unit::Hz const &frequency,
-										base::pwm_timer::Polarity effective_polarity) override
-		{
-			_handle_context._handle.Instance = TIM3;
-		}
+										base::pwm_timer::Polarity effective_polarity) override;
 
 		virtual void InitializeAsDownMode(base::unit::Hz const &frequency,
 										  base::pwm_timer::Polarity effective_polarity) override
