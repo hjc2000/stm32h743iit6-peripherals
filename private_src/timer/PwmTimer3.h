@@ -3,12 +3,14 @@
 #include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
 #include "pwm_timer_handle.h"
+#include "Timer3.h"
 #include <chrono>
 #include <cstdint>
 
 namespace bsp
 {
 	class PwmTimer3 final :
+		public bsp::Timer3,
 		public base::pwm_timer::pwm_timer_handle
 	{
 	private:
@@ -24,7 +26,7 @@ namespace bsp
 			PwmTimer3 *_self{};
 		};
 
-		base::UsageStateManager<PwmTimer3> _usage_state_manager{};
+		base::UsageStateManager<bsp::Timer3> _usage_state_manager{};
 		handle_context _handle_context{this};
 		TIM_OC_InitTypeDef _output_configuration{};
 
