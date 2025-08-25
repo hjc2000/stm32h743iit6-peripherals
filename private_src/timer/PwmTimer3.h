@@ -54,9 +54,7 @@ namespace bsp
 
 		virtual void Start(uint32_t channel_id) override;
 
-		virtual void ChangeCompareValue(uint32_t channel_id, uint32_t value) override
-		{
-		}
+		virtual void ChangeCompareValue(uint32_t channel_id, uint32_t value) override;
 
 		virtual void Stop(uint32_t channel_id) override;
 	};
