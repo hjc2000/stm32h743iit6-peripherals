@@ -27,4 +27,6 @@ public:
 									uint32_t value) = 0;
 
 	virtual void Stop(uint32_t channel_id) = 0;
+
+	virtual void StopAllChannels() = 0;
 };

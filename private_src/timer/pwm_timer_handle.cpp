@@ -76,3 +76,8 @@ void base::pwm_timer::stop(base::pwm_timer::pwm_timer_handle &self, uint32_t cha
 {
 	self.Stop(channel_id);
 }
+
+void base::pwm_timer::stop_all_channels(base::pwm_timer::pwm_timer_handle &self)
+{
+	self.StopAllChannels();
+}

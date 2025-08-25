@@ -287,3 +287,14 @@ void bsp::PwmTimer3::Stop(uint32_t channel_id)
 		throw std::runtime_error{CODE_POS_STR + "停止 PWM 输出失败。"};
 	}
 }
+
+void bsp::PwmTimer3::StopAllChannels()
+{
+	HAL_StatusTypeDef result = HAL_TIM_PWM_Stop(&_handle_context._handle,
+												TIM_CHANNEL_ALL);
+
+	if (result != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "停止 PWM 输出失败。"};
+	}
+}
