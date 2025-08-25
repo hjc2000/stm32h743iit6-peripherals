@@ -20,8 +20,8 @@ public:
 
 	virtual void Start(base::pwm_timer::pwm_timer_handle &self) = 0;
 
-	virtual void Stop() = 0;
-
 	virtual void ChangeCompareValue(std::bitset<32> channels,
 									uint32_t value) = 0;
+
+	virtual void Stop() = 0;
 };

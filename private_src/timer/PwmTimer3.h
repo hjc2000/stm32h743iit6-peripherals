@@ -63,12 +63,12 @@ namespace bsp
 		{
 		}
 
-		virtual void Stop() override
+		virtual void ChangeCompareValue(std::bitset<32> channels,
+										uint32_t value) override
 		{
 		}
 
-		virtual void ChangeCompareValue(std::bitset<32> channels,
-										uint32_t value) override
+		virtual void Stop() override
 		{
 		}
 	};

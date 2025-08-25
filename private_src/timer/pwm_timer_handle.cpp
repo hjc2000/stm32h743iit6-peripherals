@@ -22,8 +22,8 @@ void base::pwm_timer::configure_output(base::pwm_timer::pwm_timer_handle &self,
 
 void base::pwm_timer::start(base::pwm_timer::pwm_timer_handle &self);
 
-void base::pwm_timer::stop(base::pwm_timer::pwm_timer_handle &self);
-
 void base::pwm_timer::change_compare_value(base::pwm_timer::pwm_timer_handle &self,
 										   std::bitset<32> channels,
 										   uint32_t value);
+
+void base::pwm_timer::stop(base::pwm_timer::pwm_timer_handle &self);
