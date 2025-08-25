@@ -15,12 +15,12 @@ void base::sdram::initialize_as_read_burst_mode(base::sdram::sdram_controller_ha
 												base::sdram::DataWidth const &data_width,
 												base::sdram::ReadBurstLength const &read_burst_length)
 {
-	h.OpenAsReadBurstMode(timing_provider,
-						  bank_count,
-						  row_bit_count,
-						  column_bit_count,
-						  data_width,
-						  read_burst_length);
+	h.InitializeAsReadBurstMode(timing_provider,
+								bank_count,
+								row_bit_count,
+								column_bit_count,
+								data_width,
+								read_burst_length);
 }
 
 void base::sdram::send_precharge_all_command(base::sdram::sdram_controller_handle &h)

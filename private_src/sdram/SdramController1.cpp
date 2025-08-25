@@ -1,12 +1,12 @@
 #include "SdramController1.h"
 #include "base/embedded/clock/ClockSource.h"
 
-void bsp::SdramController1::OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
-												base::sdram::BankCount const &bank_count,
-												base::sdram::RowBitCount const &row_bit_count,
-												base::sdram::ColumnBitCount const &column_bit_count,
-												base::sdram::DataWidth const &data_width,
-												base::sdram::ReadBurstLength const &read_burst_length)
+void bsp::SdramController1::InitializeAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
+													  base::sdram::BankCount const &bank_count,
+													  base::sdram::RowBitCount const &row_bit_count,
+													  base::sdram::ColumnBitCount const &column_bit_count,
+													  base::sdram::DataWidth const &data_width,
+													  base::sdram::ReadBurstLength const &read_burst_length)
 {
 	base::sdram::msp_initialize_callback(1);
 
