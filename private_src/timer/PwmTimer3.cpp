@@ -66,7 +66,7 @@ void bsp::PwmTimer3::InitializeAsUpMode(base::unit::Hz const &frequency,
 
 	InitializePeriod(static_cast<std::chrono::nanoseconds>(period));
 
-	if (HAL_TIM_Base_Init(&_handle_context._handle) != HAL_OK)
+	if (HAL_TIM_PWM_Init(&_handle_context._handle) != HAL_OK)
 	{
 		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
 	}
