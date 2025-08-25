@@ -1,5 +1,6 @@
 #pragma once
 #include "base/exception/NotSupportedException.h"
+#include "base/unit/MHz.h"
 #include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
 #include "pwm_timer_handle.h"
@@ -14,10 +15,13 @@ namespace bsp
 		TIM_HandleTypeDef _handle{};
 		TIM_OC_InitTypeDef _output_configuration{};
 
+		base::unit::MHz ClockSourceFrequency() const;
+
 	public:
 		virtual void InitializeAsUpMode(base::unit::Hz const &frequency,
 										base::pwm_timer::Polarity effective_polarity) override
 		{
+			_handle.Instance = TIM3;
 		}
 
 		virtual void InitializeAsDownMode(base::unit::Hz const &frequency,
