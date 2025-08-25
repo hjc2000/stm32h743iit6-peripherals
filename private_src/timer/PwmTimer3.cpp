@@ -4,6 +4,7 @@
 #include "base/math/pow.h"
 #include "base/string/define.h"
 #include "base/unit/Nanosecond.h"
+#include "define.h"
 #include "Pclk1ClockSignal.h"
 #include <cstdint>
 #include <stdexcept>
@@ -78,29 +79,6 @@ void bsp::PwmTimer3::InitializeAsUpMode(base::unit::Hz const &frequency)
 	{
 		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
 	}
-
-	// 配置 PWM 输出
-	{
-		// _output_configuration.OCMode = TIM_OCMODE_PWM1;
-		// _output_configuration.Pulse = 0;
-
-		// if (effective_polarity == base::pwm_timer::Polarity::Negative)
-		// {
-		// 	// 有效状态是低电平
-		// 	_output_configuration.OCPolarity = TIM_OCPOLARITY_LOW;
-
-		// 	// 空闲时是无效状态，输出高电平
-		// 	_output_configuration.OCIdleState = TIM_OCIDLESTATE_SET;
-		// }
-		// else
-		// {
-		// 	// 有效状态是高电平
-		// 	_output_configuration.OCPolarity = TIM_OCPOLARITY_HIGH;
-
-		// 	// 空闲时是无效状态，输出低电平
-		// 	_output_configuration.OCIdleState = TIM_OCIDLESTATE_RESET;
-		// }
-	}
 }
 
 void bsp::PwmTimer3::InitializeAsDownMode(base::unit::Hz const &frequency)
@@ -165,4 +143,54 @@ void bsp::PwmTimer3::InitializeAsUpDownMode(base::unit::Hz const &frequency)
 	{
 		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
 	}
+}
+
+void bsp::PwmTimer3::ConfigureOutput(uint32_t channel_id,
+									 base::pwm_timer::Polarity effective_polarity,
+									 base::pwm_timer::Polarity idle_polarity,
+									 uint32_t compare_value,
+									 uint32_t dead_time)
+{
+	_output_configuration.OCMode = TIM_OCMODE_PWM1;
+	_output_configuration.Pulse = compare_value;
+
+	switch (effective_polarity)
+	{
+	case base::pwm_timer::Polarity::Positive:
+		{
+			_output_configuration.OCPolarity = TIM_OCPOLARITY_HIGH;
+			break;
+		}
+	case base::pwm_timer::Polarity::Negative:
+		{
+			_output_configuration.OCPolarity = TIM_OCPOLARITY_LOW;
+			break;
+		}
+	default:
+		{
+			throw std::invalid_argument{CODE_POS_STR + "非法极性。"};
+		}
+	}
+
+	switch (idle_polarity)
+	{
+	case base::pwm_timer::Polarity::Positive:
+		{
+			_output_configuration.OCIdleState = TIM_OCIDLESTATE_SET;
+			break;
+		}
+	case base::pwm_timer::Polarity::Negative:
+		{
+			_output_configuration.OCIdleState = TIM_OCIDLESTATE_RESET;
+			break;
+		}
+	default:
+		{
+			throw std::invalid_argument{CODE_POS_STR + "非法极性。"};
+		}
+	}
+
+	HAL_TIM_PWM_ConfigChannel(&_handle_context._handle,
+							  &_output_configuration,
+							  bsp::channel_id_to_channel_define(channel_id));
 }
