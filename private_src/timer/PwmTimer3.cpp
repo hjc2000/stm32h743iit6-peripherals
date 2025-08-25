@@ -225,7 +225,7 @@ void bsp::PwmTimer3::Start(uint32_t channel_id)
 	}
 }
 
-void bsp::PwmTimer3::Start()
+void bsp::PwmTimer3::StartAllChannels()
 {
 	HAL_StatusTypeDef result = HAL_TIM_PWM_Start(&_handle_context._handle,
 												 TIM_CHANNEL_ALL);

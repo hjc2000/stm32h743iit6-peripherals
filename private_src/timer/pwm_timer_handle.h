@@ -21,7 +21,7 @@ public:
 
 	virtual void Start(uint32_t channel_id) = 0;
 
-	virtual void Start() = 0;
+	virtual void StartAllChannels() = 0;
 
 	virtual void ChangeCompareValue(uint32_t channel_id,
 									uint32_t value) = 0;
