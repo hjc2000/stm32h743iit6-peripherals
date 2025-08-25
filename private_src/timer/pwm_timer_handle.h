@@ -11,7 +11,7 @@ public:
 
 	virtual void InitializeAsUpDownMode(base::unit::Hz const &frequency) = 0;
 
-	virtual uint32_t Cycle() = 0;
+	virtual uint32_t Cycle() const = 0;
 
 	virtual void ConfigureOutput(uint32_t channel_id,
 								 base::pwm_timer::Polarity effective_polarity,

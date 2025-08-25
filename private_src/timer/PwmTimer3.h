@@ -41,7 +41,7 @@ namespace bsp
 
 		virtual void InitializeAsUpDownMode(base::unit::Hz const &frequency) override;
 
-		virtual uint32_t Cycle() override
+		virtual uint32_t Cycle() const override
 		{
 			return _handle_context._handle.Init.Period;
 		}
