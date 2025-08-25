@@ -1,10 +1,13 @@
 #pragma once
 #include "base/exception/NotSupportedException.h"
+#include "base/string/define.h"
 #include "base/unit/MHz.h"
 #include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
 #include "pwm_timer_handle.h"
 #include <chrono>
+#include <cstdint>
+#include <stdexcept>
 
 namespace bsp
 {
@@ -58,6 +61,10 @@ namespace bsp
 
 		virtual void SetCompareValue(uint32_t value) override
 		{
+			if (value > UINT16_MAX)
+			{
+				throw std::invalid_argument{CODE_POS_STR + "非法比较值。"};
+			}
 		}
 
 		virtual uint32_t DeadTime() override
