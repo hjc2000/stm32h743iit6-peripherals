@@ -1,6 +1,22 @@
 #include "pwm_timer_handle.h" // IWYU pragma: keep
+#include "base/string/define.h"
+#include "PwmTimer3.h"
+#include <stdexcept>
 
-std::shared_ptr<base::pwm_timer::pwm_timer_handle> base::pwm_timer::open(uint32_t id);
+std::shared_ptr<base::pwm_timer::pwm_timer_handle> base::pwm_timer::open(uint32_t id)
+{
+	switch (id)
+	{
+	case 3:
+		{
+			return std::shared_ptr<base::pwm_timer::pwm_timer_handle>{new bsp::PwmTimer3{}};
+		}
+	default:
+		{
+			throw std::invalid_argument{CODE_POS_STR + "非法 ID."};
+		}
+	}
+}
 
 void base::pwm_timer::initialize_as_up_mode(base::pwm_timer::pwm_timer_handle &self,
 											base::unit::Hz const &frequency)
