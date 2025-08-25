@@ -67,7 +67,8 @@ void bsp::PwmTimer3::InitializeAsUpMode(base::unit::Hz const &frequency)
 
 	InitializePeriod(static_cast<std::chrono::nanoseconds>(period));
 
-	if (HAL_TIM_PWM_Init(&_handle_context._handle) != HAL_OK)
+	HAL_StatusTypeDef result = HAL_TIM_PWM_Init(&_handle_context._handle);
+	if (result != HAL_OK)
 	{
 		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
 	}
@@ -75,7 +76,9 @@ void bsp::PwmTimer3::InitializeAsUpMode(base::unit::Hz const &frequency)
 	TIM_MasterConfigTypeDef sMasterConfig{};
 	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-	if (HAL_TIMEx_MasterConfigSynchronization(&_handle_context._handle, &sMasterConfig) != HAL_OK)
+
+	result = HAL_TIMEx_MasterConfigSynchronization(&_handle_context._handle, &sMasterConfig);
+	if (result != HAL_OK)
 	{
 		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
 	}
@@ -96,7 +99,8 @@ void bsp::PwmTimer3::InitializeAsDownMode(base::unit::Hz const &frequency)
 
 	InitializePeriod(static_cast<std::chrono::nanoseconds>(period));
 
-	if (HAL_TIM_PWM_Init(&_handle_context._handle) != HAL_OK)
+	HAL_StatusTypeDef result = HAL_TIM_PWM_Init(&_handle_context._handle);
+	if (result != HAL_OK)
 	{
 		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
 	}
@@ -104,7 +108,9 @@ void bsp::PwmTimer3::InitializeAsDownMode(base::unit::Hz const &frequency)
 	TIM_MasterConfigTypeDef sMasterConfig{};
 	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-	if (HAL_TIMEx_MasterConfigSynchronization(&_handle_context._handle, &sMasterConfig) != HAL_OK)
+
+	result = HAL_TIMEx_MasterConfigSynchronization(&_handle_context._handle, &sMasterConfig);
+	if (result != HAL_OK)
 	{
 		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
 	}
@@ -131,7 +137,8 @@ void bsp::PwmTimer3::InitializeAsUpDownMode(base::unit::Hz const &frequency)
 
 	InitializePeriod(static_cast<std::chrono::nanoseconds>(period));
 
-	if (HAL_TIM_PWM_Init(&_handle_context._handle) != HAL_OK)
+	HAL_StatusTypeDef result = HAL_TIM_PWM_Init(&_handle_context._handle);
+	if (result != HAL_OK)
 	{
 		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
 	}
@@ -139,7 +146,9 @@ void bsp::PwmTimer3::InitializeAsUpDownMode(base::unit::Hz const &frequency)
 	TIM_MasterConfigTypeDef sMasterConfig{};
 	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-	if (HAL_TIMEx_MasterConfigSynchronization(&_handle_context._handle, &sMasterConfig) != HAL_OK)
+
+	result = HAL_TIMEx_MasterConfigSynchronization(&_handle_context._handle, &sMasterConfig);
+	if (result != HAL_OK)
 	{
 		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
 	}
@@ -151,6 +160,11 @@ void bsp::PwmTimer3::ConfigureOutput(uint32_t channel_id,
 									 uint32_t compare_value,
 									 uint32_t dead_time)
 {
+	if (compare_value > UINT16_MAX)
+	{
+		throw std::invalid_argument{CODE_POS_STR + "比较值过大，超出范围。"};
+	}
+
 	_output_configuration.OCMode = TIM_OCMODE_PWM1;
 	_output_configuration.Pulse = compare_value;
 
@@ -190,7 +204,12 @@ void bsp::PwmTimer3::ConfigureOutput(uint32_t channel_id,
 		}
 	}
 
-	HAL_TIM_PWM_ConfigChannel(&_handle_context._handle,
-							  &_output_configuration,
-							  bsp::channel_id_to_channel_define(channel_id));
+	HAL_StatusTypeDef result = HAL_TIM_PWM_ConfigChannel(&_handle_context._handle,
+														 &_output_configuration,
+														 bsp::channel_id_to_channel_define(channel_id));
+
+	if (result != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "配置输出失败。"};
+	}
 }
