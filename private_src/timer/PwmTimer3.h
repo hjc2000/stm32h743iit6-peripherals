@@ -1,13 +1,10 @@
 #pragma once
-#include "base/exception/NotSupportedException.h"
-#include "base/string/define.h"
 #include "base/unit/MHz.h"
 #include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
 #include "pwm_timer_handle.h"
 #include <chrono>
 #include <cstdint>
-#include <stdexcept>
 
 namespace bsp
 {
