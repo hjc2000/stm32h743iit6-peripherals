@@ -25,3 +25,5 @@ uint32_t base::pwm_timer::dead_time(base::pwm_timer::pwm_timer_handle const &sel
 void base::pwm_timer::set_dead_time(base::pwm_timer::pwm_timer_handle &self, uint32_t value);
 
 void base::pwm_timer::start(base::pwm_timer::pwm_timer_handle &self);
+
+void base::pwm_timer::stop(base::pwm_timer::pwm_timer_handle &self);
