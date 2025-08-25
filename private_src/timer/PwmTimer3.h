@@ -11,17 +11,31 @@ namespace bsp
 		public base::pwm_timer::pwm_timer_handle
 	{
 	private:
+		class handle_context
+		{
+		public:
+			handle_context(PwmTimer3 *self)
+				: _self(self)
+			{
+			}
+
+			TIM_HandleTypeDef _handle{};
+			PwmTimer3 *_self{};
+		};
+
 		base::UsageStateManager<PwmTimer3> _usage_state_manager{};
-		TIM_HandleTypeDef _handle{};
+		handle_context _handle_context{this};
 		TIM_OC_InitTypeDef _output_configuration{};
 
 		base::unit::MHz ClockSourceFrequency() const;
+
+		void InitializePeriod(std::chrono::nanoseconds const &period);
 
 	public:
 		virtual void InitializeAsUpMode(base::unit::Hz const &frequency,
 										base::pwm_timer::Polarity effective_polarity) override
 		{
-			_handle.Instance = TIM3;
+			_handle_context._handle.Instance = TIM3;
 		}
 
 		virtual void InitializeAsDownMode(base::unit::Hz const &frequency,
@@ -36,7 +50,7 @@ namespace bsp
 
 		virtual uint32_t Cycle() override
 		{
-			return _handle.Init.Period;
+			return _handle_context._handle.Init.Period;
 		}
 
 		virtual uint32_t CompareValue() override

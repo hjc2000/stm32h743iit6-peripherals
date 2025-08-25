@@ -51,6 +51,7 @@ void bsp::BaseTimer3::InitializePeriod(std::chrono::nanoseconds const &period)
 
 	_handle_context._handle.Init.Prescaler = factor_extractor.Factor() - 1;
 	_handle_context._handle.Init.Period = factor_extractor.Base() - 1;
+	_period = period;
 }
 
 void bsp::BaseTimer3::InitializeInterrupt()
@@ -68,8 +69,6 @@ void bsp::BaseTimer3::InitializeInterrupt()
 
 void bsp::BaseTimer3::Initialize(std::chrono::nanoseconds const &period)
 {
-	_period = period;
-
 	__HAL_RCC_TIM3_CLK_ENABLE();
 	_handle_context._handle.Instance = TIM3;
 	_handle_context._handle.Init.CounterMode = TIM_COUNTERMODE_UP;
