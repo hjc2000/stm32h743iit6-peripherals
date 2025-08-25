@@ -1,6 +1,5 @@
 #include "PwmTimer3.h" // IWYU pragma: keep
 #include "base/embedded/timer/pwm_timer_handle.h"
-#include "base/exception/NotSupportedException.h"
 #include "base/math/FactorExtractor.h"
 #include "base/math/pow.h"
 #include "base/string/define.h"

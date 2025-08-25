@@ -1,6 +1,7 @@
 #pragma once
 #include "base/unit/MHz.h"
 #include "base/UsageStateManager.h"
+#include "define.h"
 #include "hal.h" // IWYU pragma: keep
 #include "pwm_timer_handle.h"
 #include "Timer3.h"
@@ -52,17 +53,20 @@ namespace bsp
 									 uint32_t compare_value,
 									 uint32_t dead_time) override;
 
-		virtual void Start(base::pwm_timer::pwm_timer_handle &self) override
+		virtual void Start(uint32_t channel_id) override
+		{
+			HAL_TIM_PWM_Start(&_handle_context._handle,
+							  bsp::channel_id_to_channel_define(channel_id));
+		}
+
+		virtual void ChangeCompareValue(uint32_t channel_id, uint32_t value) override
 		{
 		}
 
-		virtual void ChangeCompareValue(uint32_t channel_id,
-										uint32_t value) override
+		virtual void Stop(uint32_t channel_id) override
 		{
-		}
-
-		virtual void Stop() override
-		{
+			HAL_TIM_PWM_Stop(&_handle_context._handle,
+							 bsp::channel_id_to_channel_define(channel_id));
 		}
 	};
 

@@ -20,10 +20,10 @@ void base::pwm_timer::configure_output(base::pwm_timer::pwm_timer_handle &self,
 									   uint32_t compare_value,
 									   uint32_t dead_time);
 
-void base::pwm_timer::start(base::pwm_timer::pwm_timer_handle &self);
+void base::pwm_timer::start(base::pwm_timer::pwm_timer_handle &self, uint32_t channel_id);
 
 void base::pwm_timer::change_compare_value(base::pwm_timer::pwm_timer_handle &self,
 										   uint32_t channel_id,
 										   uint32_t value);
 
-void base::pwm_timer::stop(base::pwm_timer::pwm_timer_handle &self);
+void base::pwm_timer::stop(base::pwm_timer::pwm_timer_handle &self, uint32_t channel_id);
