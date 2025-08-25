@@ -1,4 +1,5 @@
 #include "PwmTimer3.h" // IWYU pragma: keep
+#include "base/embedded/timer/pwm_timer_handle.h"
 #include "base/math/FactorExtractor.h"
 #include "base/math/pow.h"
 #include "base/string/define.h"
@@ -77,5 +78,25 @@ void bsp::PwmTimer3::InitializeAsUpMode(base::unit::Hz const &frequency,
 	if (HAL_TIMEx_MasterConfigSynchronization(&_handle_context._handle, &sMasterConfig) != HAL_OK)
 	{
 		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
+	}
+
+	_output_configuration.OCMode = TIM_OCMODE_PWM1;
+	_output_configuration.Pulse = 0;
+
+	if (effective_polarity == base::pwm_timer::Polarity::Negative)
+	{
+		// 有效状态是低电平
+		_output_configuration.OCPolarity = TIM_OCPOLARITY_LOW;
+
+		// 空闲时是无效状态，输出高电平
+		_output_configuration.OCIdleState = TIM_OCIDLESTATE_SET;
+	}
+	else
+	{
+		// 有效状态是高电平
+		_output_configuration.OCPolarity = TIM_OCPOLARITY_HIGH;
+
+		// 空闲时是无效状态，输出低电平
+		_output_configuration.OCIdleState = TIM_OCIDLESTATE_RESET;
 	}
 }
