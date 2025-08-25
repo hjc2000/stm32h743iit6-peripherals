@@ -93,7 +93,8 @@ void bsp::BaseTimer6::Initialize(std::chrono::nanoseconds const &period)
 	_handle_context._handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
 	InitializePeriod(period);
 
-	if (HAL_TIM_Base_Init(&_handle_context._handle) != HAL_OK)
+	HAL_StatusTypeDef result = HAL_TIM_Base_Init(&_handle_context._handle);
+	if (result != HAL_OK)
 	{
 		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
 	}
@@ -107,7 +108,9 @@ void bsp::BaseTimer6::Initialize(std::chrono::nanoseconds const &period)
 	TIM_MasterConfigTypeDef sMasterConfig{};
 	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-	if (HAL_TIMEx_MasterConfigSynchronization(&_handle_context._handle, &sMasterConfig) != HAL_OK)
+
+	result = HAL_TIMEx_MasterConfigSynchronization(&_handle_context._handle, &sMasterConfig);
+	if (result != HAL_OK)
 	{
 		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
 	}
