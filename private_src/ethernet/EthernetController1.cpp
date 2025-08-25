@@ -8,8 +8,6 @@
 
 bsp::EthernetController1::EthernetController1()
 {
-	base::ethernet::msp_initialize_callback(1);
-
 	// MPU 设置
 	{
 		MPU_Region_InitTypeDef MPU_InitStruct{};
@@ -104,6 +102,8 @@ void bsp::EthernetController1::Initialize(base::ethernet::InterfaceType interfac
 										  uint32_t phy_address,
 										  base::Mac const &mac)
 {
+	base::ethernet::msp_initialize_callback(1);
+
 	_interface_type = interface_type;
 	_phy_address = phy_address;
 	_mac = mac;

@@ -64,11 +64,6 @@ namespace bsp
 		void SetReadTimeoutByBaudCount(uint32_t value);
 
 	public:
-		Serial1()
-		{
-			base::serial::msp_initialize_callback(1);
-		}
-
 		~Serial1();
 
 		///

@@ -8,6 +8,8 @@ void bsp::SdramController1::OpenAsReadBurstMode(base::sdram::ISDRAMTimingProvide
 												base::sdram::DataWidth const &data_width,
 												base::sdram::ReadBurstLength const &read_burst_length)
 {
+	base::sdram::msp_initialize_callback(1);
+
 	/* 保护SDRAM区域,共32M字节 */
 	mpu_set_protection(0xC0000000,               /* 基地址 */
 					   MPU_REGION_SIZE_32MB,     /* 长度 */
