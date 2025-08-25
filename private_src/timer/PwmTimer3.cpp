@@ -51,58 +51,54 @@ void bsp::PwmTimer3::InitializePeriod(std::chrono::nanoseconds const &period)
 	_handle_context._handle.Init.Period = factor_extractor.Base() - 1;
 }
 
-void bsp::PwmTimer3::InitializeAsUpMode(base::unit::Hz const &frequency,
-										base::pwm_timer::Polarity effective_polarity)
+void bsp::PwmTimer3::InitializeAsUpMode(base::unit::Hz const &frequency)
 {
-	// 配置定时器
+	__HAL_RCC_TIM3_CLK_ENABLE();
+	_handle_context._handle.Instance = TIM3;
+	_handle_context._handle.Init.CounterMode = TIM_COUNTERMODE_UP;
+	_handle_context._handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+
+	base::unit::Nanosecond period{frequency};
+	if (period < base::unit::Nanosecond{1})
 	{
-		__HAL_RCC_TIM3_CLK_ENABLE();
-		_handle_context._handle.Instance = TIM3;
-		_handle_context._handle.Init.CounterMode = TIM_COUNTERMODE_UP;
-		_handle_context._handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+		throw std::invalid_argument{CODE_POS_STR + "频率过高。"};
+	}
 
-		base::unit::Nanosecond period{frequency};
-		if (period < base::unit::Nanosecond{1})
-		{
-			throw std::invalid_argument{CODE_POS_STR + "频率过高。"};
-		}
+	InitializePeriod(static_cast<std::chrono::nanoseconds>(period));
 
-		InitializePeriod(static_cast<std::chrono::nanoseconds>(period));
+	if (HAL_TIM_PWM_Init(&_handle_context._handle) != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
+	}
 
-		if (HAL_TIM_PWM_Init(&_handle_context._handle) != HAL_OK)
-		{
-			throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
-		}
-
-		TIM_MasterConfigTypeDef sMasterConfig{};
-		sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-		sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-		if (HAL_TIMEx_MasterConfigSynchronization(&_handle_context._handle, &sMasterConfig) != HAL_OK)
-		{
-			throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
-		}
+	TIM_MasterConfigTypeDef sMasterConfig{};
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	if (HAL_TIMEx_MasterConfigSynchronization(&_handle_context._handle, &sMasterConfig) != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
 	}
 
 	// 配置 PWM 输出
 	{
-		_output_configuration.OCMode = TIM_OCMODE_PWM1;
-		_output_configuration.Pulse = 0;
+		// _output_configuration.OCMode = TIM_OCMODE_PWM1;
+		// _output_configuration.Pulse = 0;
 
-		if (effective_polarity == base::pwm_timer::Polarity::Negative)
-		{
-			// 有效状态是低电平
-			_output_configuration.OCPolarity = TIM_OCPOLARITY_LOW;
+		// if (effective_polarity == base::pwm_timer::Polarity::Negative)
+		// {
+		// 	// 有效状态是低电平
+		// 	_output_configuration.OCPolarity = TIM_OCPOLARITY_LOW;
 
-			// 空闲时是无效状态，输出高电平
-			_output_configuration.OCIdleState = TIM_OCIDLESTATE_SET;
-		}
-		else
-		{
-			// 有效状态是高电平
-			_output_configuration.OCPolarity = TIM_OCPOLARITY_HIGH;
+		// 	// 空闲时是无效状态，输出高电平
+		// 	_output_configuration.OCIdleState = TIM_OCIDLESTATE_SET;
+		// }
+		// else
+		// {
+		// 	// 有效状态是高电平
+		// 	_output_configuration.OCPolarity = TIM_OCPOLARITY_HIGH;
 
-			// 空闲时是无效状态，输出低电平
-			_output_configuration.OCIdleState = TIM_OCIDLESTATE_RESET;
-		}
+		// 	// 空闲时是无效状态，输出低电平
+		// 	_output_configuration.OCIdleState = TIM_OCIDLESTATE_RESET;
+		// }
 	}
 }

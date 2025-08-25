@@ -36,16 +36,13 @@ namespace bsp
 		void InitializePeriod(std::chrono::nanoseconds const &period);
 
 	public:
-		virtual void InitializeAsUpMode(base::unit::Hz const &frequency,
-										base::pwm_timer::Polarity effective_polarity) override;
+		virtual void InitializeAsUpMode(base::unit::Hz const &frequency) override;
 
-		virtual void InitializeAsDownMode(base::unit::Hz const &frequency,
-										  base::pwm_timer::Polarity effective_polarity) override
+		virtual void InitializeAsDownMode(base::unit::Hz const &frequency) override
 		{
 		}
 
-		virtual void InitializeAsUpDownMode(base::unit::Hz const &frequency,
-											base::pwm_timer::Polarity effective_polarity) override
+		virtual void InitializeAsUpDownMode(base::unit::Hz const &frequency) override
 		{
 		}
 
@@ -54,27 +51,12 @@ namespace bsp
 			return _handle_context._handle.Init.Period;
 		}
 
-		virtual uint32_t CompareValue() override
+		virtual void ConfigureOutput(std::bitset<32> const &channels,
+									 base::pwm_timer::Polarity effective_polarity,
+									 base::pwm_timer::Polarity idle_polarity,
+									 uint32_t compare_value,
+									 uint32_t dead_time) override
 		{
-			return _output_configuration.Pulse;
-		}
-
-		virtual void SetCompareValue(uint32_t value) override
-		{
-			if (value > UINT16_MAX)
-			{
-				throw std::invalid_argument{CODE_POS_STR + "非法比较值。"};
-			}
-		}
-
-		virtual uint32_t DeadTime() override
-		{
-			return 0;
-		}
-
-		virtual void SetDeadTime(uint32_t value) override
-		{
-			throw base::NotSupportedException{};
 		}
 
 		virtual void Start(base::pwm_timer::pwm_timer_handle &self) override
@@ -82,6 +64,11 @@ namespace bsp
 		}
 
 		virtual void Stop() override
+		{
+		}
+
+		virtual void ChangeCompareValue(std::bitset<32> channels,
+										uint32_t value) override
 		{
 		}
 	};
