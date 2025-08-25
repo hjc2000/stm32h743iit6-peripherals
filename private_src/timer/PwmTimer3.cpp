@@ -213,3 +213,25 @@ void bsp::PwmTimer3::ConfigureOutput(uint32_t channel_id,
 		throw std::runtime_error{CODE_POS_STR + "配置输出失败。"};
 	}
 }
+
+void bsp::PwmTimer3::Start(uint32_t channel_id)
+{
+	HAL_StatusTypeDef result = HAL_TIM_PWM_Start(&_handle_context._handle,
+												 bsp::channel_id_to_channel_define(channel_id));
+
+	if (result != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "启动 PWM 输出失败。"};
+	}
+}
+
+void bsp::PwmTimer3::Stop(uint32_t channel_id)
+{
+	HAL_StatusTypeDef result = HAL_TIM_PWM_Stop(&_handle_context._handle,
+												bsp::channel_id_to_channel_define(channel_id));
+
+	if (result != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "停止 PWM 输出失败。"};
+	}
+}
