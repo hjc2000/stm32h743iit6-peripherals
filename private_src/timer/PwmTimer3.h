@@ -51,7 +51,7 @@ namespace bsp
 			return _handle_context._handle.Init.Period;
 		}
 
-		virtual void ConfigureOutput(std::bitset<32> const &channels,
+		virtual void ConfigureOutput(uint32_t channel_id,
 									 base::pwm_timer::Polarity effective_polarity,
 									 base::pwm_timer::Polarity idle_polarity,
 									 uint32_t compare_value,
@@ -63,7 +63,7 @@ namespace bsp
 		{
 		}
 
-		virtual void ChangeCompareValue(std::bitset<32> channels,
+		virtual void ChangeCompareValue(uint32_t channel_id,
 										uint32_t value) override
 		{
 		}

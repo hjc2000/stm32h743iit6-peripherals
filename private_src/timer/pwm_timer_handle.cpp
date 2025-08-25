@@ -14,7 +14,7 @@ void base::pwm_timer::initialize_as_up_down_mode(base::pwm_timer::pwm_timer_hand
 uint32_t base::pwm_timer::cycle(base::pwm_timer::pwm_timer_handle const &self);
 
 void base::pwm_timer::configure_output(base::pwm_timer::pwm_timer_handle &self,
-									   std::bitset<32> const &channels,
+									   uint32_t channel_id,
 									   base::pwm_timer::Polarity effective_polarity,
 									   base::pwm_timer::Polarity idle_polarity,
 									   uint32_t compare_value,
@@ -23,7 +23,7 @@ void base::pwm_timer::configure_output(base::pwm_timer::pwm_timer_handle &self,
 void base::pwm_timer::start(base::pwm_timer::pwm_timer_handle &self);
 
 void base::pwm_timer::change_compare_value(base::pwm_timer::pwm_timer_handle &self,
-										   std::bitset<32> channels,
+										   uint32_t channel_id,
 										   uint32_t value);
 
 void base::pwm_timer::stop(base::pwm_timer::pwm_timer_handle &self);
