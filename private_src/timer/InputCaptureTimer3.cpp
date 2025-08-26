@@ -52,6 +52,8 @@ void bsp::InputCaptureTimer3::InitializeInterrupt()
 	// 先不启用中断，等到 SetPeriodElapsedCallback 函数被调用时再启用。
 }
 
+/* #region 回调 */
+
 void bsp::InputCaptureTimer3::OnPeriodElapsedCallback()
 {
 	if (_on_period_elapsed_callback == nullptr)
@@ -125,6 +127,8 @@ void bsp::InputCaptureTimer3::OnCaptureCompleteCallback()
 	{
 	}
 }
+
+/* #endregion */
 
 void bsp::InputCaptureTimer3::initialize(std::chrono::nanoseconds const &period)
 {
