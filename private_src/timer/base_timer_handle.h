@@ -26,9 +26,9 @@ public:
 	/// @note 此函数要实现为能够在定时时间到的回调中被调用，因此实现者需要避免会出现
 	/// 死锁的实现方式。
 	///
-	/// @param period
+	/// @param value
 	///
-	virtual void SetPeriod(std::chrono::nanoseconds const &period) = 0;
+	virtual void SetPeriod(std::chrono::nanoseconds const &value) = 0;
 
 	///
 	/// @brief 设置定时时间到的回调。

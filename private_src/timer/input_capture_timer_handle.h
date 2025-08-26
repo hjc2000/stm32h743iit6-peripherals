@@ -13,7 +13,7 @@ public:
 
 	virtual std::chrono::nanoseconds period() = 0;
 
-	virtual void set_period(std::chrono::nanoseconds const &period) = 0;
+	virtual void set_period(std::chrono::nanoseconds const &value) = 0;
 
 	virtual void set_period_elapsed_callback(std::function<void()> const &callback) = 0;
 

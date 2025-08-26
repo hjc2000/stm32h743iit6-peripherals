@@ -35,9 +35,9 @@ std::chrono::nanoseconds base::base_timer::period(base::base_timer::base_timer_h
 }
 
 void base::base_timer::set_period(base::base_timer::base_timer_handle &self,
-								  std::chrono::nanoseconds const &period)
+								  std::chrono::nanoseconds const &value)
 {
-	self.SetPeriod(period);
+	self.SetPeriod(value);
 }
 
 void base::base_timer::set_period_elapsed_callback(base::base_timer::base_timer_handle &self,
