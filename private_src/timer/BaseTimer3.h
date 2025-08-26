@@ -1,6 +1,5 @@
 #pragma once
 #include "base/embedded/interrupt/interrupt.h"
-#include "base/unit/MHz.h"
 #include "base/UsageStateManager.h"
 #include "base_timer_handle.h"
 #include "hal.h" // IWYU pragma: keep
@@ -32,8 +31,6 @@ namespace bsp
 		handle_context _handle_context{this};
 		std::function<void()> _on_period_elapsed_callback;
 		std::chrono::nanoseconds _period{};
-
-		base::unit::MHz ClockSourceFrequency() const;
 
 		void InitializePeriod(std::chrono::nanoseconds const &period);
 		void InitializeInterrupt();

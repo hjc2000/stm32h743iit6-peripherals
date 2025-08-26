@@ -1,5 +1,4 @@
 #pragma once
-#include "base/unit/MHz.h"
 #include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
 #include "pwm_timer_handle.h"
@@ -29,8 +28,6 @@ namespace bsp
 		base::UsageStateManager<bsp::Timer3> _usage_state_manager{};
 		handle_context _handle_context{this};
 		TIM_OC_InitTypeDef _output_configuration{};
-
-		base::unit::MHz ClockSourceFrequency() const;
 
 		void InitializePeriod(std::chrono::nanoseconds const &period);
 

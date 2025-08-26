@@ -5,24 +5,8 @@
 #include "base/string/define.h"
 #include "base/unit/Nanosecond.h"
 #include "define.h"
-#include "Pclk1ClockSignal.h"
 #include <cstdint>
 #include <stdexcept>
-
-base::unit::MHz bsp::PwmTimer3::ClockSourceFrequency() const
-{
-	// 定时器 6 的时钟源是 PCLK1 再经过一个倍频器。当 PCLK1 的输入分频系数大于 1
-	// 时，这个倍频器会把 PCLK1 的频率乘 2, 如果 PCLK1 的输入分频系数为 1, 则不
-	// 倍频。
-	bsp::Pclk1ClockSignal pclk1{};
-	base::unit::MHz freq = pclk1.Frequency();
-	if (pclk1.InputDivider() > 1)
-	{
-		freq *= 2;
-	}
-
-	return freq;
-}
 
 void bsp::PwmTimer3::InitializePeriod(std::chrono::nanoseconds const &period)
 {

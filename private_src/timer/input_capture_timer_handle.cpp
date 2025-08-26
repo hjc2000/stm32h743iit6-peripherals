@@ -32,15 +32,33 @@ void base::input_capture_timer::set_period(base::input_capture_timer::input_capt
 }
 
 void base::input_capture_timer::set_period_elapsed_callback(base::input_capture_timer::input_capture_timer_handle &self,
-															std::function<void()> const &callback);
+															std::function<void()> const &callback)
+{
+	self.set_period_elapsed_callback(callback);
+}
 
 void base::input_capture_timer::set_capture_complete_callback(base::input_capture_timer::input_capture_timer_handle &self,
-															  std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback);
+															  std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback)
+{
+	self.set_capture_complete_callback(callback);
+}
 
-void base::input_capture_timer::start(base::input_capture_timer::input_capture_timer_handle &self, uint32_t channel_id);
+void base::input_capture_timer::start(base::input_capture_timer::input_capture_timer_handle &self, uint32_t channel_id)
+{
+	self.start(channel_id);
+}
 
-void base::input_capture_timer::start_all_channels(base::input_capture_timer::input_capture_timer_handle &self);
+void base::input_capture_timer::start_all_channels(base::input_capture_timer::input_capture_timer_handle &self)
+{
+	self.start_all_channels();
+}
 
-void base::input_capture_timer::stop(base::input_capture_timer::input_capture_timer_handle &self, uint32_t channel_id);
+void base::input_capture_timer::stop(base::input_capture_timer::input_capture_timer_handle &self, uint32_t channel_id)
+{
+	self.stop(channel_id);
+}
 
-void base::input_capture_timer::stop_all_channels(base::input_capture_timer::input_capture_timer_handle &self);
+void base::input_capture_timer::stop_all_channels(base::input_capture_timer::input_capture_timer_handle &self)
+{
+	self.stop_all_channels();
+}
