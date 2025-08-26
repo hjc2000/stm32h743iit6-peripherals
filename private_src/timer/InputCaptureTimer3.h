@@ -61,6 +61,7 @@ namespace bsp
 			base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn));
 			_on_period_elapsed_callback = callback;
 			base::interrupt::enable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn), 10);
+			__HAL_TIM_ENABLE_IT(&_handle_context._handle, TIM_IT_UPDATE);
 		}
 
 		virtual void set_capture_complete_callback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback) override
