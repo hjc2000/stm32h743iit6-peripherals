@@ -5,6 +5,8 @@
 #include "base/unit/Nanosecond.h"
 #include "timer3_isr.h"
 
+/* #region 初始化辅助函数 */
+
 void bsp::InputCaptureTimer3::InitializePeriod(std::chrono::nanoseconds const &period)
 {
 	if (period.count() <= 0)
@@ -51,6 +53,8 @@ void bsp::InputCaptureTimer3::InitializeInterrupt()
 
 	// 先不启用中断，等到 SetPeriodElapsedCallback 函数被调用时再启用。
 }
+
+/* #endregion */
 
 /* #region 回调 */
 
