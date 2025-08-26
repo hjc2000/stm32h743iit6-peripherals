@@ -167,3 +167,9 @@ void bsp::InputCaptureTimer3::initialize(std::chrono::nanoseconds const &period)
 
 	InitializeInterrupt();
 }
+
+void bsp::InputCaptureTimer3::set_period(std::chrono::nanoseconds const &value)
+{
+	InitializePeriod(value);
+	TIM_Base_SetConfig(_handle_context._handle.Instance, &_handle_context._handle.Init);
+}

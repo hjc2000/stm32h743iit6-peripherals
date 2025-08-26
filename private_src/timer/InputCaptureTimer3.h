@@ -53,16 +53,16 @@ namespace bsp
 			return _period;
 		}
 
-		virtual void set_period(std::chrono::nanoseconds const &value) override
-		{
-		}
+		virtual void set_period(std::chrono::nanoseconds const &value) override;
 
 		virtual void set_period_elapsed_callback(std::function<void()> const &callback) override
 		{
+			_on_period_elapsed_callback = callback;
 		}
 
 		virtual void set_capture_complete_callback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback) override
 		{
+			_on_capture_complete_callback = callback;
 		}
 
 		virtual void start(uint32_t channel_id) override
