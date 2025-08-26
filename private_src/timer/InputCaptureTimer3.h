@@ -1,7 +1,9 @@
 #pragma once
+#include "base/embedded/timer/input_capture_timer_handle.h"
 #include "hal.h" // IWYU pragma: keep
 #include "input_capture_timer_handle.h"
 #include "Timer3.h"
+#include <functional>
 
 namespace bsp
 {
@@ -24,32 +26,17 @@ namespace bsp
 
 		handle_context _handle_context{this};
 		std::function<void()> _on_period_elapsed_callback;
+		std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> _on_capture_complete_callback;
 		std::chrono::nanoseconds _period{};
 
 		void InitializePeriod(std::chrono::nanoseconds const &period);
-
 		void InitializeInterrupt();
 
-		void OnPeriodElapsedCallback()
-		{
-			if (_on_period_elapsed_callback == nullptr)
-			{
-				return;
-			}
-
-			try
-			{
-				_on_period_elapsed_callback();
-			}
-			catch (...)
-			{
-			}
-		}
+		void OnPeriodElapsedCallback();
+		void OnCaptureCompleteCallback();
 
 	public:
-		virtual void initialize(std::chrono::nanoseconds const &period) override
-		{
-		}
+		virtual void initialize(std::chrono::nanoseconds const &period) override;
 
 		virtual uint32_t counter_period() override
 		{

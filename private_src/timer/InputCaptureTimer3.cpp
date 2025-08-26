@@ -51,3 +51,119 @@ void bsp::InputCaptureTimer3::InitializeInterrupt()
 
 	// 先不启用中断，等到 SetPeriodElapsedCallback 函数被调用时再启用。
 }
+
+void bsp::InputCaptureTimer3::OnPeriodElapsedCallback()
+{
+	if (_on_period_elapsed_callback == nullptr)
+	{
+		return;
+	}
+
+	try
+	{
+		_on_period_elapsed_callback();
+	}
+	catch (...)
+	{
+	}
+}
+
+void bsp::InputCaptureTimer3::OnCaptureCompleteCallback()
+{
+	if (_on_capture_complete_callback == nullptr)
+	{
+		return;
+	}
+
+	try
+	{
+		switch (_handle_context._handle.Channel)
+		{
+		case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_1:
+			{
+				base::input_capture_timer::CaptureCompleteEventArgs args{TIM3->CCR1};
+				_on_capture_complete_callback(args);
+				break;
+			}
+		case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_2:
+			{
+				base::input_capture_timer::CaptureCompleteEventArgs args{TIM3->CCR2};
+				_on_capture_complete_callback(args);
+				break;
+			}
+		case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_3:
+			{
+				base::input_capture_timer::CaptureCompleteEventArgs args{TIM3->CCR3};
+				_on_capture_complete_callback(args);
+				break;
+			}
+		case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_4:
+			{
+				base::input_capture_timer::CaptureCompleteEventArgs args{TIM3->CCR4};
+				_on_capture_complete_callback(args);
+				break;
+			}
+		case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_5:
+			{
+				base::input_capture_timer::CaptureCompleteEventArgs args{TIM3->CCR5};
+				_on_capture_complete_callback(args);
+				break;
+			}
+		case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_6:
+			{
+				base::input_capture_timer::CaptureCompleteEventArgs args{TIM3->CCR6};
+				_on_capture_complete_callback(args);
+				break;
+			}
+		default:
+			{
+				break;
+			}
+		}
+	}
+	catch (...)
+	{
+	}
+}
+
+void bsp::InputCaptureTimer3::initialize(std::chrono::nanoseconds const &period)
+{
+	__HAL_RCC_TIM3_CLK_ENABLE();
+	_handle_context._handle.Instance = TIM3;
+	_handle_context._handle.Init.CounterMode = TIM_COUNTERMODE_UP;
+	_handle_context._handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+	InitializePeriod(period);
+
+	HAL_StatusTypeDef result = HAL_TIM_IC_Init(&_handle_context._handle);
+	if (result != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
+	}
+
+	// 赋值句柄中的回调函数指针
+	{
+		_handle_context._handle.PeriodElapsedCallback = [](TIM_HandleTypeDef *handle)
+		{
+			handle_context *context = reinterpret_cast<handle_context *>(handle);
+			context->_self->OnPeriodElapsedCallback();
+		};
+
+		_handle_context._handle.IC_CaptureCallback = [](TIM_HandleTypeDef *handle)
+		{
+			handle_context *context = reinterpret_cast<handle_context *>(handle);
+			context->_self->OnCaptureCompleteCallback();
+		};
+	}
+
+	TIM_MasterConfigTypeDef sMasterConfig{};
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+
+	result = HAL_TIMEx_MasterConfigSynchronization(&_handle_context._handle, &sMasterConfig);
+	if (result != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
+	}
+
+	InitializeInterrupt();
+}
