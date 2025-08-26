@@ -238,6 +238,28 @@ void bsp::PwmTimer3::StartAllChannels()
 	}
 }
 
+void bsp::PwmTimer3::Stop(uint32_t channel_id)
+{
+	HAL_StatusTypeDef result = HAL_TIM_PWM_Stop(&_handle_context._handle,
+												bsp::channel_id_to_channel_define(channel_id));
+
+	if (result != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "停止 PWM 输出失败。"};
+	}
+}
+
+void bsp::PwmTimer3::StopAllChannels()
+{
+	HAL_StatusTypeDef result = HAL_TIM_PWM_Stop(&_handle_context._handle,
+												TIM_CHANNEL_ALL);
+
+	if (result != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "停止 PWM 输出失败。"};
+	}
+}
+
 void bsp::PwmTimer3::ChangeCompareValue(uint32_t channel_id, uint32_t value)
 {
 	switch (channel_id)
@@ -276,27 +298,5 @@ void bsp::PwmTimer3::ChangeCompareValue(uint32_t channel_id, uint32_t value)
 		{
 			throw std::invalid_argument{CODE_POS_STR + "非法通道 ID."};
 		}
-	}
-}
-
-void bsp::PwmTimer3::Stop(uint32_t channel_id)
-{
-	HAL_StatusTypeDef result = HAL_TIM_PWM_Stop(&_handle_context._handle,
-												bsp::channel_id_to_channel_define(channel_id));
-
-	if (result != HAL_OK)
-	{
-		throw std::runtime_error{CODE_POS_STR + "停止 PWM 输出失败。"};
-	}
-}
-
-void bsp::PwmTimer3::StopAllChannels()
-{
-	HAL_StatusTypeDef result = HAL_TIM_PWM_Stop(&_handle_context._handle,
-												TIM_CHANNEL_ALL);
-
-	if (result != HAL_OK)
-	{
-		throw std::runtime_error{CODE_POS_STR + "停止 PWM 输出失败。"};
 	}
 }

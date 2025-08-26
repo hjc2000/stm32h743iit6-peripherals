@@ -23,10 +23,9 @@ public:
 
 	virtual void StartAllChannels() = 0;
 
-	virtual void ChangeCompareValue(uint32_t channel_id,
-									uint32_t value) = 0;
-
 	virtual void Stop(uint32_t channel_id) = 0;
 
 	virtual void StopAllChannels() = 0;
+
+	virtual void ChangeCompareValue(uint32_t channel_id, uint32_t value) = 0;
 };
