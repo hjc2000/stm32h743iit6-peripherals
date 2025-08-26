@@ -1,6 +1,5 @@
 #pragma once
 #include "base/embedded/interrupt/interrupt.h"
-#include "base/UsageStateManager.h"
 #include "base_timer_handle.h"
 #include "hal.h" // IWYU pragma: keep
 #include "Timer3.h"
@@ -27,7 +26,6 @@ namespace bsp
 			BaseTimer3 *_self{};
 		};
 
-		base::UsageStateManager<bsp::Timer3> _usage_state_manager{};
 		handle_context _handle_context{this};
 		std::function<void()> _on_period_elapsed_callback;
 		std::chrono::nanoseconds _period{};

@@ -1,5 +1,4 @@
 #pragma once
-#include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
 #include "pwm_timer_handle.h"
 #include "Timer3.h"
@@ -25,7 +24,6 @@ namespace bsp
 			PwmTimer3 *_self{};
 		};
 
-		base::UsageStateManager<bsp::Timer3> _usage_state_manager{};
 		handle_context _handle_context{this};
 		TIM_OC_InitTypeDef _output_configuration{};
 

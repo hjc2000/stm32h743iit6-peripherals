@@ -1,5 +1,4 @@
 #pragma once
-#include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
 #include "input_capture_timer_handle.h"
 #include "Timer3.h"
@@ -22,8 +21,6 @@ namespace bsp
 			TIM_HandleTypeDef _handle{};
 			InputCaptureTimer3 *_self{};
 		};
-
-		base::UsageStateManager<bsp::Timer3> _usage_state_manager{};
 
 	public:
 		virtual void initialize(std::chrono::nanoseconds const &period) = 0;
