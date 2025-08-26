@@ -181,3 +181,25 @@ void bsp::InputCaptureTimer3::set_period(std::chrono::nanoseconds const &value)
 	InitializePeriod(value);
 	TIM_Base_SetConfig(_handle_context._handle.Instance, &_handle_context._handle.Init);
 }
+
+void bsp::InputCaptureTimer3::set_period_elapsed_callback(std::function<void()> const &callback)
+{
+	__HAL_TIM_DISABLE_IT(&_handle_context._handle, TIM_IT_UPDATE);
+
+	if (callback == nullptr)
+	{
+		return;
+	}
+
+	base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn));
+	_on_period_elapsed_callback = callback;
+	base::interrupt::enable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn), 10);
+	__HAL_TIM_ENABLE_IT(&_handle_context._handle, TIM_IT_UPDATE);
+}
+
+void bsp::InputCaptureTimer3::set_capture_complete_callback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback)
+{
+	base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn));
+	_on_capture_complete_callback = callback;
+	base::interrupt::enable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn), 10);
+}

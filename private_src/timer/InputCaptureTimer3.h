@@ -3,6 +3,7 @@
 #include "base/embedded/timer/input_capture_timer_handle.h"
 #include "hal.h" // IWYU pragma: keep
 #include "input_capture_timer_handle.h"
+#include "stm32h7xx_hal_tim.h"
 #include "Timer3.h"
 #include <functional>
 
@@ -61,20 +62,9 @@ namespace bsp
 
 		virtual void set_period(std::chrono::nanoseconds const &value) override;
 
-		virtual void set_period_elapsed_callback(std::function<void()> const &callback) override
-		{
-			base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn));
-			_on_period_elapsed_callback = callback;
-			base::interrupt::enable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn), 10);
-			__HAL_TIM_ENABLE_IT(&_handle_context._handle, TIM_IT_UPDATE);
-		}
+		virtual void set_period_elapsed_callback(std::function<void()> const &callback) override;
 
-		virtual void set_capture_complete_callback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback) override
-		{
-			base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn));
-			_on_capture_complete_callback = callback;
-			base::interrupt::enable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn), 10);
-		}
+		virtual void set_capture_complete_callback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback) override;
 
 		virtual void start(uint32_t channel_id) override
 		{
