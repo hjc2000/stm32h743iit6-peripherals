@@ -2,9 +2,11 @@
 #include "base/embedded/interrupt/interrupt.h"
 #include "base/math/FactorExtractor.h"
 #include "base/math/pow.h"
+#include "base/string/define.h"
 #include "base/unit/Nanosecond.h"
 #include "define.h"
 #include "timer3_isr.h"
+#include <stdexcept>
 
 /* #region 初始化辅助函数 */
 
@@ -175,6 +177,70 @@ void bsp::InputCaptureTimer3::initialize(std::chrono::nanoseconds const &period)
 	}
 
 	InitializeInterrupt();
+}
+
+void bsp::InputCaptureTimer3::configure_channel(uint32_t channel_id,
+												base::input_capture_timer::CaptureEdge edge,
+												uint32_t input_prescaler)
+{
+	TIM_IC_InitTypeDef configuration{};
+	configuration.ICSelection = TIM_ICSELECTION_DIRECTTI;
+	configuration.ICFilter = 0;
+
+	switch (edge)
+	{
+	case base::input_capture_timer::CaptureEdge::RisingEdge:
+		{
+			configuration.ICPolarity = TIM_ICPOLARITY_RISING;
+			break;
+		}
+	case base::input_capture_timer::CaptureEdge::FallenEdge:
+		{
+			configuration.ICPolarity = TIM_ICPOLARITY_FALLING;
+			break;
+		}
+	case base::input_capture_timer::CaptureEdge::BothEdge:
+		{
+			configuration.ICPolarity = TIM_ICPOLARITY_BOTHEDGE;
+			break;
+		}
+	default:
+		{
+			throw std::invalid_argument{CODE_POS_STR + "非法边缘。"};
+		}
+	}
+
+	switch (input_prescaler)
+	{
+	case 1:
+		{
+			configuration.ICPrescaler = TIM_ICPSC_DIV1;
+			break;
+		}
+	case 2:
+		{
+			configuration.ICPrescaler = TIM_ICPSC_DIV2;
+			break;
+		}
+	case 4:
+		{
+			configuration.ICPrescaler = TIM_ICPSC_DIV4;
+			break;
+		}
+	case 8:
+		{
+			configuration.ICPrescaler = TIM_ICPSC_DIV8;
+			break;
+		}
+	default:
+		{
+			throw std::invalid_argument{CODE_POS_STR + "非法预分频系数。"};
+		}
+	}
+
+	HAL_TIM_IC_ConfigChannel(&_handle_context._handle,
+							 &configuration,
+							 bsp::channel_id_to_channel_define(channel_id));
 }
 
 void bsp::InputCaptureTimer3::set_period(std::chrono::nanoseconds const &value)

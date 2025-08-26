@@ -14,10 +14,11 @@ uint32_t base::input_capture_timer::counter_period(base::input_capture_timer::in
 }
 
 void base::input_capture_timer::configure_channel(base::input_capture_timer::input_capture_timer_handle &self,
+												  uint32_t channel_id,
 												  base::input_capture_timer::CaptureEdge edge,
 												  uint32_t input_prescaler)
 {
-	self.configure_channel(edge, input_prescaler);
+	self.configure_channel(channel_id, edge, input_prescaler);
 }
 
 std::chrono::nanoseconds base::input_capture_timer::period(base::input_capture_timer::input_capture_timer_handle &self)

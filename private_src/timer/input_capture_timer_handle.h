@@ -8,7 +8,8 @@ public:
 
 	virtual uint32_t counter_period() = 0;
 
-	virtual void configure_channel(base::input_capture_timer::CaptureEdge edge,
+	virtual void configure_channel(uint32_t channel_id,
+								   base::input_capture_timer::CaptureEdge edge,
 								   uint32_t input_prescaler) = 0;
 
 	virtual std::chrono::nanoseconds period() = 0;

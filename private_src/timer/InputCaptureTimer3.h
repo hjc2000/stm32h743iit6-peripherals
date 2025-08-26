@@ -48,10 +48,9 @@ namespace bsp
 			return _handle_context._handle.Init.Period + 1;
 		}
 
-		virtual void configure_channel(base::input_capture_timer::CaptureEdge edge,
-									   uint32_t input_prescaler) override
-		{
-		}
+		virtual void configure_channel(uint32_t channel_id,
+									   base::input_capture_timer::CaptureEdge edge,
+									   uint32_t input_prescaler) override;
 
 		virtual std::chrono::nanoseconds period() override
 		{
