@@ -142,7 +142,6 @@ void bsp::PwmTimer3::InitializeAsUpDownMode(base::unit::Hz const &frequency)
 
 void bsp::PwmTimer3::ConfigureOutput(uint32_t channel_id,
 									 base::pwm_timer::Polarity effective_polarity,
-									 base::pwm_timer::Polarity idle_polarity,
 									 uint32_t compare_value,
 									 uint32_t dead_time)
 {
@@ -159,29 +158,13 @@ void bsp::PwmTimer3::ConfigureOutput(uint32_t channel_id,
 	case base::pwm_timer::Polarity::Positive:
 		{
 			_output_configuration.OCPolarity = TIM_OCPOLARITY_HIGH;
+			_output_configuration.OCIdleState = TIM_OCIDLESTATE_RESET;
 			break;
 		}
 	case base::pwm_timer::Polarity::Negative:
 		{
 			_output_configuration.OCPolarity = TIM_OCPOLARITY_LOW;
-			break;
-		}
-	default:
-		{
-			throw std::invalid_argument{CODE_POS_STR + "非法极性。"};
-		}
-	}
-
-	switch (idle_polarity)
-	{
-	case base::pwm_timer::Polarity::Positive:
-		{
 			_output_configuration.OCIdleState = TIM_OCIDLESTATE_SET;
-			break;
-		}
-	case base::pwm_timer::Polarity::Negative:
-		{
-			_output_configuration.OCIdleState = TIM_OCIDLESTATE_RESET;
 			break;
 		}
 	default:

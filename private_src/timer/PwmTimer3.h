@@ -49,7 +49,6 @@ namespace bsp
 
 		virtual void ConfigureOutput(uint32_t channel_id,
 									 base::pwm_timer::Polarity effective_polarity,
-									 base::pwm_timer::Polarity idle_polarity,
 									 uint32_t compare_value,
 									 uint32_t dead_time) override;
 
