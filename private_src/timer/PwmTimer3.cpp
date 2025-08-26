@@ -59,8 +59,6 @@ void bsp::PwmTimer3::InitializePeriod(std::chrono::nanoseconds const &period)
 
 void bsp::PwmTimer3::InitializeAsUpMode(base::unit::Hz const &frequency)
 {
-	base::pwm_timer::msp_initialize_callback(3);
-
 	__HAL_RCC_TIM3_CLK_ENABLE();
 	_handle_context._handle.Instance = TIM3;
 	_handle_context._handle.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -93,8 +91,6 @@ void bsp::PwmTimer3::InitializeAsUpMode(base::unit::Hz const &frequency)
 
 void bsp::PwmTimer3::InitializeAsDownMode(base::unit::Hz const &frequency)
 {
-	base::pwm_timer::msp_initialize_callback(3);
-
 	__HAL_RCC_TIM3_CLK_ENABLE();
 	_handle_context._handle.Instance = TIM3;
 	_handle_context._handle.Init.CounterMode = TIM_COUNTERMODE_DOWN;
@@ -127,8 +123,6 @@ void bsp::PwmTimer3::InitializeAsDownMode(base::unit::Hz const &frequency)
 
 void bsp::PwmTimer3::InitializeAsUpDownMode(base::unit::Hz const &frequency)
 {
-	base::pwm_timer::msp_initialize_callback(3);
-
 	__HAL_RCC_TIM3_CLK_ENABLE();
 	_handle_context._handle.Instance = TIM3;
 	_handle_context._handle.Init.CounterMode = TIM_COUNTERMODE_CENTERALIGNED1;

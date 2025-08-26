@@ -396,8 +396,6 @@ void bsp::Serial1::Start(base::serial::Direction direction,
 						 base::serial::StopBits stop_bits,
 						 base::serial::HardwareFlowControl hardware_flow_control)
 {
-	base::serial::msp_initialize_callback(1);
-
 	_direction = direction;
 	_baud_rate = baud_rate.Value();
 	_data_bits = data_bits.Value();

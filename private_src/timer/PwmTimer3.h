@@ -35,6 +35,11 @@ namespace bsp
 		void InitializePeriod(std::chrono::nanoseconds const &period);
 
 	public:
+		PwmTimer3()
+		{
+			base::pwm_timer::msp_initialize_callback(3);
+		}
+
 		virtual void InitializeAsUpMode(base::unit::Hz const &frequency) override;
 
 		virtual void InitializeAsDownMode(base::unit::Hz const &frequency) override;
