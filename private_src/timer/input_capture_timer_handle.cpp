@@ -1,6 +1,7 @@
 #include "input_capture_timer_handle.h" // IWYU pragma: keep
 #include "base/string/define.h"
 #include "InputCaptureTimer3.h"
+#include "InputCaptureTimer5.h"
 #include <stdexcept>
 
 std::shared_ptr<base::input_capture_timer::input_capture_timer_handle> base::input_capture_timer::open(uint32_t id)
@@ -10,6 +11,10 @@ std::shared_ptr<base::input_capture_timer::input_capture_timer_handle> base::inp
 	case 3:
 		{
 			return std::shared_ptr<base::input_capture_timer::input_capture_timer_handle>{new bsp::InputCaptureTimer3{}};
+		}
+	case 5:
+		{
+			return std::shared_ptr<base::input_capture_timer::input_capture_timer_handle>{new bsp::InputCaptureTimer5{}};
 		}
 	default:
 		{
