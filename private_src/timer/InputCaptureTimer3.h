@@ -41,35 +41,35 @@ namespace bsp
 			base::input_capture_timer::msp_initialize_callback(3);
 		}
 
-		virtual void initialize(std::chrono::nanoseconds const &period) override;
+		virtual void Initialize(std::chrono::nanoseconds const &period) override;
 
-		virtual uint32_t counter_period() override
+		virtual uint32_t CounterPeriod() override
 		{
 			return _handle_context._handle.Init.Period + 1;
 		}
 
-		virtual void configure_channel(uint32_t channel_id,
-									   base::input_capture_timer::CaptureEdge edge,
-									   uint32_t input_prescaler) override;
+		virtual void ConfigureChannel(uint32_t channel_id,
+									  base::input_capture_timer::CaptureEdge edge,
+									  uint32_t input_prescaler) override;
 
-		virtual std::chrono::nanoseconds period() override
+		virtual std::chrono::nanoseconds Period() override
 		{
 			return _period;
 		}
 
-		virtual void set_period(std::chrono::nanoseconds const &value) override;
+		virtual void SetPeriod(std::chrono::nanoseconds const &value) override;
 
-		virtual void set_period_elapsed_callback(std::function<void()> const &callback) override;
+		virtual void SetPeriodElapsedCallback(std::function<void()> const &callback) override;
 
-		virtual void set_capture_complete_callback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback) override;
+		virtual void SetCaptureCompleteCallback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback) override;
 
-		virtual void start(uint32_t channel_id) override;
+		virtual void Start(uint32_t channel_id) override;
 
-		virtual void start_all_channels() override;
+		virtual void StartAllChannels() override;
 
-		virtual void stop(uint32_t channel_id) override;
+		virtual void Stop(uint32_t channel_id) override;
 
-		virtual void stop_all_channels() override;
+		virtual void StopAllChannels() override;
 	};
 
 } // namespace bsp

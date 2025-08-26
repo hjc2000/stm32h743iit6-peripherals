@@ -137,7 +137,7 @@ void bsp::InputCaptureTimer3::OnCaptureCompleteCallback()
 
 /* #endregion */
 
-void bsp::InputCaptureTimer3::initialize(std::chrono::nanoseconds const &period)
+void bsp::InputCaptureTimer3::Initialize(std::chrono::nanoseconds const &period)
 {
 	__HAL_RCC_TIM3_CLK_ENABLE();
 	_handle_context._handle.Instance = TIM3;
@@ -179,9 +179,9 @@ void bsp::InputCaptureTimer3::initialize(std::chrono::nanoseconds const &period)
 	InitializeInterrupt();
 }
 
-void bsp::InputCaptureTimer3::configure_channel(uint32_t channel_id,
-												base::input_capture_timer::CaptureEdge edge,
-												uint32_t input_prescaler)
+void bsp::InputCaptureTimer3::ConfigureChannel(uint32_t channel_id,
+											   base::input_capture_timer::CaptureEdge edge,
+											   uint32_t input_prescaler)
 {
 	TIM_IC_InitTypeDef configuration{};
 	configuration.ICSelection = TIM_ICSELECTION_DIRECTTI;
@@ -243,13 +243,13 @@ void bsp::InputCaptureTimer3::configure_channel(uint32_t channel_id,
 							 bsp::channel_id_to_channel_define(channel_id));
 }
 
-void bsp::InputCaptureTimer3::set_period(std::chrono::nanoseconds const &value)
+void bsp::InputCaptureTimer3::SetPeriod(std::chrono::nanoseconds const &value)
 {
 	InitializePeriod(value);
 	TIM_Base_SetConfig(_handle_context._handle.Instance, &_handle_context._handle.Init);
 }
 
-void bsp::InputCaptureTimer3::set_period_elapsed_callback(std::function<void()> const &callback)
+void bsp::InputCaptureTimer3::SetPeriodElapsedCallback(std::function<void()> const &callback)
 {
 	__HAL_TIM_DISABLE_IT(&_handle_context._handle, TIM_IT_UPDATE);
 
@@ -264,14 +264,14 @@ void bsp::InputCaptureTimer3::set_period_elapsed_callback(std::function<void()> 
 	__HAL_TIM_ENABLE_IT(&_handle_context._handle, TIM_IT_UPDATE);
 }
 
-void bsp::InputCaptureTimer3::set_capture_complete_callback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback)
+void bsp::InputCaptureTimer3::SetCaptureCompleteCallback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback)
 {
 	base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn));
 	_on_capture_complete_callback = callback;
 	base::interrupt::enable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn), 10);
 }
 
-void bsp::InputCaptureTimer3::start(uint32_t channel_id)
+void bsp::InputCaptureTimer3::Start(uint32_t channel_id)
 {
 	HAL_StatusTypeDef result = HAL_TIM_IC_Start_IT(&_handle_context._handle,
 												   bsp::channel_id_to_channel_define(channel_id));
@@ -282,7 +282,7 @@ void bsp::InputCaptureTimer3::start(uint32_t channel_id)
 	}
 }
 
-void bsp::InputCaptureTimer3::start_all_channels()
+void bsp::InputCaptureTimer3::StartAllChannels()
 {
 	HAL_StatusTypeDef result = HAL_TIM_IC_Start_IT(&_handle_context._handle,
 												   TIM_CHANNEL_ALL);
@@ -293,7 +293,7 @@ void bsp::InputCaptureTimer3::start_all_channels()
 	}
 }
 
-void bsp::InputCaptureTimer3::stop(uint32_t channel_id)
+void bsp::InputCaptureTimer3::Stop(uint32_t channel_id)
 {
 	HAL_StatusTypeDef result = HAL_TIM_IC_Stop_IT(&_handle_context._handle,
 												  bsp::channel_id_to_channel_define(channel_id));
@@ -304,7 +304,7 @@ void bsp::InputCaptureTimer3::stop(uint32_t channel_id)
 	}
 }
 
-void bsp::InputCaptureTimer3::stop_all_channels()
+void bsp::InputCaptureTimer3::StopAllChannels()
 {
 	HAL_StatusTypeDef result = HAL_TIM_IC_Stop_IT(&_handle_context._handle,
 												  TIM_CHANNEL_ALL);
