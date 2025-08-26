@@ -37,6 +37,11 @@ namespace bsp
 		void OnCaptureCompleteCallback();
 
 	public:
+		InputCaptureTimer3()
+		{
+			base::input_capture_timer::msp_initialize_callback(3);
+		}
+
 		virtual void initialize(std::chrono::nanoseconds const &period) override;
 
 		virtual uint32_t counter_period() override
