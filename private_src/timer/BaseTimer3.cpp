@@ -40,9 +40,14 @@ void bsp::BaseTimer3::InitializePeriod(std::chrono::nanoseconds const &period)
 	}
 
 	base::FactorExtractor<uint64_t> factor_extractor{total_cycle_count};
-	factor_extractor.Extract(2, base::pow<uint64_t>(2, 16));
-	factor_extractor.Extract(3, base::pow<uint64_t>(2, 16));
-	factor_extractor.Extract(5, base::pow<uint64_t>(2, 16));
+	factor_extractor.ExtractConservatively(2, base::pow<uint64_t>(2, 16));
+	factor_extractor.ExtractConservatively(3, base::pow<uint64_t>(2, 16));
+	factor_extractor.ExtractConservatively(5, base::pow<uint64_t>(2, 16));
+
+	if (factor_extractor.Factor() > base::pow<uint64_t>(2, 16))
+	{
+		throw std::out_of_range{CODE_POS_STR + "无法在不损失定时精度的情况下定时。"};
+	}
 
 	if (factor_extractor.Base() > base::pow<uint64_t>(2, 16))
 	{
