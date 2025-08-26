@@ -36,9 +36,9 @@ void base::pwm_timer::initialize_as_up_down_mode(base::pwm_timer::pwm_timer_hand
 	self.InitializeAsUpDownMode(frequency);
 }
 
-uint32_t base::pwm_timer::cycle(base::pwm_timer::pwm_timer_handle const &self)
+uint32_t base::pwm_timer::counter_period(base::pwm_timer::pwm_timer_handle const &self)
 {
-	return self.Cycle();
+	return self.CounterPeriod();
 }
 
 void base::pwm_timer::configure_output(base::pwm_timer::pwm_timer_handle &self,
