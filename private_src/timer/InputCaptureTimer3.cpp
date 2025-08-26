@@ -3,6 +3,7 @@
 #include "base/math/FactorExtractor.h"
 #include "base/math/pow.h"
 #include "base/unit/Nanosecond.h"
+#include "define.h"
 #include "timer3_isr.h"
 
 /* #region 初始化辅助函数 */
@@ -202,4 +203,48 @@ void bsp::InputCaptureTimer3::set_capture_complete_callback(std::function<void(b
 	base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn));
 	_on_capture_complete_callback = callback;
 	base::interrupt::enable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn), 10);
+}
+
+void bsp::InputCaptureTimer3::start(uint32_t channel_id)
+{
+	HAL_StatusTypeDef result = HAL_TIM_IC_Start_IT(&_handle_context._handle,
+												   bsp::channel_id_to_channel_define(channel_id));
+
+	if (result != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "启动捕获输入通道失败。"};
+	}
+}
+
+void bsp::InputCaptureTimer3::start_all_channels()
+{
+	HAL_StatusTypeDef result = HAL_TIM_IC_Start_IT(&_handle_context._handle,
+												   TIM_CHANNEL_ALL);
+
+	if (result != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "启动捕获输入通道失败。"};
+	}
+}
+
+void bsp::InputCaptureTimer3::stop(uint32_t channel_id)
+{
+	HAL_StatusTypeDef result = HAL_TIM_IC_Stop_IT(&_handle_context._handle,
+												  bsp::channel_id_to_channel_define(channel_id));
+
+	if (result != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "启动捕获输入通道失败。"};
+	}
+}
+
+void bsp::InputCaptureTimer3::stop_all_channels()
+{
+	HAL_StatusTypeDef result = HAL_TIM_IC_Stop_IT(&_handle_context._handle,
+												  TIM_CHANNEL_ALL);
+
+	if (result != HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "启动捕获输入通道失败。"};
+	}
 }

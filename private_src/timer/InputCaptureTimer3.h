@@ -1,9 +1,7 @@
 #pragma once
-#include "base/embedded/interrupt/interrupt.h"
 #include "base/embedded/timer/input_capture_timer_handle.h"
 #include "hal.h" // IWYU pragma: keep
 #include "input_capture_timer_handle.h"
-#include "stm32h7xx_hal_tim.h"
 #include "Timer3.h"
 #include <functional>
 
@@ -66,21 +64,13 @@ namespace bsp
 
 		virtual void set_capture_complete_callback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback) override;
 
-		virtual void start(uint32_t channel_id) override
-		{
-		}
+		virtual void start(uint32_t channel_id) override;
 
-		virtual void start_all_channels() override
-		{
-		}
+		virtual void start_all_channels() override;
 
-		virtual void stop(uint32_t channel_id) override
-		{
-		}
+		virtual void stop(uint32_t channel_id) override;
 
-		virtual void stop_all_channels() override
-		{
-		}
+		virtual void stop_all_channels() override;
 	};
 
 } // namespace bsp
