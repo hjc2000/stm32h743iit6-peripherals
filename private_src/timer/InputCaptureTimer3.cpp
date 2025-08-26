@@ -300,7 +300,7 @@ void bsp::InputCaptureTimer3::Stop(uint32_t channel_id)
 
 	if (result != HAL_OK)
 	{
-		throw std::runtime_error{CODE_POS_STR + "启动捕获输入通道失败。"};
+		throw std::runtime_error{CODE_POS_STR + "停止捕获输入通道失败。"};
 	}
 }
 
@@ -311,6 +311,6 @@ void bsp::InputCaptureTimer3::StopAllChannels()
 
 	if (result != HAL_OK)
 	{
-		throw std::runtime_error{CODE_POS_STR + "启动捕获输入通道失败。"};
+		throw std::runtime_error{CODE_POS_STR + "停止捕获输入通道失败。"};
 	}
 }
