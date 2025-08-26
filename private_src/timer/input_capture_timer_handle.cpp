@@ -1,6 +1,22 @@
 #include "input_capture_timer_handle.h" // IWYU pragma: keep
+#include "base/string/define.h"
+#include "InputCaptureTimer3.h"
+#include <stdexcept>
 
-std::shared_ptr<base::input_capture_timer::input_capture_timer_handle> base::input_capture_timer::open(uint32_t id);
+std::shared_ptr<base::input_capture_timer::input_capture_timer_handle> base::input_capture_timer::open(uint32_t id)
+{
+	switch (id)
+	{
+	case 3:
+		{
+			return std::shared_ptr<base::input_capture_timer::input_capture_timer_handle>{new bsp::InputCaptureTimer3{}};
+		}
+	default:
+		{
+			throw std::invalid_argument{CODE_POS_STR + "非法 ID."};
+		}
+	}
+}
 
 void base::input_capture_timer::initialize(base::input_capture_timer::input_capture_timer_handle &self,
 										   std::chrono::nanoseconds const &period)
