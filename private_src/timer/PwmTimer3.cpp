@@ -59,7 +59,6 @@ void bsp::PwmTimer3::InitializePeriod(std::chrono::nanoseconds const &period)
 
 void bsp::PwmTimer3::InitializeAsUpMode(base::unit::Hz const &frequency)
 {
-	__HAL_RCC_TIM3_CLK_ENABLE();
 	_handle_context._handle.Instance = TIM3;
 	_handle_context._handle.Init.CounterMode = TIM_COUNTERMODE_UP;
 	_handle_context._handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
@@ -91,7 +90,6 @@ void bsp::PwmTimer3::InitializeAsUpMode(base::unit::Hz const &frequency)
 
 void bsp::PwmTimer3::InitializeAsDownMode(base::unit::Hz const &frequency)
 {
-	__HAL_RCC_TIM3_CLK_ENABLE();
 	_handle_context._handle.Instance = TIM3;
 	_handle_context._handle.Init.CounterMode = TIM_COUNTERMODE_DOWN;
 	_handle_context._handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
@@ -123,7 +121,6 @@ void bsp::PwmTimer3::InitializeAsDownMode(base::unit::Hz const &frequency)
 
 void bsp::PwmTimer3::InitializeAsUpDownMode(base::unit::Hz const &frequency)
 {
-	__HAL_RCC_TIM3_CLK_ENABLE();
 	_handle_context._handle.Instance = TIM3;
 	_handle_context._handle.Init.CounterMode = TIM_COUNTERMODE_CENTERALIGNED1;
 	_handle_context._handle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;

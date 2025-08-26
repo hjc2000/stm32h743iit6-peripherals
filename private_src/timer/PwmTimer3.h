@@ -37,6 +37,7 @@ namespace bsp
 	public:
 		PwmTimer3()
 		{
+			__HAL_RCC_TIM3_CLK_ENABLE();
 			base::pwm_timer::msp_initialize_callback(3);
 		}
 
