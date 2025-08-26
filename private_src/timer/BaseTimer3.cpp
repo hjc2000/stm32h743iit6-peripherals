@@ -4,7 +4,6 @@
 #include "base/math/pow.h"
 #include "base/string/define.h"
 #include "base/unit/Nanosecond.h"
-#include "Pclk1ClockSignal.h"
 #include "timer3_isr.h"
 #include <cstdint>
 #include <functional>

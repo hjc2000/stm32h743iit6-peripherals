@@ -22,29 +22,77 @@ namespace bsp
 			InputCaptureTimer3 *_self{};
 		};
 
-	public:
-		virtual void initialize(std::chrono::nanoseconds const &period) = 0;
+		handle_context _handle_context{this};
+		std::function<void()> _on_period_elapsed_callback;
+		std::chrono::nanoseconds _period{};
 
-		virtual uint32_t counter_period() = 0;
+		void InitializePeriod(std::chrono::nanoseconds const &period);
+
+		void InitializeInterrupt();
+
+		void OnPeriodElapsedCallback()
+		{
+			if (_on_period_elapsed_callback == nullptr)
+			{
+				return;
+			}
+
+			try
+			{
+				_on_period_elapsed_callback();
+			}
+			catch (...)
+			{
+			}
+		}
+
+	public:
+		virtual void initialize(std::chrono::nanoseconds const &period) override
+		{
+		}
+
+		virtual uint32_t counter_period() override
+		{
+			return _handle_context._handle.Init.Period + 1;
+		}
 
 		virtual void configure_channel(base::input_capture_timer::CaptureEdge edge,
-									   uint32_t input_prescaler) = 0;
+									   uint32_t input_prescaler) override
+		{
+		}
 
-		virtual std::chrono::nanoseconds period() = 0;
+		virtual std::chrono::nanoseconds period() override
+		{
+			return _period;
+		}
 
-		virtual void set_period(std::chrono::nanoseconds const &value) = 0;
+		virtual void set_period(std::chrono::nanoseconds const &value) override
+		{
+		}
 
-		virtual void set_period_elapsed_callback(std::function<void()> const &callback) = 0;
+		virtual void set_period_elapsed_callback(std::function<void()> const &callback) override
+		{
+		}
 
-		virtual void set_capture_complete_callback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback) = 0;
+		virtual void set_capture_complete_callback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback) override
+		{
+		}
 
-		virtual void start(uint32_t channel_id) = 0;
+		virtual void start(uint32_t channel_id) override
+		{
+		}
 
-		virtual void start_all_channels() = 0;
+		virtual void start_all_channels() override
+		{
+		}
 
-		virtual void stop(uint32_t channel_id) = 0;
+		virtual void stop(uint32_t channel_id) override
+		{
+		}
 
-		virtual void stop_all_channels() = 0;
+		virtual void stop_all_channels() override
+		{
+		}
 	};
 
 } // namespace bsp

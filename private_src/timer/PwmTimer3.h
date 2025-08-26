@@ -44,7 +44,7 @@ namespace bsp
 
 		virtual uint32_t CounterPeriod() const override
 		{
-			return _handle_context._handle.Init.Period;
+			return _handle_context._handle.Init.Period + 1;
 		}
 
 		virtual void ConfigureOutput(uint32_t channel_id,
