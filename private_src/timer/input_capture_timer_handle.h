@@ -8,6 +8,8 @@ public:
 
 	virtual uint32_t CounterPeriod() = 0;
 
+	virtual void SetCounterPeriodPreloadValue(uint32_t value) = 0;
+
 	virtual void ConfigureChannel(uint32_t channel_id,
 								  base::input_capture_timer::CaptureEdge edge,
 								  uint32_t input_prescaler) = 0;

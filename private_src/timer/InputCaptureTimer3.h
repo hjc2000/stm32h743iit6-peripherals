@@ -48,6 +48,17 @@ namespace bsp
 			return _handle_context._handle.Init.Period + 1;
 		}
 
+		virtual void SetCounterPeriodPreloadValue(uint32_t value) override
+		{
+			if (value == 0)
+			{
+				throw std::invalid_argument{"非法参数。"};
+			}
+
+			_handle_context._handle.Init.Period = value - 1;
+			TIM3->ARR = value - 1;
+		}
+
 		virtual void ConfigureChannel(uint32_t channel_id,
 									  base::input_capture_timer::CaptureEdge edge,
 									  uint32_t input_prescaler) override;

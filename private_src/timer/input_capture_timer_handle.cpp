@@ -34,6 +34,11 @@ uint32_t base::input_capture_timer::counter_period(base::input_capture_timer::in
 	return self.CounterPeriod();
 }
 
+void base::input_capture_timer::set_counter_period_preload_value(base::input_capture_timer::input_capture_timer_handle &self, uint32_t value)
+{
+	self.SetCounterPeriodPreloadValue(value);
+}
+
 void base::input_capture_timer::configure_channel(base::input_capture_timer::input_capture_timer_handle &self,
 												  uint32_t channel_id,
 												  base::input_capture_timer::CaptureEdge edge,
