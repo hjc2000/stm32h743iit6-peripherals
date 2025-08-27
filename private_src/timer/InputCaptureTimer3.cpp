@@ -260,7 +260,7 @@ void bsp::InputCaptureTimer3::SetPeriodElapsedCallback(std::function<void()> con
 
 	base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn));
 	_on_period_elapsed_callback = callback;
-	base::interrupt::enable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn), 10);
+	base::interrupt::enable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn), 5);
 	__HAL_TIM_ENABLE_IT(&_handle_context._handle, TIM_IT_UPDATE);
 }
 
@@ -268,7 +268,7 @@ void bsp::InputCaptureTimer3::SetCaptureCompleteCallback(std::function<void(base
 {
 	base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn));
 	_on_capture_complete_callback = callback;
-	base::interrupt::enable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn), 10);
+	base::interrupt::enable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn), 5);
 }
 
 void bsp::InputCaptureTimer3::Start(uint32_t channel_id)
