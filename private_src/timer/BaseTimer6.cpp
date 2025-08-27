@@ -123,8 +123,8 @@ void bsp::BaseTimer6::Initialize(std::chrono::nanoseconds const &period)
 	InitializeInterrupt();
 }
 
-void bsp::BaseTimer6::SetPeriod(std::chrono::nanoseconds const &period)
+void bsp::BaseTimer6::SetPeriod(std::chrono::nanoseconds const &value)
 {
-	InitializePeriod(period);
+	InitializePeriod(value);
 	TIM_Base_SetConfig(_handle_context._handle.Instance, &_handle_context._handle.Init);
 }
