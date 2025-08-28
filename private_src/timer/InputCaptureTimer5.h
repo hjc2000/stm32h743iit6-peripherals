@@ -52,7 +52,11 @@ namespace bsp
 		{
 			if (value == 0)
 			{
-				throw std::invalid_argument{"非法参数。"};
+				value = 1;
+			}
+			else if (value > UINT16_MAX + 1)
+			{
+				value = UINT16_MAX + 1;
 			}
 
 			_handle_context._handle.Init.Period = value - 1;
