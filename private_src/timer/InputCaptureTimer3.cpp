@@ -25,9 +25,12 @@ void bsp::InputCaptureTimer3::InitializePeriod(std::chrono::nanoseconds const &p
 	}
 
 	base::FactorExtractor<uint64_t> factor_extractor{total_cycle_count};
-	factor_extractor.ExtractConservatively(2, base::pow<uint64_t>(2, 16));
-	factor_extractor.ExtractConservatively(3, base::pow<uint64_t>(2, 16));
-	factor_extractor.ExtractConservatively(5, base::pow<uint64_t>(2, 16));
+
+	// 虽然是 16 位计数器，但是要留有一定的调整的余量，所以将计数值尽量
+	// 限制在 2^16 的一半，即 2^15.
+	factor_extractor.ExtractConservatively(2, base::pow<uint64_t>(2, 15));
+	factor_extractor.ExtractConservatively(3, base::pow<uint64_t>(2, 15));
+	factor_extractor.ExtractConservatively(5, base::pow<uint64_t>(2, 15));
 
 	if (factor_extractor.Factor() > base::pow<uint64_t>(2, 16))
 	{
