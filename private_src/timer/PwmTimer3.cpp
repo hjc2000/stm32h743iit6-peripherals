@@ -183,7 +183,7 @@ void bsp::PwmTimer3::ConfigureOutput(uint32_t channel_id,
 	}
 }
 
-void bsp::PwmTimer3::Start(uint32_t channel_id)
+void bsp::PwmTimer3::StartChannel(uint32_t channel_id)
 {
 	HAL_StatusTypeDef result = HAL_TIM_PWM_Start(&_handle_context._handle,
 												 bsp::channel_id_to_channel_define(channel_id));
@@ -205,7 +205,7 @@ void bsp::PwmTimer3::StartAllChannels()
 	}
 }
 
-void bsp::PwmTimer3::Stop(uint32_t channel_id)
+void bsp::PwmTimer3::StopChannel(uint32_t channel_id)
 {
 	HAL_StatusTypeDef result = HAL_TIM_PWM_Stop(&_handle_context._handle,
 												bsp::channel_id_to_channel_define(channel_id));

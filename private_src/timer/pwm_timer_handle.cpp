@@ -1,4 +1,5 @@
 #include "pwm_timer_handle.h" // IWYU pragma: keep
+#include "base/embedded/timer/pwm_timer_handle.h"
 #include "base/string/define.h"
 #include "PwmTimer3.h"
 #include <stdexcept>
@@ -53,9 +54,19 @@ void base::pwm_timer::configure_output(base::pwm_timer::pwm_timer_handle &self,
 						 dead_time);
 }
 
-void base::pwm_timer::start(base::pwm_timer::pwm_timer_handle &self, uint32_t channel_id)
+void base::pwm_timer::start(base::pwm_timer::pwm_timer_handle &self)
 {
-	self.Start(channel_id);
+	self.Start();
+}
+
+void base::pwm_timer::stop(base::pwm_timer::pwm_timer_handle &self)
+{
+	self.Stop();
+}
+
+void base::pwm_timer::start_channel(base::pwm_timer::pwm_timer_handle &self, uint32_t channel_id)
+{
+	self.StartChannel(channel_id);
 }
 
 void base::pwm_timer::start_all_channels(base::pwm_timer::pwm_timer_handle &self)
@@ -63,9 +74,9 @@ void base::pwm_timer::start_all_channels(base::pwm_timer::pwm_timer_handle &self
 	self.StartAllChannels();
 }
 
-void base::pwm_timer::stop(base::pwm_timer::pwm_timer_handle &self, uint32_t channel_id)
+void base::pwm_timer::stop_channel(base::pwm_timer::pwm_timer_handle &self, uint32_t channel_id)
 {
-	self.Stop(channel_id);
+	self.StopChannel(channel_id);
 }
 
 void base::pwm_timer::stop_all_channels(base::pwm_timer::pwm_timer_handle &self)
