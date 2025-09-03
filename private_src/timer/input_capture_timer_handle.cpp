@@ -1,4 +1,5 @@
 #include "input_capture_timer_handle.h" // IWYU pragma: keep
+#include "base/embedded/timer/input_capture_timer_handle.h"
 #include "base/string/define.h"
 #include "InputCaptureTimer3.h"
 #include "InputCaptureTimer5.h"
@@ -70,9 +71,19 @@ void base::input_capture_timer::set_capture_complete_callback(base::input_captur
 	self.SetCaptureCompleteCallback(callback);
 }
 
-void base::input_capture_timer::start(base::input_capture_timer::input_capture_timer_handle &self, uint32_t channel_id)
+void base::input_capture_timer::start(base::input_capture_timer::input_capture_timer_handle &self)
 {
-	self.Start(channel_id);
+	self.Start();
+}
+
+void base::input_capture_timer::stop(base::input_capture_timer::input_capture_timer_handle &self)
+{
+	self.Stop();
+}
+
+void base::input_capture_timer::start_channel(base::input_capture_timer::input_capture_timer_handle &self, uint32_t channel_id)
+{
+	self.StartChannel(channel_id);
 }
 
 void base::input_capture_timer::start_all_channels(base::input_capture_timer::input_capture_timer_handle &self)
@@ -80,9 +91,9 @@ void base::input_capture_timer::start_all_channels(base::input_capture_timer::in
 	self.StartAllChannels();
 }
 
-void base::input_capture_timer::stop(base::input_capture_timer::input_capture_timer_handle &self, uint32_t channel_id)
+void base::input_capture_timer::stop_channel(base::input_capture_timer::input_capture_timer_handle &self, uint32_t channel_id)
 {
-	self.Stop(channel_id);
+	self.StopChannel(channel_id);
 }
 
 void base::input_capture_timer::stop_all_channels(base::input_capture_timer::input_capture_timer_handle &self)

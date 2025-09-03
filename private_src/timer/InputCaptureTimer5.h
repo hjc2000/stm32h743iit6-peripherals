@@ -78,11 +78,21 @@ namespace bsp
 
 		virtual void SetCaptureCompleteCallback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback) override;
 
-		virtual void Start(uint32_t channel_id) override;
+		virtual void Start() override
+		{
+			HAL_TIM_Base_Start_IT(&_handle_context._handle);
+		}
+
+		virtual void Stop() override
+		{
+			HAL_TIM_Base_Stop_IT(&_handle_context._handle);
+		}
+
+		virtual void StartChannel(uint32_t channel_id) override;
 
 		virtual void StartAllChannels() override;
 
-		virtual void Stop(uint32_t channel_id) override;
+		virtual void StopChannel(uint32_t channel_id) override;
 
 		virtual void StopAllChannels() override;
 	};

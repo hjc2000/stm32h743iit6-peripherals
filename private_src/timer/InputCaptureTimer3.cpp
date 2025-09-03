@@ -274,7 +274,7 @@ void bsp::InputCaptureTimer3::SetCaptureCompleteCallback(std::function<void(base
 	base::interrupt::enable_interrupt(static_cast<int32_t>(IRQn_Type::TIM3_IRQn), 5);
 }
 
-void bsp::InputCaptureTimer3::Start(uint32_t channel_id)
+void bsp::InputCaptureTimer3::StartChannel(uint32_t channel_id)
 {
 	HAL_StatusTypeDef result = HAL_TIM_IC_Start_IT(&_handle_context._handle,
 												   bsp::channel_id_to_channel_define(channel_id));
@@ -296,7 +296,7 @@ void bsp::InputCaptureTimer3::StartAllChannels()
 	}
 }
 
-void bsp::InputCaptureTimer3::Stop(uint32_t channel_id)
+void bsp::InputCaptureTimer3::StopChannel(uint32_t channel_id)
 {
 	HAL_StatusTypeDef result = HAL_TIM_IC_Stop_IT(&_handle_context._handle,
 												  bsp::channel_id_to_channel_define(channel_id));

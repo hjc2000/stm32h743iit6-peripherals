@@ -22,11 +22,15 @@ public:
 
 	virtual void SetCaptureCompleteCallback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback) = 0;
 
-	virtual void Start(uint32_t channel_id) = 0;
+	virtual void Start() = 0;
+
+	virtual void Stop() = 0;
+
+	virtual void StartChannel(uint32_t channel_id) = 0;
 
 	virtual void StartAllChannels() = 0;
 
-	virtual void Stop(uint32_t channel_id) = 0;
+	virtual void StopChannel(uint32_t channel_id) = 0;
 
 	virtual void StopAllChannels() = 0;
 };
