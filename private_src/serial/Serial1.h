@@ -56,9 +56,9 @@ namespace bsp
 		int32_t HaveRead();
 
 		/* #region 被中断处理函数回调的函数 */
-		static_function void OnReceiveEventCallback(UART_HandleTypeDef *huart, uint16_t pos);
-		static_function void OnSendCompleteCallback(UART_HandleTypeDef *huart);
-		static_function void OnReadTimeout(UART_HandleTypeDef *huart);
+		static void OnReceiveEventCallback(UART_HandleTypeDef *huart, uint16_t pos);
+		static void OnSendCompleteCallback(UART_HandleTypeDef *huart);
+		static void OnReadTimeout(UART_HandleTypeDef *huart);
 		/* #endregion */
 
 		void SetReadTimeoutByBaudCount(uint32_t value);
