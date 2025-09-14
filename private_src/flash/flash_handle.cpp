@@ -1,6 +1,22 @@
 #include "flash_handle.h" // IWYU pragma: keep
+#include "base/string/define.h"
+#include "RamFlash.h"
+#include <stdexcept>
 
-std::shared_ptr<base::flash::flash_handle> base::flash::open(uint32_t id);
+std::shared_ptr<base::flash::flash_handle> base::flash::open(uint32_t id)
+{
+	switch (id)
+	{
+	case 1:
+		{
+			return std::shared_ptr<base::flash::flash_handle>{new bsp::RamFlash{}};
+		}
+	default:
+		{
+			throw std::invalid_argument{CODE_POS_STR + "非法 ID."};
+		}
+	}
+}
 
 void base::flash::initialize(base::flash::flash_handle &self)
 {
