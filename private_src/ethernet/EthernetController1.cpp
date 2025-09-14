@@ -3,8 +3,27 @@
 #include "base/embedded/cache/cache.h"
 #include "base/embedded/ethernet/ethernet_controller_handle.h"
 #include "base/embedded/interrupt/interrupt.h"
-#include "bsp-interface/di/interrupt.h"
 #include "hal.h"
+
+namespace
+{
+	std::function<void()> _ethernet_isr;
+}
+
+extern "C"
+{
+	///
+	/// @brief 以太网中断服务函数。
+	/// @param
+	///
+	void ETH_IRQHandler(void)
+	{
+		if (_ethernet_isr)
+		{
+			_ethernet_isr();
+		}
+	}
+}
 
 bsp::EthernetController1::EthernetController1()
 {
@@ -155,11 +174,10 @@ void bsp::EthernetController1::Initialize(base::ethernet::InterfaceType interfac
 	// freertos 无法屏蔽的中断中禁止使用 freertos 的 API.
 	base::interrupt::enable_interrupt(static_cast<uint32_t>(ETH_IRQn), 5);
 
-	bsp::di::interrupt::IsrManager().AddIsr(static_cast<uint32_t>(ETH_IRQn),
-											[&]()
-											{
-												HAL_ETH_IRQHandler(&_handle_context._handle);
-											});
+	_ethernet_isr = [&]()
+	{
+		HAL_ETH_IRQHandler(&_handle_context._handle);
+	};
 }
 
 uint32_t bsp::EthernetController1::ReadPHYRegister(uint32_t register_index)
