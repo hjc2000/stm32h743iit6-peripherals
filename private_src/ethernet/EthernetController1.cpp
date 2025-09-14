@@ -18,7 +18,7 @@ extern "C"
 	///
 	void ETH_IRQHandler(void)
 	{
-		if (_ethernet_isr)
+		if (_ethernet_isr != nullptr)
 		{
 			_ethernet_isr();
 		}

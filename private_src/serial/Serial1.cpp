@@ -23,34 +23,25 @@ extern "C"
 {
 	void USART1_IRQHandler()
 	{
-		try
+		if (_uart1_isr != nullptr)
 		{
 			_uart1_isr();
-		}
-		catch (...)
-		{
 		}
 	}
 
 	void DMA1_Stream0_IRQHandler()
 	{
-		try
+		if (_dma1_stream0_isr != nullptr)
 		{
 			_dma1_stream0_isr();
-		}
-		catch (...)
-		{
 		}
 	}
 
 	void DMA1_Stream1_IRQHandler()
 	{
-		try
+		if (_dma1_stream1_isr != nullptr)
 		{
 			_dma1_stream1_isr();
-		}
-		catch (...)
-		{
 		}
 	}
 }
