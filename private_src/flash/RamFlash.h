@@ -38,21 +38,54 @@ namespace bsp
 
 		virtual void EraseSector(int64_t sector_index) override
 		{
-			_ram_flash.EraseSector(sector_index);
+			try
+			{
+				_ram_flash.EraseSector(sector_index);
+			}
+			catch (std::exception const &e)
+			{
+				throw std::runtime_error{CODE_POS_STR + e.what()};
+			}
+			catch (...)
+			{
+				throw std::runtime_error{CODE_POS_STR + "未知的异常。"};
+			}
 		}
 
 		virtual void ReadSector(int64_t sector_index,
 								int64_t offset,
 								base::Span const &span) override
 		{
-			_ram_flash.ReadSector(sector_index, offset, span);
+			try
+			{
+				_ram_flash.ReadSector(sector_index, offset, span);
+			}
+			catch (std::exception const &e)
+			{
+				throw std::runtime_error{CODE_POS_STR + e.what()};
+			}
+			catch (...)
+			{
+				throw std::runtime_error{CODE_POS_STR + "未知的异常。"};
+			}
 		}
 
 		virtual void ProgramSector(int64_t sector_index,
 								   int64_t offset,
 								   base::ReadOnlySpan const &span) override
 		{
-			_ram_flash.ProgramSector(sector_index, offset, span);
+			try
+			{
+				_ram_flash.ProgramSector(sector_index, offset, span);
+			}
+			catch (std::exception const &e)
+			{
+				throw std::runtime_error{CODE_POS_STR + e.what()};
+			}
+			catch (...)
+			{
+				throw std::runtime_error{CODE_POS_STR + "未知的异常。"};
+			}
 		}
 	};
 
