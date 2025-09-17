@@ -1,0 +1,17 @@
+#include "Apb1Timer.h" // IWYU pragma: keep
+#include "Pclk1ClockSignal.h"
+
+base::unit::MHz bsp::Apb1Timer::ClockSourceFrequency()
+{
+	// APB1 总线上的定时器的时钟源是 PCLK1 再经过一个倍频器。当 PCLK1 的输入分频系数大于 1
+	// 时，这个倍频器会把 PCLK1 的频率乘 2, 如果 PCLK1 的输入分频系数为 1, 则不
+	// 倍频。
+	bsp::Pclk1ClockSignal pclk1{};
+	base::unit::MHz freq = pclk1.Frequency();
+	if (pclk1.InputDivider() > 1)
+	{
+		freq *= 2;
+	}
+
+	return freq;
+}
