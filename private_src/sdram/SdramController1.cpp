@@ -1,5 +1,6 @@
 #include "SdramController1.h"
 #include "base/embedded/clock/ClockSource.h"
+#include "define.h"
 
 void bsp::SdramController1::InitializeAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
 													  base::sdram::BankCount const &bank_count,
@@ -24,29 +25,7 @@ void bsp::SdramController1::InitializeAsReadBurstMode(base::sdram::ISDRAMTimingP
 	_handle.Init.WriteProtection = FMC_SDRAM_WRITE_PROTECTION_DISABLE;
 	_handle.Init.ReadBurst = FMC_SDRAM_RBURST_ENABLE;
 	_handle.Init.ReadPipeDelay = FMC_SDRAM_RPIPE_DELAY_2;
-
-	switch (row_bit_count.Value())
-	{
-	case 11:
-		{
-			_handle.Init.RowBitsNumber = FMC_SDRAM_ROW_BITS_NUM_11;
-			break;
-		}
-	case 12:
-		{
-			_handle.Init.RowBitsNumber = FMC_SDRAM_ROW_BITS_NUM_12;
-			break;
-		}
-	case 13:
-		{
-			_handle.Init.RowBitsNumber = FMC_SDRAM_ROW_BITS_NUM_13;
-			break;
-		}
-	default:
-		{
-			throw std::invalid_argument{"不支持的行地址位数。"};
-		}
-	}
+	_handle.Init.RowBitsNumber = bsp::sdram::row_bit_count_to_define(row_bit_count);
 
 	switch (column_bit_count.Value())
 	{
