@@ -25,27 +25,10 @@ void bsp::SdramController1::InitializeAsReadBurstMode(base::sdram::ISDRAMTimingP
 	_handle.Init.WriteProtection = FMC_SDRAM_WRITE_PROTECTION_DISABLE;
 	_handle.Init.ReadBurst = FMC_SDRAM_RBURST_ENABLE;
 	_handle.Init.ReadPipeDelay = FMC_SDRAM_RPIPE_DELAY_2;
+	_handle.Init.InternalBankNumber = bsp::sdram::bank_count_to_define(bank_count);
 	_handle.Init.RowBitsNumber = bsp::sdram::row_bit_count_to_define(row_bit_count);
 	_handle.Init.ColumnBitsNumber = bsp::sdram::column_bit_count_to_define(column_bit_count);
 	_handle.Init.MemoryDataWidth = bsp::sdram::data_width_to_define(data_width);
-
-	switch (bank_count.Value())
-	{
-	case 2:
-		{
-			_handle.Init.InternalBankNumber = FMC_SDRAM_INTERN_BANKS_NUM_2;
-			break;
-		}
-	case 4:
-		{
-			_handle.Init.InternalBankNumber = FMC_SDRAM_INTERN_BANKS_NUM_4;
-			break;
-		}
-	default:
-		{
-			throw std::invalid_argument{"不支持的 BANK 数量。"};
-		}
-	}
 
 	// 初始化 _timing
 	{
@@ -65,28 +48,7 @@ void bsp::SdramController1::InitializeAsReadBurstMode(base::sdram::ISDRAMTimingP
 		_timing = timing_provider.GetTiming(base::unit::MHz{hclk_freq / hclk_div});
 	}
 
-	switch (_timing.cas_latency())
-	{
-	case 1:
-		{
-			_handle.Init.CASLatency = FMC_SDRAM_CAS_LATENCY_1;
-			break;
-		}
-	case 2:
-		{
-			_handle.Init.CASLatency = FMC_SDRAM_CAS_LATENCY_2;
-			break;
-		}
-	case 3:
-		{
-			_handle.Init.CASLatency = FMC_SDRAM_CAS_LATENCY_3;
-			break;
-		}
-	default:
-		{
-			throw std::invalid_argument{"不支持的 CASLatency."};
-		}
-	}
+	_handle.Init.CASLatency = bsp::sdram::cas_latency_value_to_define(_timing.cas_latency());
 
 	FMC_SDRAM_TimingTypeDef timing_def{};
 	timing_def.LoadToActiveDelay = _timing.t_rsc_clock_cycle_count();

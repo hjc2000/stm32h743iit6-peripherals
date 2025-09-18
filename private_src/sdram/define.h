@@ -9,6 +9,25 @@ namespace bsp
 {
 	namespace sdram
 	{
+		constexpr uint32_t bank_count_to_define(base::sdram::BankCount const &bank_count)
+		{
+			switch (bank_count.Value())
+			{
+			case 2:
+				{
+					return FMC_SDRAM_INTERN_BANKS_NUM_2;
+				}
+			case 4:
+				{
+					return FMC_SDRAM_INTERN_BANKS_NUM_4;
+				}
+			default:
+				{
+					throw std::invalid_argument{CODE_POS_STR + "不支持的 BANK 数量。"};
+				}
+			}
+		}
+
 		///
 		/// @brief 将行地址位数参数转换为 HAL 库的宏定义。
 		///
@@ -96,6 +115,35 @@ namespace bsp
 			default:
 				{
 					throw std::invalid_argument{CODE_POS_STR + "不支持的数据宽度。"};
+				}
+			}
+		}
+
+		///
+		/// @brief
+		///
+		/// @param cas_latency
+		/// @return
+		///
+		constexpr uint32_t cas_latency_value_to_define(uint32_t cas_latency)
+		{
+			switch (cas_latency)
+			{
+			case 1:
+				{
+					return FMC_SDRAM_CAS_LATENCY_1;
+				}
+			case 2:
+				{
+					return FMC_SDRAM_CAS_LATENCY_2;
+				}
+			case 3:
+				{
+					return FMC_SDRAM_CAS_LATENCY_3;
+				}
+			default:
+				{
+					throw std::invalid_argument{CODE_POS_STR + "不支持的 CASLatency."};
 				}
 			}
 		}
