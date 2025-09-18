@@ -1,4 +1,5 @@
 #pragma once
+#include "base/unit/MHz.h"
 #include <string>
 
 namespace bsp
@@ -11,5 +12,7 @@ namespace bsp
 	/// @param clock_source_name
 	///
 	void config_fmc_clock_source(std::string const &clock_source_name);
+
+	base::unit::MHz get_fmc_clock_source_frequency(std::string const &clock_source_name);
 
 } // namespace bsp

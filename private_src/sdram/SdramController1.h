@@ -55,6 +55,8 @@ namespace bsp
 		///
 		/// @brief 将 SDRAM 控制器以读突发的模式打开。写不突发。
 		///
+		/// @param clock_source_name
+		/// @param divider
 		/// @param timing_provider
 		/// @param bank_count
 		/// @param row_bit_count
@@ -62,12 +64,14 @@ namespace bsp
 		/// @param data_width
 		/// @param read_burst_length
 		///
-		void InitializeAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
-									   base::sdram::BankCount const &bank_count,
-									   base::sdram::RowBitCount const &row_bit_count,
-									   base::sdram::ColumnBitCount const &column_bit_count,
-									   base::sdram::DataWidth const &data_width,
-									   base::sdram::ReadBurstLength const &read_burst_length) override;
+		virtual void InitializeAsReadBurstMode(std::string const &clock_source_name,
+											   uint32_t divider,
+											   base::sdram::ISDRAMTimingProvider const &timing_provider,
+											   base::sdram::BankCount const &bank_count,
+											   base::sdram::RowBitCount const &row_bit_count,
+											   base::sdram::ColumnBitCount const &column_bit_count,
+											   base::sdram::DataWidth const &data_width,
+											   base::sdram::ReadBurstLength const &read_burst_length) override;
 
 		///
 		/// @brief 将输入信号置于空操作命令状态，然后开始向 SDRAM 提供 CLK 信号。

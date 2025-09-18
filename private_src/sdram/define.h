@@ -9,6 +9,25 @@ namespace bsp
 {
 	namespace sdram
 	{
+		constexpr uint32_t clock_source_divider_value_to_define(uint32_t divider)
+		{
+			switch (divider)
+			{
+			case 2:
+				{
+					return FMC_SDRAM_CLOCK_PERIOD_2;
+				}
+			case 3:
+				{
+					return FMC_SDRAM_CLOCK_PERIOD_3;
+				}
+			default:
+				{
+					throw std::invalid_argument{CODE_POS_STR + "非法分频系数。"};
+				}
+			}
+		}
+
 		constexpr uint32_t bank_count_to_define(base::sdram::BankCount const &bank_count)
 		{
 			switch (bank_count.Value())

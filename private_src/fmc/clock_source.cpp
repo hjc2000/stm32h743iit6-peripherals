@@ -1,4 +1,5 @@
 #include "clock_source.h" // IWYU pragma: keep
+#include "base/embedded/clock/ClockSource.h"
 #include "base/string/define.h"
 #include "hal.h"
 #include <stdexcept>
@@ -57,6 +58,18 @@ void bsp::config_fmc_clock_source(std::string const &clock_source_name)
 		}
 
 		return;
+	}
+
+	throw std::invalid_argument{CODE_POS_STR + "无效的时钟源名称。"};
+}
+
+base::unit::MHz bsp::get_fmc_clock_source_frequency(std::string const &clock_source_name)
+{
+	if (clock_source_name == "hclk3")
+	{
+		base::clock::ClockSource clock_source{"hclk"};
+		base::unit::MHz clock_source_freq = clock_source.Frequency();
+		return clock_source_freq;
 	}
 
 	throw std::invalid_argument{CODE_POS_STR + "无效的时钟源名称。"};

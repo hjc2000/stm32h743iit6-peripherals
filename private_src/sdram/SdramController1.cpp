@@ -1,8 +1,10 @@
 #include "SdramController1.h"
-#include "base/embedded/clock/ClockSource.h"
+#include "clock_source.h"
 #include "define.h"
 
-void bsp::SdramController1::InitializeAsReadBurstMode(base::sdram::ISDRAMTimingProvider const &timing_provider,
+void bsp::SdramController1::InitializeAsReadBurstMode(std::string const &clock_source_name,
+													  uint32_t divider,
+													  base::sdram::ISDRAMTimingProvider const &timing_provider,
 													  base::sdram::BankCount const &bank_count,
 													  base::sdram::RowBitCount const &row_bit_count,
 													  base::sdram::ColumnBitCount const &column_bit_count,
@@ -19,6 +21,10 @@ void bsp::SdramController1::InitializeAsReadBurstMode(base::sdram::ISDRAMTimingP
 					   MPU_ACCESS_BUFFERABLE);   /* 允许缓冲 */
 
 	__HAL_RCC_FMC_CLK_ENABLE();
+	bsp::config_fmc_clock_source(clock_source_name);
+
+	base::unit::MHz clock_source_freq = get_fmc_clock_source_frequency(clock_source_name);
+	_timing = timing_provider.GetTiming(base::unit::MHz{clock_source_freq / divider});
 
 	_handle.Instance = FMC_SDRAM_DEVICE;
 	_handle.Init.SDBank = FMC_SDRAM_BANK1;
@@ -29,25 +35,7 @@ void bsp::SdramController1::InitializeAsReadBurstMode(base::sdram::ISDRAMTimingP
 	_handle.Init.RowBitsNumber = bsp::sdram::row_bit_count_to_define(row_bit_count);
 	_handle.Init.ColumnBitsNumber = bsp::sdram::column_bit_count_to_define(column_bit_count);
 	_handle.Init.MemoryDataWidth = bsp::sdram::data_width_to_define(data_width);
-
-	// 初始化 _timing
-	{
-		base::clock::ClockSource hclk{"hclk"};
-		base::unit::MHz hclk_freq = hclk.Frequency();
-
-		// 分频系数
-		int hclk_div = 2;
-		_handle.Init.SDClockPeriod = FMC_SDRAM_CLOCK_PERIOD_2;
-
-		if (hclk_freq / hclk_div > timing_provider.MaxClockFrequency())
-		{
-			hclk_div = 3;
-			_handle.Init.SDClockPeriod = FMC_SDRAM_CLOCK_PERIOD_3;
-		}
-
-		_timing = timing_provider.GetTiming(base::unit::MHz{hclk_freq / hclk_div});
-	}
-
+	_handle.Init.SDClockPeriod = bsp::sdram::clock_source_divider_value_to_define(divider);
 	_handle.Init.CASLatency = bsp::sdram::cas_latency_value_to_define(_timing.cas_latency());
 
 	FMC_SDRAM_TimingTypeDef timing_def{};

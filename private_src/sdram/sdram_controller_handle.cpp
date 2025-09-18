@@ -8,6 +8,8 @@ std::shared_ptr<base::sdram::sdram_controller_handle> base::sdram::open(uint32_t
 }
 
 void base::sdram::initialize_as_read_burst_mode(base::sdram::sdram_controller_handle &h,
+												std::string const &clock_source_name,
+												uint32_t divider,
 												base::sdram::ISDRAMTimingProvider const &timing_provider,
 												base::sdram::BankCount const &bank_count,
 												base::sdram::RowBitCount const &row_bit_count,
@@ -15,7 +17,9 @@ void base::sdram::initialize_as_read_burst_mode(base::sdram::sdram_controller_ha
 												base::sdram::DataWidth const &data_width,
 												base::sdram::ReadBurstLength const &read_burst_length)
 {
-	h.InitializeAsReadBurstMode(timing_provider,
+	h.InitializeAsReadBurstMode(clock_source_name,
+								divider,
+								timing_provider,
 								bank_count,
 								row_bit_count,
 								column_bit_count,
