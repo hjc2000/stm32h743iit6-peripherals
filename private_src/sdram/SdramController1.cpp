@@ -26,34 +26,7 @@ void bsp::SdramController1::InitializeAsReadBurstMode(base::sdram::ISDRAMTimingP
 	_handle.Init.ReadBurst = FMC_SDRAM_RBURST_ENABLE;
 	_handle.Init.ReadPipeDelay = FMC_SDRAM_RPIPE_DELAY_2;
 	_handle.Init.RowBitsNumber = bsp::sdram::row_bit_count_to_define(row_bit_count);
-
-	switch (column_bit_count.Value())
-	{
-	case 8:
-		{
-			_handle.Init.ColumnBitsNumber = FMC_SDRAM_COLUMN_BITS_NUM_8;
-			break;
-		}
-	case 9:
-		{
-			_handle.Init.ColumnBitsNumber = FMC_SDRAM_COLUMN_BITS_NUM_9;
-			break;
-		}
-	case 10:
-		{
-			_handle.Init.ColumnBitsNumber = FMC_SDRAM_COLUMN_BITS_NUM_10;
-			break;
-		}
-	case 11:
-		{
-			_handle.Init.ColumnBitsNumber = FMC_SDRAM_COLUMN_BITS_NUM_11;
-			break;
-		}
-	default:
-		{
-			throw std::invalid_argument{"不支持的列地址位数。"};
-		}
-	}
+	_handle.Init.ColumnBitsNumber = bsp::sdram::column_bit_count_to_define(column_bit_count);
 
 	switch (data_width.Value())
 	{
