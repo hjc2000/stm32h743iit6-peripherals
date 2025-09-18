@@ -71,6 +71,35 @@ namespace bsp
 			}
 		}
 
+		///
+		/// @brief 将数据宽度参数转换为 HAL 库的宏定义。
+		///
+		/// @param data_width
+		/// @return
+		///
+		constexpr uint32_t data_width_to_define(base::sdram::DataWidth const &data_width)
+		{
+			switch (data_width.Value())
+			{
+			case 8:
+				{
+					return FMC_SDRAM_MEM_BUS_WIDTH_8;
+				}
+			case 16:
+				{
+					return FMC_SDRAM_MEM_BUS_WIDTH_16;
+				}
+			case 32:
+				{
+					return FMC_SDRAM_MEM_BUS_WIDTH_32;
+				}
+			default:
+				{
+					throw std::invalid_argument{CODE_POS_STR + "不支持的数据宽度。"};
+				}
+			}
+		}
+
 	} // namespace sdram
 
 } // namespace bsp

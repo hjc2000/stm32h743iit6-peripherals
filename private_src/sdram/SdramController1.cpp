@@ -27,29 +27,7 @@ void bsp::SdramController1::InitializeAsReadBurstMode(base::sdram::ISDRAMTimingP
 	_handle.Init.ReadPipeDelay = FMC_SDRAM_RPIPE_DELAY_2;
 	_handle.Init.RowBitsNumber = bsp::sdram::row_bit_count_to_define(row_bit_count);
 	_handle.Init.ColumnBitsNumber = bsp::sdram::column_bit_count_to_define(column_bit_count);
-
-	switch (data_width.Value())
-	{
-	case 8:
-		{
-			_handle.Init.MemoryDataWidth = FMC_SDRAM_MEM_BUS_WIDTH_8;
-			break;
-		}
-	case 16:
-		{
-			_handle.Init.MemoryDataWidth = FMC_SDRAM_MEM_BUS_WIDTH_16;
-			break;
-		}
-	case 32:
-		{
-			_handle.Init.MemoryDataWidth = FMC_SDRAM_MEM_BUS_WIDTH_32;
-			break;
-		}
-	default:
-		{
-			throw std::invalid_argument{"不支持的数据宽度。"};
-		}
-	}
+	_handle.Init.MemoryDataWidth = bsp::sdram::data_width_to_define(data_width);
 
 	switch (bank_count.Value())
 	{
