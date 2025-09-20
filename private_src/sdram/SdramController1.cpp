@@ -1,4 +1,5 @@
 #include "SdramController1.h"
+#include "check.h"
 #include "clock_source.h"
 #include "define.h"
 
@@ -46,6 +47,7 @@ void bsp::SdramController1::InitializeAsReadBurstMode(std::string const &clock_s
 	timing_def.WriteRecoveryTime = _timing.t_wr_clock_cycle_count();
 	timing_def.RPDelay = _timing.t_rp_clock_cycle_count();
 	timing_def.RCDDelay = _timing.t_rcd_clock_cycle_count();
+	bsp::sdram::check(timing_def);
 
 	HAL_SDRAM_Init(&_handle, &timing_def);
 	PowerUp();
