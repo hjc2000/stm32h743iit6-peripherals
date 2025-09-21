@@ -24,6 +24,50 @@ namespace bsp
 		base::UsageStateManager<UsbFsPcd> _usage_state_manager{};
 		handle_context _handle_context{this};
 
+		void OnSofCallback()
+		{
+		}
+
+		void OnSetupStageCallback()
+		{
+		}
+
+		void OnResetCallback()
+		{
+		}
+
+		void OnSuspendCallback()
+		{
+		}
+
+		void OnResumeCallback()
+		{
+		}
+
+		void OnConnectCallback()
+		{
+		}
+
+		void OnDisconnectCallback()
+		{
+		}
+
+		void OnDataOutStageCallback(uint8_t epnum)
+		{
+		}
+
+		void OnDataInStageCallback(uint8_t epnum)
+		{
+		}
+
+		void OnISOOUTIncompleteCallback(uint8_t epnum)
+		{
+		}
+
+		void OnISOINIncompleteCallback(uint8_t epnum)
+		{
+		}
+
 	public:
 		virtual void InitializeAsDevice(std::string const &clock_source_name,
 										uint32_t divider,
