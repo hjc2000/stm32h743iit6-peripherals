@@ -1,7 +1,9 @@
 #pragma once
+#include "base/embedded/usb/usb_fs_pcd_handle.h"
 #include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
 #include "usb_fs_pcd_handle.h"
+#include <cstdint>
 
 namespace bsp
 {
@@ -71,6 +73,11 @@ namespace bsp
 		}
 
 	public:
+		UsbFsPcd()
+		{
+			base::usb_fs_pcd::msp_initialize(1);
+		}
+
 		virtual void InitializeAsDevice(std::string const &clock_source_name,
 										uint32_t divider,
 										base::usb_fs_pcd::PhyType phy_type) override;
