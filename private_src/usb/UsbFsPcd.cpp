@@ -77,6 +77,7 @@ void bsp::UsbFsPcd::InitializeAsDevice(std::string const &clock_source_name,
 									   base::usb_fs_pcd::PhyType phy_type)
 {
 	__HAL_RCC_USB_OTG_FS_CLK_ENABLE();
+	HAL_PWREx_EnableUSBVoltageDetector();
 
 	_handle_context._handle.Instance = USB_OTG_FS;
 	_handle_context._handle.Init.dev_endpoints = 9;

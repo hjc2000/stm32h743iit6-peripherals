@@ -28,6 +28,8 @@ namespace bsp
 
 		void InitializeCallback();
 
+		/* #region USB 回调 */
+
 		void OnSofCallback()
 		{
 		}
@@ -71,6 +73,8 @@ namespace bsp
 		void OnISOINIncompleteCallback(uint8_t epnum)
 		{
 		}
+
+		/* #endregion */
 
 	public:
 		UsbFsPcd()
