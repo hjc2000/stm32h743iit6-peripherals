@@ -1,5 +1,7 @@
 #include "UsbFsPcd.h"
+#include "base/embedded/interrupt/interrupt.h"
 #include "stm32_hal_legacy.h"
+#include <cstdint>
 
 void bsp::UsbFsPcd::InitializeCallback()
 {
@@ -93,6 +95,7 @@ void bsp::UsbFsPcd::InitializeAsDevice(std::string const &clock_source_name,
 	}
 
 	InitializeCallback();
+	base::interrupt::enable_interrupt(static_cast<int32_t>(IRQn_Type::OTG_FS_IRQn), 5);
 
 	HAL_PCDEx_SetRxFiFo(&_handle_context._handle, 0x80);
 	HAL_PCDEx_SetTxFiFo(&_handle_context._handle, 0, 0x40);
