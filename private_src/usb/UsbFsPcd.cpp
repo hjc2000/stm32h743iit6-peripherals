@@ -1,25 +1,7 @@
 #include "UsbFsPcd.h"
 
-void bsp::UsbFsPcd::InitializeAsDevice(std::string const &clock_source_name,
-									   uint32_t divider,
-									   base::usb_fs_pcd::PhyType phy_type)
+void bsp::UsbFsPcd::InitializeCallback()
 {
-	_handle_context._handle.Instance = USB_OTG_FS;
-	_handle_context._handle.Init.dev_endpoints = 9;
-	_handle_context._handle.Init.speed = PCD_SPEED_FULL;
-	_handle_context._handle.Init.dma_enable = FunctionalState::DISABLE;
-	_handle_context._handle.Init.phy_itface = PCD_PHY_EMBEDDED;
-	_handle_context._handle.Init.Sof_enable = FunctionalState::DISABLE;
-	_handle_context._handle.Init.low_power_enable = FunctionalState::DISABLE;
-	_handle_context._handle.Init.lpm_enable = FunctionalState::DISABLE;
-	_handle_context._handle.Init.battery_charging_enable = FunctionalState::DISABLE;
-	_handle_context._handle.Init.vbus_sensing_enable = FunctionalState::DISABLE;
-	_handle_context._handle.Init.use_dedicated_ep1 = FunctionalState::DISABLE;
-	if (HAL_PCD_Init(&_handle_context._handle) != HAL_StatusTypeDef::HAL_OK)
-	{
-		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
-	}
-
 	_handle_context._handle.SOFCallback = [](PCD_HandleTypeDef *handle)
 	{
 		UsbFsPcd *self = reinterpret_cast<handle_context *>(handle)->_self;
@@ -85,6 +67,29 @@ void bsp::UsbFsPcd::InitializeAsDevice(std::string const &clock_source_name,
 		UsbFsPcd *self = reinterpret_cast<handle_context *>(handle)->_self;
 		self->OnISOINIncompleteCallback(epnum);
 	};
+}
+
+void bsp::UsbFsPcd::InitializeAsDevice(std::string const &clock_source_name,
+									   uint32_t divider,
+									   base::usb_fs_pcd::PhyType phy_type)
+{
+	_handle_context._handle.Instance = USB_OTG_FS;
+	_handle_context._handle.Init.dev_endpoints = 9;
+	_handle_context._handle.Init.speed = PCD_SPEED_FULL;
+	_handle_context._handle.Init.dma_enable = FunctionalState::DISABLE;
+	_handle_context._handle.Init.phy_itface = PCD_PHY_EMBEDDED;
+	_handle_context._handle.Init.Sof_enable = FunctionalState::DISABLE;
+	_handle_context._handle.Init.low_power_enable = FunctionalState::DISABLE;
+	_handle_context._handle.Init.lpm_enable = FunctionalState::DISABLE;
+	_handle_context._handle.Init.battery_charging_enable = FunctionalState::DISABLE;
+	_handle_context._handle.Init.vbus_sensing_enable = FunctionalState::DISABLE;
+	_handle_context._handle.Init.use_dedicated_ep1 = FunctionalState::DISABLE;
+	if (HAL_PCD_Init(&_handle_context._handle) != HAL_StatusTypeDef::HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
+	}
+
+	InitializeCallback();
 
 	HAL_PCDEx_SetRxFiFo(&_handle_context._handle, 0x80);
 	HAL_PCDEx_SetTxFiFo(&_handle_context._handle, 0, 0x40);

@@ -24,6 +24,8 @@ namespace bsp
 		base::UsageStateManager<UsbFsPcd> _usage_state_manager{};
 		handle_context _handle_context{this};
 
+		void InitializeCallback();
+
 		void OnSofCallback()
 		{
 		}
