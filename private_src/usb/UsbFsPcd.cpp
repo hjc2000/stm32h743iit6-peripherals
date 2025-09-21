@@ -1,4 +1,5 @@
 #include "UsbFsPcd.h"
+#include "stm32_hal_legacy.h"
 
 void bsp::UsbFsPcd::InitializeCallback()
 {
@@ -73,6 +74,8 @@ void bsp::UsbFsPcd::InitializeAsDevice(std::string const &clock_source_name,
 									   uint32_t divider,
 									   base::usb_fs_pcd::PhyType phy_type)
 {
+	__HAL_RCC_USB_OTG_FS_CLK_ENABLE();
+
 	_handle_context._handle.Instance = USB_OTG_FS;
 	_handle_context._handle.Init.dev_endpoints = 9;
 	_handle_context._handle.Init.speed = PCD_SPEED_FULL;
