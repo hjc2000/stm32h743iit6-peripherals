@@ -1,6 +1,11 @@
 #include "usb_fs_pcd_handle.h"
+#include "UsbFsPcd.h"
+#include <memory>
 
-std::shared_ptr<base::usb_fs_pcd::usb_fs_pcd_handle> base::usb_fs_pcd::open(uint32_t id);
+std::shared_ptr<base::usb_fs_pcd::usb_fs_pcd_handle> base::usb_fs_pcd::open(uint32_t id)
+{
+	return std::shared_ptr<base::usb_fs_pcd::usb_fs_pcd_handle>{new bsp::UsbFsPcd{}};
+}
 
 void base::usb_fs_pcd::initialize_as_device(base::usb_fs_pcd::usb_fs_pcd_handle &self,
 											std::string const &clock_source_name,
