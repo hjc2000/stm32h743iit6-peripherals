@@ -138,32 +138,14 @@ void bsp::PllClockSource::Configure(std::string const &input_channel_name,
 									std::map<std::string, uint32_t> const &channel_factor_map)
 {
 	Factors factors = get_factors(channel_factor_map);
-
-	base::unit::MHz input_freq;
-	if (input_channel_name == "hse")
-	{
-		base::clock::ClockSource hse{"hse"};
-		input_freq = hse.Frequency();
-	}
-	else if (input_channel_name == "hsi")
-	{
-		throw std::invalid_argument{CODE_POS_STR + "不支持该输入通道"};
-	}
-	else if (input_channel_name == "csi")
-	{
-		throw std::invalid_argument{CODE_POS_STR + "不支持该输入通道"};
-	}
-	else
-	{
-		throw std::invalid_argument{CODE_POS_STR + "不支持该输入通道"};
-	}
+	base::unit::MHz input_frequency = get_input_frequency(input_channel_name);
 
 	/* #region pll_range */
 
 	int pll_range = RCC_PLL1VCIRANGE_2;
 	{
 		// 经过 m 分频系数分频后输入锁相环，这里需要根据输入锁相环的频率所处的范围来设置参数。
-		base::unit::MHz divided_input_freq = input_freq / factors._m;
+		base::unit::MHz divided_input_freq = input_frequency / factors._m;
 		if (divided_input_freq < base::unit::MHz{2})
 		{
 			pll_range = RCC_PLL1VCIRANGE_0;
@@ -203,9 +185,9 @@ void bsp::PllClockSource::Configure(std::string const &input_channel_name,
 	}
 
 	// 打开后，记录各个输出通道的频率
-	_p_freq = input_freq / factors._m * factors._n / factors._p;
-	_q_freq = input_freq / factors._m * factors._n / factors._q;
-	_r_freq = input_freq / factors._m * factors._n / factors._r;
+	_p_freq = input_frequency / factors._m * factors._n / factors._p;
+	_q_freq = input_frequency / factors._m * factors._n / factors._q;
+	_r_freq = input_frequency / factors._m * factors._n / factors._r;
 
 	_configured = true;
 }
