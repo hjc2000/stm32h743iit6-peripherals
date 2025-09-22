@@ -99,28 +99,6 @@ void bsp::PllClockSource::Configure(std::string const &input_channel_name,
 
 	/* #endregion */
 
-	/* #region pll_source */
-
-	uint32_t pll_source = RCC_PLLSOURCE_HSE;
-	if (input_channel_name == "hse")
-	{
-		pll_source = RCC_PLLSOURCE_HSE;
-	}
-	else if (input_channel_name == "hsi")
-	{
-		pll_source = RCC_PLLSOURCE_HSI;
-	}
-	else if (input_channel_name == "csi")
-	{
-		pll_source = RCC_PLLSOURCE_CSI;
-	}
-	else
-	{
-		throw std::invalid_argument{"不支持该输入通道"};
-	}
-
-	/* #endregion */
-
 	base::unit::MHz input_freq;
 	if (input_channel_name == "hse")
 	{
@@ -169,7 +147,7 @@ void bsp::PllClockSource::Configure(std::string const &input_channel_name,
 	RCC_OscInitTypeDef def{};
 	def.OscillatorType = RCC_OSCILLATORTYPE_NONE;
 	def.PLL.PLLState = RCC_PLL_ON;
-	def.PLL.PLLSource = pll_source;
+	def.PLL.PLLSource = input_channel_name_to_define_value(input_channel_name);
 	def.PLL.PLLRGE = pll_range;
 	def.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
 	def.PLL.PLLM = m;
