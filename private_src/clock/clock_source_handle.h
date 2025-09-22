@@ -28,7 +28,7 @@ public:
 		throw base::NotSupportedException{};
 	}
 
-	void Configure(uint32_t input_divider)
+	virtual void Configure(uint32_t input_divider)
 	{
 		throw base::NotSupportedException{};
 	}
@@ -38,8 +38,8 @@ public:
 		throw base::NotSupportedException{};
 	}
 
-	void Configure(std::string const &input_channel_name,
-				   uint32_t input_divider)
+	virtual void Configure(std::string const &input_channel_name,
+						   uint32_t input_divider)
 	{
 		throw base::NotSupportedException{};
 	}
