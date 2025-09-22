@@ -87,7 +87,7 @@ base::unit::MHz bsp::PllClockSource::Frequency(std::string const &output_channel
 {
 	if (!_configured)
 	{
-		throw std::runtime_error{"pll 还未打开，无法查看频率"};
+		throw std::runtime_error{CODE_POS_STR + "必须先通过本类配置后才能查看频率。"};
 	}
 
 	if (output_channel_name == "p")
@@ -104,7 +104,7 @@ base::unit::MHz bsp::PllClockSource::Frequency(std::string const &output_channel
 	}
 	else
 	{
-		throw std::invalid_argument{"没有该输出通道"};
+		throw std::invalid_argument{CODE_POS_STR + "非法输出通道。"};
 	}
 }
 
@@ -121,15 +121,15 @@ void bsp::PllClockSource::Configure(std::string const &input_channel_name,
 	}
 	else if (input_channel_name == "hsi")
 	{
-		throw std::invalid_argument{"不支持该输入通道"};
+		throw std::invalid_argument{CODE_POS_STR + "不支持该输入通道"};
 	}
 	else if (input_channel_name == "csi")
 	{
-		throw std::invalid_argument{"不支持该输入通道"};
+		throw std::invalid_argument{CODE_POS_STR + "不支持该输入通道"};
 	}
 	else
 	{
-		throw std::invalid_argument{"不支持该输入通道"};
+		throw std::invalid_argument{CODE_POS_STR + "不支持该输入通道"};
 	}
 
 	/* #region pll_range */
