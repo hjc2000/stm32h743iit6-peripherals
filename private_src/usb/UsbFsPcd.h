@@ -84,7 +84,7 @@ namespace bsp
 
 		virtual void InitializeAsDevice(std::string const &clock_source_name,
 										uint32_t divider,
-										base::usb_fs_pcd::PhyType phy_type) override;
+										base::usb::PhyType phy_type) override;
 	};
 
 } // namespace bsp
