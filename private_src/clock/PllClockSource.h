@@ -25,6 +25,8 @@ namespace bsp
 		inline static base::unit::MHz _q_freq;
 		inline static base::unit::MHz _r_freq;
 
+		std::string _clock_source_name;
+
 		static uint32_t input_channel_name_to_define_value(std::string const &input_channel_name);
 
 		static Factors get_factors(std::map<std::string, uint32_t> const &channel_factor_map);
@@ -57,6 +59,11 @@ namespace bsp
 			}
 
 			_configured = false;
+		}
+
+		std::string ClockSourceName() const
+		{
+			return _clock_source_name;
 		}
 	};
 

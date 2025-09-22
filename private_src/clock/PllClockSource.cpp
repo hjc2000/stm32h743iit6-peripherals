@@ -158,6 +158,7 @@ base::unit::MHz bsp::PllClockSource::Frequency(std::string const &output_channel
 void bsp::PllClockSource::Configure(std::string const &input_channel_name,
 									std::map<std::string, uint32_t> const &channel_factor_map)
 {
+	_clock_source_name = input_channel_name;
 	Factors factors = get_factors(channel_factor_map);
 	base::unit::MHz input_frequency = get_input_frequency(input_channel_name);
 	uint32_t pll_range = calculate_pll_range(input_frequency / factors._m);
