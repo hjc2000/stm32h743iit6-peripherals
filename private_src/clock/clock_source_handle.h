@@ -28,7 +28,18 @@ public:
 		throw base::NotSupportedException{};
 	}
 
+	void Configure(uint32_t input_divider)
+	{
+		throw base::NotSupportedException{};
+	}
+
 	virtual void Configure(std::map<std::string, uint32_t> const &channel_factor_map)
+	{
+		throw base::NotSupportedException{};
+	}
+
+	void Configure(std::string const &input_channel_name,
+				   uint32_t input_divider)
 	{
 		throw base::NotSupportedException{};
 	}
