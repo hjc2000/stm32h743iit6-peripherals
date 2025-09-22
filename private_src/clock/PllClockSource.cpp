@@ -2,6 +2,8 @@
 #include "base/embedded/clock/ClockSource.h"
 #include "base/string/define.h"
 
+/* #region 静态的配置帮助函数 */
+
 uint32_t bsp::PllClockSource::input_channel_name_to_define_value(std::string const &input_channel_name)
 {
 	if (input_channel_name == "hse")
@@ -78,6 +80,8 @@ bsp::PllClockSource::Factors bsp::PllClockSource::get_factors(std::map<std::stri
 
 	return ret;
 }
+
+/* #endregion */
 
 base::unit::MHz bsp::PllClockSource::Frequency(std::string const &output_channel_name) const
 {
