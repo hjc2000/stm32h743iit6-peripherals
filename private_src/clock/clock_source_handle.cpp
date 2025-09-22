@@ -49,46 +49,50 @@ std::shared_ptr<base::clock::clock_source_handle> base::clock::open(std::string 
 	throw std::invalid_argument{CODE_POS_STR + "没有时钟源名为：" + name};
 }
 
-base::unit::MHz base::clock::frequency(base::clock::clock_source_handle &h)
+/* #region frequency */
+
+base::unit::MHz base::clock::frequency(base::clock::clock_source_handle &self)
 {
-	return h.Frequency();
+	return self.Frequency();
 }
 
-base::unit::MHz base::clock::frequency(base::clock::clock_source_handle &h,
+base::unit::MHz base::clock::frequency(base::clock::clock_source_handle &self,
 									   std::string const &output_channel_name)
 {
-	return h.Frequency(output_channel_name);
-}
-
-/* #region configure */
-
-void base::clock::configure(base::clock::clock_source_handle &h)
-{
-	h.Configure();
-}
-
-void base::clock::configure(base::clock::clock_source_handle &h,
-							std::map<std::string, uint32_t> const &channel_factor_map)
-{
-	h.Configure(channel_factor_map);
-}
-
-void base::clock::configure(base::clock::clock_source_handle &h,
-							std::string const &input_channel_name,
-							std::map<std::string, uint32_t> const &channel_factor_map)
-{
-	h.Configure(input_channel_name, channel_factor_map);
+	return self.Frequency(output_channel_name);
 }
 
 /* #endregion */
 
-void base::clock::configure_as_bypass_mode(base::clock::clock_source_handle &h,
-										   base::unit::MHz const &bypass_input_frequency)
+/* #region configure */
+
+void base::clock::configure(base::clock::clock_source_handle &self)
 {
-	h.ConfigureAsBypassMode(bypass_input_frequency);
+	self.Configure();
 }
 
-void base::clock::turn_off(base::clock::clock_source_handle &h)
+void base::clock::configure(base::clock::clock_source_handle &self,
+							std::map<std::string, uint32_t> const &channel_factor_map)
 {
-	h.TurnOff();
+	self.Configure(channel_factor_map);
+}
+
+void base::clock::configure(base::clock::clock_source_handle &self,
+							std::string const &input_channel_name,
+							std::map<std::string, uint32_t> const &channel_factor_map)
+{
+	self.Configure(input_channel_name, channel_factor_map);
+}
+
+/* #endregion */
+
+void base::clock::configure_as_bypass_mode(base::clock::clock_source_handle &self,
+										   base::unit::MHz const &bypass_input_frequency)
+{
+	self.ConfigureAsBypassMode(bypass_input_frequency);
+}
+
+void base::clock::turn_off(base::clock::clock_source_handle &self)
+{
+	self.TurnOff();
 }
