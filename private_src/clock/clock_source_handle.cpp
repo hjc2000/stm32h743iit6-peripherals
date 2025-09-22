@@ -8,6 +8,7 @@
 #include "Pclk1ClockSignal.h"
 #include "Pclk2ClockSignal.h"
 #include "PllClockSource.h"
+#include "PllClockSource2.h"
 #include "SysclkClockSignal.h"
 #include <memory>
 #include <stdexcept>
@@ -21,6 +22,10 @@ std::shared_ptr<base::clock::clock_source_handle> base::clock::open(std::string 
 	else if (name == "pll")
 	{
 		return std::shared_ptr<base::clock::clock_source_handle>{new bsp::PllClockSource{}};
+	}
+	else if (name == "pll2")
+	{
+		return std::shared_ptr<base::clock::clock_source_handle>{new bsp::PllClockSource2{}};
 	}
 	else if (name == "sysclk")
 	{
