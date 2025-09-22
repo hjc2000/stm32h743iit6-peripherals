@@ -71,10 +71,22 @@ void base::clock::configure(base::clock::clock_source_handle &self)
 	self.Configure();
 }
 
+void base::clock::configure(base::clock::clock_source_handle &self, uint32_t input_divider)
+{
+	self.Configure(input_divider);
+}
+
 void base::clock::configure(base::clock::clock_source_handle &self,
 							std::map<std::string, uint32_t> const &channel_factor_map)
 {
 	self.Configure(channel_factor_map);
+}
+
+void base::clock::configure(base::clock::clock_source_handle &self,
+							std::string const &input_channel_name,
+							uint32_t input_divider)
+{
+	self.Configure(input_channel_name, input_divider);
 }
 
 void base::clock::configure(base::clock::clock_source_handle &self,
