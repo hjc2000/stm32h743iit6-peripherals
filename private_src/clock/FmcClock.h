@@ -22,10 +22,7 @@ namespace bsp
 		virtual base::unit::MHz Frequency() const override;
 
 		virtual void Configure(std::string const &input_channel_name,
-							   uint32_t input_divider) override
-		{
-			throw base::NotSupportedException{};
-		}
+							   uint32_t input_divider) override;
 	};
 
 } // namespace bsp
