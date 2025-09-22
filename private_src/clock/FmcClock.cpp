@@ -20,7 +20,17 @@ base::unit::MHz bsp::FmcClock::Frequency() const
 			return clock_source_freq;
 		}
 	case InputChannel::PLL1_Q:
+		{
+			base::clock::ClockSource clock_source{"pll"};
+			base::unit::MHz clock_source_freq = clock_source.Frequency("q");
+			return clock_source_freq;
+		}
 	case InputChannel::PLL2_R:
+		{
+			base::clock::ClockSource clock_source{"pll2"};
+			base::unit::MHz clock_source_freq = clock_source.Frequency("r");
+			return clock_source_freq;
+		}
 	case InputChannel::PER_CK:
 		{
 			throw std::runtime_error{CODE_POS_STR + "暂不支持。"};
