@@ -147,11 +147,11 @@ void bsp::PllClockSource2::Configure(std::map<std::string, uint32_t> const &chan
 	uint32_t pll_range = calculate_pll_range(input_frequency / factors._m);
 
 	RCC_PeriphCLKInitTypeDef def{};
-	def.PLL2.PLL2M = 5;
-	def.PLL2.PLL2N = 192;
-	def.PLL2.PLL2P = 2;
-	def.PLL2.PLL2Q = 20;
-	def.PLL2.PLL2R = 2;
+	def.PLL2.PLL2M = factors._m;
+	def.PLL2.PLL2N = factors._n;
+	def.PLL2.PLL2P = factors._p;
+	def.PLL2.PLL2Q = factors._q;
+	def.PLL2.PLL2R = factors._r;
 	def.PLL2.PLL2RGE = pll_range;
 	def.PLL2.PLL2FRACN = 0;
 
