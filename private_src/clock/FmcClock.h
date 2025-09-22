@@ -16,6 +16,7 @@ namespace bsp
 		};
 
 		InputChannel _input_channel{};
+		bool _configured = false;
 
 	public:
 		virtual base::unit::MHz Frequency() const override;

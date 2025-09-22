@@ -1,8 +1,15 @@
 #include "FmcClock.h" // IWYU pragma: keep
 #include "base/embedded/clock/ClockSource.h"
+#include "base/string/define.h"
+#include <stdexcept>
 
 base::unit::MHz bsp::FmcClock::Frequency() const
 {
+	if (!_configured)
+	{
+		throw std::runtime_error{CODE_POS_STR + "需要先通过本类配置后才能查询频率。"};
+	}
+
 	switch (_input_channel)
 	{
 	case InputChannel::HCLK3:
