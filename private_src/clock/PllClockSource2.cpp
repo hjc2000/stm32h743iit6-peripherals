@@ -1,29 +1,11 @@
 #include "PllClockSource2.h" // IWYU pragma: keep
 #include "base/embedded/clock/ClockSource.h"
 #include "base/string/define.h"
+#include "PllClockSource.h"
 #include <cstdint>
+#include <string>
 
 /* #region 静态的配置帮助函数 */
-
-uint32_t bsp::PllClockSource2::input_channel_name_to_define_value(std::string const &input_channel_name)
-{
-	if (input_channel_name == "hse")
-	{
-		return RCC_PLLSOURCE_HSE;
-	}
-	else if (input_channel_name == "hsi")
-	{
-		return RCC_PLLSOURCE_HSI;
-	}
-	else if (input_channel_name == "csi")
-	{
-		return RCC_PLLSOURCE_CSI;
-	}
-	else
-	{
-		throw std::invalid_argument{CODE_POS_STR + "非法输入通道名。"};
-	}
-}
 
 bsp::PllClockSource2::Factors bsp::PllClockSource2::get_factors(std::map<std::string, uint32_t> const &channel_factor_map)
 {
@@ -82,8 +64,11 @@ bsp::PllClockSource2::Factors bsp::PllClockSource2::get_factors(std::map<std::st
 	return ret;
 }
 
-base::unit::MHz bsp::PllClockSource2::get_input_frequency(std::string const &input_channel_name)
+base::unit::MHz bsp::PllClockSource2::get_input_frequency()
 {
+	bsp::PllClockSource pll{};
+	std::string input_channel_name = pll.ClockSourceName();
+
 	if (input_channel_name == "hse")
 	{
 		base::clock::ClockSource clock_source{"hse"};
@@ -112,20 +97,20 @@ uint32_t bsp::PllClockSource2::calculate_pll_range(base::unit::MHz const &m_chan
 {
 	if (m_channel_output_frequency < base::unit::MHz{2})
 	{
-		return RCC_PLL1VCIRANGE_0;
+		return RCC_PLL2VCIRANGE_0;
 	}
 
 	if (m_channel_output_frequency >= base::unit::MHz{2} && m_channel_output_frequency < base::unit::MHz{4})
 	{
-		return RCC_PLL1VCIRANGE_1;
+		return RCC_PLL2VCIRANGE_1;
 	}
 
 	if (m_channel_output_frequency >= base::unit::MHz{4} && m_channel_output_frequency < base::unit::MHz{8})
 	{
-		return RCC_PLL1VCIRANGE_2;
+		return RCC_PLL2VCIRANGE_2;
 	}
 
-	return RCC_PLL1VCIRANGE_3;
+	return RCC_PLL2VCIRANGE_3;
 }
 
 /* #endregion */
@@ -155,26 +140,22 @@ base::unit::MHz bsp::PllClockSource2::Frequency(std::string const &output_channe
 	throw std::invalid_argument{CODE_POS_STR + "非法输出通道。"};
 }
 
-void bsp::PllClockSource2::Configure(std::string const &input_channel_name,
-									 std::map<std::string, uint32_t> const &channel_factor_map)
+void bsp::PllClockSource2::Configure(std::map<std::string, uint32_t> const &channel_factor_map)
 {
 	Factors factors = get_factors(channel_factor_map);
-	base::unit::MHz input_frequency = get_input_frequency(input_channel_name);
+	base::unit::MHz input_frequency = get_input_frequency();
 	uint32_t pll_range = calculate_pll_range(input_frequency / factors._m);
 
-	RCC_OscInitTypeDef def{};
-	def.OscillatorType = RCC_OSCILLATORTYPE_NONE;
-	def.PLL.PLLState = RCC_PLL_ON;
-	def.PLL.PLLSource = input_channel_name_to_define_value(input_channel_name);
-	def.PLL.PLLRGE = pll_range;
-	def.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
-	def.PLL.PLLM = factors._m;
-	def.PLL.PLLN = factors._n;
-	def.PLL.PLLP = factors._p;
-	def.PLL.PLLQ = factors._q;
-	def.PLL.PLLR = factors._r;
+	RCC_PeriphCLKInitTypeDef def{};
+	def.PLL2.PLL2M = 5;
+	def.PLL2.PLL2N = 192;
+	def.PLL2.PLL2P = 2;
+	def.PLL2.PLL2Q = 20;
+	def.PLL2.PLL2R = 2;
+	def.PLL2.PLL2RGE = pll_range;
+	def.PLL2.PLL2FRACN = 0;
 
-	HAL_StatusTypeDef result = HAL_RCC_OscConfig(&def);
+	HAL_StatusTypeDef result = HAL_RCCEx_PeriphCLKConfig(&def);
 	if (result != HAL_StatusTypeDef::HAL_OK)
 	{
 		throw std::runtime_error{CODE_POS_STR + "配置 PLL 失败。"};
