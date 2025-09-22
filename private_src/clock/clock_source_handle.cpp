@@ -98,6 +98,12 @@ void base::clock::configure(base::clock::clock_source_handle &self,
 }
 
 void base::clock::configure(base::clock::clock_source_handle &self,
+							std::string const &input_channel_name)
+{
+	self.Configure(input_channel_name);
+}
+
+void base::clock::configure(base::clock::clock_source_handle &self,
 							std::string const &input_channel_name,
 							uint32_t input_divider)
 {

@@ -42,8 +42,7 @@ base::unit::MHz bsp::FmcClock::Frequency() const
 	}
 }
 
-void bsp::FmcClock::Configure(std::string const &input_channel_name,
-							  uint32_t input_divider)
+void bsp::FmcClock::Configure(std::string const &input_channel_name)
 {
 	RCC_PeriphCLKInitTypeDef PeriphClkInitStruct{};
 

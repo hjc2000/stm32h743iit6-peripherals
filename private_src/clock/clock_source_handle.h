@@ -38,6 +38,11 @@ public:
 		throw base::NotSupportedException{};
 	}
 
+	virtual void Configure(std::string const &input_channel_name)
+	{
+		throw base::NotSupportedException{};
+	}
+
 	virtual void Configure(std::string const &input_channel_name,
 						   uint32_t input_divider)
 	{

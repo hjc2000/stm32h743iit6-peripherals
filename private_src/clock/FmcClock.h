@@ -21,8 +21,7 @@ namespace bsp
 	public:
 		virtual base::unit::MHz Frequency() const override;
 
-		virtual void Configure(std::string const &input_channel_name,
-							   uint32_t input_divider) override;
+		virtual void Configure(std::string const &input_channel_name) override;
 	};
 
 } // namespace bsp
