@@ -54,6 +54,12 @@ base::unit::MHz base::clock::frequency(base::clock::clock_source_handle &h)
 	return h.Frequency();
 }
 
+base::unit::MHz base::clock::frequency(base::clock::clock_source_handle &h,
+									   std::string const &output_channel_name)
+{
+	return h.Frequency(output_channel_name);
+}
+
 /* #region configure */
 
 void base::clock::configure(base::clock::clock_source_handle &h)
