@@ -22,6 +22,9 @@ base::unit::MHz bsp::FmcClock::Frequency() const
 	case InputChannel::PLL1_Q:
 	case InputChannel::PLL2_R:
 	case InputChannel::PER_CK:
+		{
+			throw std::runtime_error{CODE_POS_STR + "暂不支持。"};
+		}
 	default:
 		{
 			throw std::invalid_argument{CODE_POS_STR + "无效的时钟源输入通道。"};
