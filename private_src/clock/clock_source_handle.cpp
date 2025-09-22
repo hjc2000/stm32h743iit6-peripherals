@@ -2,6 +2,7 @@
 #include "base/string/define.h"
 #include "D1Pclk1ClockSignal.h"
 #include "D3Pclk1ClockSignal.h"
+#include "FmcClock.h"
 #include "HclkClockSignal.h"
 #include "HseClockSource.h"
 #include "Pclk1ClockSignal.h"
@@ -44,6 +45,10 @@ std::shared_ptr<base::clock::clock_source_handle> base::clock::open(std::string 
 	else if (name == "d3pclk1")
 	{
 		return std::shared_ptr<base::clock::clock_source_handle>{new bsp::D3Pclk1ClockSignal{}};
+	}
+	else if (name == "fmc")
+	{
+		return std::shared_ptr<base::clock::clock_source_handle>{new bsp::FmcClock{}};
 	}
 
 	throw std::invalid_argument{CODE_POS_STR + "没有时钟源名为：" + name};
