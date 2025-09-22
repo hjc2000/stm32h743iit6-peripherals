@@ -11,12 +11,23 @@ namespace bsp
 		public base::clock::clock_source_handle
 	{
 	private:
+		struct Factors
+		{
+			uint32_t _m{};
+			uint32_t _n{};
+			uint32_t _p{};
+			uint32_t _q{};
+			uint32_t _r{};
+		};
+
 		inline static bool _opened = false;
 		inline static base::unit::MHz _p_freq;
 		inline static base::unit::MHz _q_freq;
 		inline static base::unit::MHz _r_freq;
 
 		static uint32_t input_channel_name_to_define_value(std::string const &input_channel_name);
+
+		static Factors get_factors(std::map<std::string, uint32_t> const &channel_factor_map);
 
 	public:
 		virtual base::unit::MHz Frequency(std::string const &output_channel_name) const override;

@@ -22,6 +22,63 @@ uint32_t bsp::PllClockSource::input_channel_name_to_define_value(std::string con
 	}
 }
 
+bsp::PllClockSource::Factors bsp::PllClockSource::get_factors(std::map<std::string, uint32_t> const &channel_factor_map)
+{
+	Factors ret{};
+
+	{
+		auto it = channel_factor_map.find("m");
+		if (it == channel_factor_map.end())
+		{
+			throw std::invalid_argument{CODE_POS_STR + "缺少 m 因子。"};
+		}
+
+		ret._m = it->second;
+	}
+
+	{
+		auto it = channel_factor_map.find("n");
+		if (it == channel_factor_map.end())
+		{
+			throw std::invalid_argument{CODE_POS_STR + "缺少 n 因子。"};
+		}
+
+		ret._n = it->second;
+	}
+
+	{
+		auto it = channel_factor_map.find("p");
+		if (it == channel_factor_map.end())
+		{
+			throw std::invalid_argument{CODE_POS_STR + "缺少 p 因子。"};
+		}
+
+		ret._p = it->second;
+	}
+
+	{
+		auto it = channel_factor_map.find("q");
+		if (it == channel_factor_map.end())
+		{
+			throw std::invalid_argument{CODE_POS_STR + "缺少 q 因子。"};
+		}
+
+		ret._q = it->second;
+	}
+
+	{
+		auto it = channel_factor_map.find("r");
+		if (it == channel_factor_map.end())
+		{
+			throw std::invalid_argument{CODE_POS_STR + "缺少 r 因子。"};
+		}
+
+		ret._r = it->second;
+	}
+
+	return ret;
+}
+
 base::unit::MHz bsp::PllClockSource::Frequency(std::string const &output_channel_name) const
 {
 	if (!_opened)
