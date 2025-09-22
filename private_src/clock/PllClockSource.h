@@ -61,6 +61,11 @@ namespace bsp
 			_configured = false;
 		}
 
+		///
+		/// @brief 获取 PLL 的时钟源的名称。
+		///
+		/// @return
+		///
 		std::string ClockSourceName() const
 		{
 			return _clock_source_name;
