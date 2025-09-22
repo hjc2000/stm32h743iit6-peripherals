@@ -5,7 +5,7 @@
 
 namespace bsp
 {
-	class PllClockSource :
+	class PllClockSource final :
 		public base::clock::clock_source_handle
 	{
 	private:
@@ -34,4 +34,5 @@ namespace bsp
 			_opened = false;
 		}
 	};
+
 } // namespace bsp
