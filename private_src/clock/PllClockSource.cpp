@@ -81,6 +81,32 @@ bsp::PllClockSource::Factors bsp::PllClockSource::get_factors(std::map<std::stri
 	return ret;
 }
 
+base::unit::MHz bsp::PllClockSource::get_input_frequency(std::string const &input_channel_name)
+{
+	if (input_channel_name == "hse")
+	{
+		base::clock::ClockSource clock_source{"hse"};
+		base::unit::MHz ret = clock_source.Frequency();
+		return ret;
+	}
+
+	if (input_channel_name == "hsi")
+	{
+		base::clock::ClockSource clock_source{"hsi"};
+		base::unit::MHz ret = clock_source.Frequency();
+		return ret;
+	}
+
+	if (input_channel_name == "csi")
+	{
+		base::clock::ClockSource clock_source{"csi"};
+		base::unit::MHz ret = clock_source.Frequency();
+		return ret;
+	}
+
+	throw std::invalid_argument{CODE_POS_STR + "非法输入通道名。"};
+}
+
 /* #endregion */
 
 base::unit::MHz bsp::PllClockSource::Frequency(std::string const &output_channel_name) const

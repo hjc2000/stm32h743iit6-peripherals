@@ -29,6 +29,8 @@ namespace bsp
 
 		static Factors get_factors(std::map<std::string, uint32_t> const &channel_factor_map);
 
+		static base::unit::MHz get_input_frequency(std::string const &input_channel_name);
+
 	public:
 		virtual base::unit::MHz Frequency(std::string const &output_channel_name) const override;
 
