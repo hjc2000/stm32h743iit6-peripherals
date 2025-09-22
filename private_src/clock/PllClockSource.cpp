@@ -141,18 +141,18 @@ base::unit::MHz bsp::PllClockSource::Frequency(std::string const &output_channel
 	{
 		return _p_freq;
 	}
-	else if (output_channel_name == "q")
+
+	if (output_channel_name == "q")
 	{
 		return _q_freq;
 	}
-	else if (output_channel_name == "r")
+
+	if (output_channel_name == "r")
 	{
 		return _r_freq;
 	}
-	else
-	{
-		throw std::invalid_argument{CODE_POS_STR + "非法输出通道。"};
-	}
+
+	throw std::invalid_argument{CODE_POS_STR + "非法输出通道。"};
 }
 
 void bsp::PllClockSource::Configure(std::string const &input_channel_name,
