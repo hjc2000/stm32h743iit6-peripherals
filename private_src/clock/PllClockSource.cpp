@@ -107,54 +107,7 @@ base::unit::MHz bsp::PllClockSource::Frequency(std::string const &output_channel
 void bsp::PllClockSource::Configure(std::string const &input_channel_name,
 									std::map<std::string, uint32_t> const &channel_factor_map)
 {
-	/* #region m,n,p,q,r */
-
-	int m = 1;
-	{
-		auto it = channel_factor_map.find("m");
-		if (it != channel_factor_map.end())
-		{
-			m = it->second;
-		}
-	}
-
-	int n = 1;
-	{
-		auto it = channel_factor_map.find("n");
-		if (it != channel_factor_map.end())
-		{
-			n = it->second;
-		}
-	}
-
-	int p = 1;
-	{
-		auto it = channel_factor_map.find("p");
-		if (it != channel_factor_map.end())
-		{
-			p = it->second;
-		}
-	}
-
-	int q = 1;
-	{
-		auto it = channel_factor_map.find("q");
-		if (it != channel_factor_map.end())
-		{
-			q = it->second;
-		}
-	}
-
-	int r = 1;
-	{
-		auto it = channel_factor_map.find("r");
-		if (it != channel_factor_map.end())
-		{
-			r = it->second;
-		}
-	}
-
-	/* #endregion */
+	Factors factors = get_factors(channel_factor_map);
 
 	base::unit::MHz input_freq;
 	if (input_channel_name == "hse")
@@ -180,7 +133,7 @@ void bsp::PllClockSource::Configure(std::string const &input_channel_name,
 	int pll_range = RCC_PLL1VCIRANGE_2;
 	{
 		// 经过 m 分频系数分频后输入锁相环，这里需要根据输入锁相环的频率所处的范围来设置参数。
-		base::unit::MHz divided_input_freq = input_freq / m;
+		base::unit::MHz divided_input_freq = input_freq / factors._m;
 		if (divided_input_freq < base::unit::MHz{2})
 		{
 			pll_range = RCC_PLL1VCIRANGE_0;
@@ -207,11 +160,11 @@ void bsp::PllClockSource::Configure(std::string const &input_channel_name,
 	def.PLL.PLLSource = input_channel_name_to_define_value(input_channel_name);
 	def.PLL.PLLRGE = pll_range;
 	def.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
-	def.PLL.PLLM = m;
-	def.PLL.PLLN = n;
-	def.PLL.PLLP = p;
-	def.PLL.PLLQ = q;
-	def.PLL.PLLR = r;
+	def.PLL.PLLM = factors._m;
+	def.PLL.PLLN = factors._n;
+	def.PLL.PLLP = factors._p;
+	def.PLL.PLLQ = factors._q;
+	def.PLL.PLLR = factors._r;
 
 	HAL_StatusTypeDef result = HAL_RCC_OscConfig(&def);
 	if (result != HAL_StatusTypeDef::HAL_OK)
@@ -220,9 +173,9 @@ void bsp::PllClockSource::Configure(std::string const &input_channel_name,
 	}
 
 	// 打开后，记录各个输出通道的频率
-	_p_freq = input_freq / m * n / p;
-	_q_freq = input_freq / m * n / q;
-	_r_freq = input_freq / m * n / r;
+	_p_freq = input_freq / factors._m * factors._n / factors._p;
+	_q_freq = input_freq / factors._m * factors._n / factors._q;
+	_r_freq = input_freq / factors._m * factors._n / factors._r;
 
 	_opened = true;
 }
