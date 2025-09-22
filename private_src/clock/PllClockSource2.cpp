@@ -147,6 +147,7 @@ void bsp::PllClockSource2::Configure(std::map<std::string, uint32_t> const &chan
 	uint32_t pll_range = calculate_pll_range(input_frequency / factors._m);
 
 	RCC_PeriphCLKInitTypeDef def{};
+	def.PeriphClockSelection = RCC_PERIPHCLK_PLL2_DIVP | RCC_PERIPHCLK_PLL2_DIVQ | RCC_PERIPHCLK_PLL2_DIVR;
 	def.PLL2.PLL2M = factors._m;
 	def.PLL2.PLL2N = factors._n;
 	def.PLL2.PLL2P = factors._p;
