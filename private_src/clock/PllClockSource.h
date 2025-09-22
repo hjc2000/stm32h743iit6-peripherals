@@ -31,6 +31,14 @@ namespace bsp
 
 		static base::unit::MHz get_input_frequency(std::string const &input_channel_name);
 
+		///
+		/// @brief
+		///
+		/// @param m_channel_output_frequency m 通道的输出频率。
+		/// @return
+		///
+		static uint32_t calculate_pll_range(base::unit::MHz const &m_channel_output_frequency);
+
 	public:
 		virtual base::unit::MHz Frequency(std::string const &output_channel_name) const override;
 

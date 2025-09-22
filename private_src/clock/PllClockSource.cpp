@@ -1,6 +1,7 @@
 #include "PllClockSource.h" // IWYU pragma: keep
 #include "base/embedded/clock/ClockSource.h"
 #include "base/string/define.h"
+#include <cstdint>
 
 /* #region 静态的配置帮助函数 */
 
@@ -107,6 +108,30 @@ base::unit::MHz bsp::PllClockSource::get_input_frequency(std::string const &inpu
 	throw std::invalid_argument{CODE_POS_STR + "非法输入通道名。"};
 }
 
+uint32_t bsp::PllClockSource::calculate_pll_range(base::unit::MHz const &m_channel_output_frequency)
+{
+	uint32_t pll_range = RCC_PLL1VCIRANGE_2;
+
+	if (m_channel_output_frequency < base::unit::MHz{2})
+	{
+		pll_range = RCC_PLL1VCIRANGE_0;
+	}
+	else if (m_channel_output_frequency >= base::unit::MHz{2} && m_channel_output_frequency < base::unit::MHz{4})
+	{
+		pll_range = RCC_PLL1VCIRANGE_1;
+	}
+	else if (m_channel_output_frequency >= base::unit::MHz{4} && m_channel_output_frequency < base::unit::MHz{8})
+	{
+		pll_range = RCC_PLL1VCIRANGE_2;
+	}
+	else
+	{
+		pll_range = RCC_PLL1VCIRANGE_3;
+	}
+
+	return pll_range;
+}
+
 /* #endregion */
 
 base::unit::MHz bsp::PllClockSource::Frequency(std::string const &output_channel_name) const
@@ -142,7 +167,7 @@ void bsp::PllClockSource::Configure(std::string const &input_channel_name,
 
 	/* #region pll_range */
 
-	int pll_range = RCC_PLL1VCIRANGE_2;
+	uint32_t pll_range = RCC_PLL1VCIRANGE_2;
 	{
 		// 经过 m 分频系数分频后输入锁相环，这里需要根据输入锁相环的频率所处的范围来设置参数。
 		base::unit::MHz divided_input_freq = input_frequency / factors._m;
