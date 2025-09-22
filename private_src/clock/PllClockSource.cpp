@@ -85,7 +85,7 @@ bsp::PllClockSource::Factors bsp::PllClockSource::get_factors(std::map<std::stri
 
 base::unit::MHz bsp::PllClockSource::Frequency(std::string const &output_channel_name) const
 {
-	if (!_opened)
+	if (!_configured)
 	{
 		throw std::runtime_error{"pll 还未打开，无法查看频率"};
 	}
@@ -181,5 +181,5 @@ void bsp::PllClockSource::Configure(std::string const &input_channel_name,
 	_q_freq = input_freq / factors._m * factors._n / factors._q;
 	_r_freq = input_freq / factors._m * factors._n / factors._r;
 
-	_opened = true;
+	_configured = true;
 }
