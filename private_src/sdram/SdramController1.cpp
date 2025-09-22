@@ -1,7 +1,7 @@
 #include "SdramController1.h"
+#include "base/embedded/clock/ClockSource.h"
 #include "check.h"
 #include "define.h"
-#include "fmc_clock_source.h"
 
 void bsp::SdramController1::InitializeAsReadBurstMode(std::string const &clock_source_name,
 													  uint32_t divider,
@@ -22,9 +22,10 @@ void bsp::SdramController1::InitializeAsReadBurstMode(std::string const &clock_s
 					   MPU_ACCESS_BUFFERABLE);   /* 允许缓冲 */
 
 	__HAL_RCC_FMC_CLK_ENABLE();
-	bsp::config_fmc_clock_source(clock_source_name);
 
-	base::unit::MHz clock_source_freq = get_fmc_clock_source_frequency(clock_source_name);
+	base::clock::ClockSource fmc{"fmc"};
+	fmc.Configure(clock_source_name);
+	base::unit::MHz clock_source_freq = fmc.Frequency();
 	_timing = timing_provider.GetTiming(base::unit::MHz{clock_source_freq / divider});
 
 	_handle.Instance = FMC_SDRAM_DEVICE;
