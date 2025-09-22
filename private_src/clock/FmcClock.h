@@ -6,11 +6,19 @@ namespace bsp
 	class FmcClock final :
 		public base::clock::clock_source_handle
 	{
-	public:
-		virtual base::unit::MHz Frequency() const override
+	private:
+		enum class InputChannel
 		{
-			throw base::NotSupportedException{};
-		}
+			HCLK3,
+			PLL1_Q,
+			PLL2_R,
+			PER_CK,
+		};
+
+		InputChannel _input_channel{};
+
+	public:
+		virtual base::unit::MHz Frequency() const override;
 
 		virtual void Configure(std::string const &input_channel_name,
 							   uint32_t input_divider) override
