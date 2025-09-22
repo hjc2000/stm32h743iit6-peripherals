@@ -7,21 +7,21 @@
 
 namespace bsp
 {
-	namespace usb_fs_pcd
+	namespace usb::fs_pcd
 	{
-		constexpr uint32_t phy_type_to_define_value(base::usb_fs_pcd::PhyType phy_type)
+		constexpr uint32_t phy_type_to_define_value(base::usb::fs_pcd::PhyType phy_type)
 		{
 			switch (phy_type)
 			{
-			case base::usb_fs_pcd::PhyType::ULPI:
+			case base::usb::fs_pcd::PhyType::ULPI:
 				{
 					return PCD_PHY_ULPI;
 				}
-			case base::usb_fs_pcd::PhyType::UTMI:
+			case base::usb::fs_pcd::PhyType::UTMI:
 				{
 					return PCD_PHY_UTMI;
 				}
-			case base::usb_fs_pcd::PhyType::Embedded:
+			case base::usb::fs_pcd::PhyType::Embedded:
 				{
 					return PCD_PHY_EMBEDDED;
 				}
@@ -32,5 +32,5 @@ namespace bsp
 			}
 		}
 
-	} // namespace usb_fs_pcd
+	} // namespace usb::fs_pcd
 } // namespace bsp
