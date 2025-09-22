@@ -5,7 +5,6 @@
 #include "base/unit/Hz.h"
 #include "base/unit/MHz.h"
 #include "base/unit/Nanosecond.h"
-#include "base/unit/Second.h"
 #include "hal.h"
 #include <chrono>
 #include <cstdint>
