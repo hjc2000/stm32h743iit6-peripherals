@@ -2,6 +2,8 @@
 #include "base/unit/MHz.h"
 #include "clock_source_handle.h"
 #include "hal.h"
+#include <cstdint>
+#include <string>
 
 namespace bsp
 {
@@ -13,6 +15,8 @@ namespace bsp
 		inline static base::unit::MHz _p_freq;
 		inline static base::unit::MHz _q_freq;
 		inline static base::unit::MHz _r_freq;
+
+		static uint32_t input_channel_name_to_define_value(std::string const &input_channel_name);
 
 	public:
 		virtual base::unit::MHz Frequency(std::string const &output_channel_name) const override;

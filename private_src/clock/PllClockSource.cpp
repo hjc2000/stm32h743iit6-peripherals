@@ -1,5 +1,26 @@
 #include "PllClockSource.h" // IWYU pragma: keep
 #include "base/embedded/clock/ClockSource.h"
+#include "base/string/define.h"
+
+uint32_t bsp::PllClockSource::input_channel_name_to_define_value(std::string const &input_channel_name)
+{
+	if (input_channel_name == "hse")
+	{
+		return RCC_PLLSOURCE_HSE;
+	}
+	else if (input_channel_name == "hsi")
+	{
+		return RCC_PLLSOURCE_HSI;
+	}
+	else if (input_channel_name == "csi")
+	{
+		return RCC_PLLSOURCE_CSI;
+	}
+	else
+	{
+		throw std::invalid_argument{CODE_POS_STR + "非法输入通道名。"};
+	}
+}
 
 base::unit::MHz bsp::PllClockSource::Frequency(std::string const &output_channel_name) const
 {
