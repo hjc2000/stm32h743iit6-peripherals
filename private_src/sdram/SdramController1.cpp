@@ -1,7 +1,7 @@
 #include "SdramController1.h"
 #include "check.h"
-#include "clock_source.h"
 #include "define.h"
+#include "fmc_clock_source.h"
 
 void bsp::SdramController1::InitializeAsReadBurstMode(std::string const &clock_source_name,
 													  uint32_t divider,

@@ -1,4 +1,4 @@
-#include "clock_source.h" // IWYU pragma: keep
+#include "fmc_clock_source.h" // IWYU pragma: keep
 #include "base/embedded/clock/ClockSource.h"
 #include "base/string/define.h"
 #include "hal.h"
