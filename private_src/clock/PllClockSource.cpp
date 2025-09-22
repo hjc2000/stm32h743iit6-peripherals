@@ -110,26 +110,22 @@ base::unit::MHz bsp::PllClockSource::get_input_frequency(std::string const &inpu
 
 uint32_t bsp::PllClockSource::calculate_pll_range(base::unit::MHz const &m_channel_output_frequency)
 {
-	uint32_t pll_range = RCC_PLL1VCIRANGE_2;
-
 	if (m_channel_output_frequency < base::unit::MHz{2})
 	{
-		pll_range = RCC_PLL1VCIRANGE_0;
-	}
-	else if (m_channel_output_frequency >= base::unit::MHz{2} && m_channel_output_frequency < base::unit::MHz{4})
-	{
-		pll_range = RCC_PLL1VCIRANGE_1;
-	}
-	else if (m_channel_output_frequency >= base::unit::MHz{4} && m_channel_output_frequency < base::unit::MHz{8})
-	{
-		pll_range = RCC_PLL1VCIRANGE_2;
-	}
-	else
-	{
-		pll_range = RCC_PLL1VCIRANGE_3;
+		return RCC_PLL1VCIRANGE_0;
 	}
 
-	return pll_range;
+	if (m_channel_output_frequency >= base::unit::MHz{2} && m_channel_output_frequency < base::unit::MHz{4})
+	{
+		return RCC_PLL1VCIRANGE_1;
+	}
+
+	if (m_channel_output_frequency >= base::unit::MHz{4} && m_channel_output_frequency < base::unit::MHz{8})
+	{
+		return RCC_PLL1VCIRANGE_2;
+	}
+
+	return RCC_PLL1VCIRANGE_3;
 }
 
 /* #endregion */
@@ -164,32 +160,7 @@ void bsp::PllClockSource::Configure(std::string const &input_channel_name,
 {
 	Factors factors = get_factors(channel_factor_map);
 	base::unit::MHz input_frequency = get_input_frequency(input_channel_name);
-
-	/* #region pll_range */
-
-	uint32_t pll_range = RCC_PLL1VCIRANGE_2;
-	{
-		// 经过 m 分频系数分频后输入锁相环，这里需要根据输入锁相环的频率所处的范围来设置参数。
-		base::unit::MHz divided_input_freq = input_frequency / factors._m;
-		if (divided_input_freq < base::unit::MHz{2})
-		{
-			pll_range = RCC_PLL1VCIRANGE_0;
-		}
-		else if (divided_input_freq >= base::unit::MHz{2} && divided_input_freq < base::unit::MHz{4})
-		{
-			pll_range = RCC_PLL1VCIRANGE_1;
-		}
-		else if (divided_input_freq >= base::unit::MHz{4} && divided_input_freq < base::unit::MHz{8})
-		{
-			pll_range = RCC_PLL1VCIRANGE_2;
-		}
-		else
-		{
-			pll_range = RCC_PLL1VCIRANGE_3;
-		}
-	}
-
-	/* #endregion */
+	uint32_t pll_range = calculate_pll_range(input_frequency / factors._m);
 
 	RCC_OscInitTypeDef def{};
 	def.OscillatorType = RCC_OSCILLATORTYPE_NONE;
