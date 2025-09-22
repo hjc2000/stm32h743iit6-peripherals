@@ -159,7 +159,7 @@ void bsp::PllClockSource::Configure(std::string const &input_channel_name,
 	HAL_StatusTypeDef result = HAL_RCC_OscConfig(&def);
 	if (result != HAL_StatusTypeDef::HAL_OK)
 	{
-		throw std::runtime_error{"打开 PLL 失败。"};
+		throw std::runtime_error{CODE_POS_STR + "配置 PLL 失败。"};
 	}
 
 	// 打开后，记录各个输出通道的频率
