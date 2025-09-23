@@ -117,24 +117,24 @@ uint32_t bsp::PllClockSource3::calculate_pll_range(base::unit::MHz const &m_chan
 
 base::unit::MHz bsp::PllClockSource3::Frequency(std::string const &output_channel_name) const
 {
-	if (!_configured)
+	if (!_singleton_context_provider.Instance()._configured)
 	{
 		throw std::runtime_error{CODE_POS_STR + "必须先通过本类配置后才能查看频率。"};
 	}
 
 	if (output_channel_name == "p")
 	{
-		return _p_freq;
+		return _singleton_context_provider.Instance()._p_freq;
 	}
 
 	if (output_channel_name == "q")
 	{
-		return _q_freq;
+		return _singleton_context_provider.Instance()._q_freq;
 	}
 
 	if (output_channel_name == "r")
 	{
-		return _r_freq;
+		return _singleton_context_provider.Instance()._r_freq;
 	}
 
 	throw std::invalid_argument{CODE_POS_STR + "非法输出通道。"};
@@ -163,9 +163,9 @@ void bsp::PllClockSource3::Configure(std::map<std::string, uint32_t> const &chan
 	}
 
 	// 打开后，记录各个输出通道的频率
-	_p_freq = input_frequency / factors._m * factors._n / factors._p;
-	_q_freq = input_frequency / factors._m * factors._n / factors._q;
-	_r_freq = input_frequency / factors._m * factors._n / factors._r;
+	_singleton_context_provider.Instance()._p_freq = input_frequency / factors._m * factors._n / factors._p;
+	_singleton_context_provider.Instance()._q_freq = input_frequency / factors._m * factors._n / factors._q;
+	_singleton_context_provider.Instance()._r_freq = input_frequency / factors._m * factors._n / factors._r;
 
-	_configured = true;
+	_singleton_context_provider.Instance()._configured = true;
 }

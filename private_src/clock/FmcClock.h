@@ -1,4 +1,5 @@
 #pragma once
+#include "base/SingletonProvider.h"
 #include "clock_source_handle.h"
 
 namespace bsp
@@ -20,8 +21,13 @@ namespace bsp
 			PER_CK,
 		};
 
-		InputChannel _input_channel{};
-		bool _configured = false;
+		struct SingletonContext
+		{
+			InputChannel _input_channel{};
+			bool _configured = false;
+		};
+
+		inline static base::SingletonProvider<SingletonContext> _singleton_context_provider{};
 
 	public:
 		virtual base::unit::MHz Frequency() const override;

@@ -6,12 +6,12 @@
 
 base::unit::MHz bsp::FmcClock::Frequency() const
 {
-	if (!_configured)
+	if (!_singleton_context_provider.Instance()._configured)
 	{
 		throw std::runtime_error{CODE_POS_STR + "需要先通过本类配置后才能查询频率。"};
 	}
 
-	switch (_input_channel)
+	switch (_singleton_context_provider.Instance()._input_channel)
 	{
 	case InputChannel::HCLK3:
 		{
@@ -56,8 +56,8 @@ void bsp::FmcClock::Configure(std::string const &input_channel_name)
 			throw std::runtime_error{CODE_POS_STR + "配置 FMC 时钟源失败。"};
 		}
 
-		_input_channel = InputChannel::HCLK3;
-		_configured = true;
+		_singleton_context_provider.Instance()._input_channel = InputChannel::HCLK3;
+		_singleton_context_provider.Instance()._configured = true;
 		return;
 	}
 
@@ -71,8 +71,8 @@ void bsp::FmcClock::Configure(std::string const &input_channel_name)
 			throw std::runtime_error{CODE_POS_STR + "配置 FMC 时钟源失败。"};
 		}
 
-		_input_channel = InputChannel::PLL1_Q;
-		_configured = true;
+		_singleton_context_provider.Instance()._input_channel = InputChannel::PLL1_Q;
+		_singleton_context_provider.Instance()._configured = true;
 		return;
 	}
 
@@ -86,8 +86,8 @@ void bsp::FmcClock::Configure(std::string const &input_channel_name)
 			throw std::runtime_error{CODE_POS_STR + "配置 FMC 时钟源失败。"};
 		}
 
-		_input_channel = InputChannel::PLL2_R;
-		_configured = true;
+		_singleton_context_provider.Instance()._input_channel = InputChannel::PLL2_R;
+		_singleton_context_provider.Instance()._configured = true;
 		return;
 	}
 
@@ -101,8 +101,8 @@ void bsp::FmcClock::Configure(std::string const &input_channel_name)
 			throw std::runtime_error{CODE_POS_STR + "配置 FMC 时钟源失败。"};
 		}
 
-		_input_channel = InputChannel::PER_CK;
-		_configured = true;
+		_singleton_context_provider.Instance()._input_channel = InputChannel::PER_CK;
+		_singleton_context_provider.Instance()._configured = true;
 		return;
 	}
 
