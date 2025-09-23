@@ -2,6 +2,7 @@
 #include "base/embedded/cache/cache.h"
 #include "base/embedded/interrupt/interrupt.h"
 #include "base/string/define.h"
+#include "define.h"
 #include "stm32h7xx_hal_dma.h"
 #include <functional>
 #include <stdexcept>
@@ -90,32 +91,8 @@ void bsp::MemoryDma1::Initialize(size_t align)
 	_handle_context._handle.Init.PeriphInc = DMA_PINC_ENABLE;
 	_handle_context._handle.Init.MemInc = DMA_MINC_ENABLE;
 	_handle_context._handle.Init.Priority = DMA_PRIORITY_MEDIUM;
-
-	switch (align)
-	{
-	case 1:
-		{
-			_handle_context._handle.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
-			_handle_context._handle.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-			break;
-		}
-	case 2:
-		{
-			_handle_context._handle.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
-			_handle_context._handle.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
-			break;
-		}
-	case 4:
-		{
-			_handle_context._handle.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
-			_handle_context._handle.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
-			break;
-		}
-	default:
-		{
-			throw std::invalid_argument{CODE_POS_STR + "非法对齐方式。"};
-		}
-	}
+	_handle_context._handle.Init.PeriphDataAlignment = bsp::dma::peripheral_align_byte_count_to_define_value(align);
+	_handle_context._handle.Init.MemDataAlignment = bsp::dma::memory_align_byte_count_to_define_value(align);
 
 	HAL_StatusTypeDef result = HAL_DMA_Init(&_handle_context._handle);
 	if (result != HAL_StatusTypeDef::HAL_OK)
