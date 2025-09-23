@@ -146,17 +146,17 @@ void bsp::PllClockSource2::Configure(std::map<std::string, uint32_t> const &chan
 	base::unit::MHz input_frequency = get_input_frequency();
 	uint32_t pll_range = calculate_pll_range(input_frequency / factors._m);
 
-	RCC_PeriphCLKInitTypeDef def{};
-	def.PeriphClockSelection = RCC_PERIPHCLK_PLL2_DIVP | RCC_PERIPHCLK_PLL2_DIVQ | RCC_PERIPHCLK_PLL2_DIVR;
-	def.PLL2.PLL2M = factors._m;
-	def.PLL2.PLL2N = factors._n;
-	def.PLL2.PLL2P = factors._p;
-	def.PLL2.PLL2Q = factors._q;
-	def.PLL2.PLL2R = factors._r;
-	def.PLL2.PLL2RGE = pll_range;
-	def.PLL2.PLL2FRACN = 0;
+	_singleton_context_provider.Instance()._hal_initialization_configuration.PeriphClockSelection = RCC_PERIPHCLK_PLL2_DIVP | RCC_PERIPHCLK_PLL2_DIVQ | RCC_PERIPHCLK_PLL2_DIVR;
+	_singleton_context_provider.Instance()._hal_initialization_configuration.PLL2.PLL2M = factors._m;
+	_singleton_context_provider.Instance()._hal_initialization_configuration.PLL2.PLL2N = factors._n;
+	_singleton_context_provider.Instance()._hal_initialization_configuration.PLL2.PLL2P = factors._p;
+	_singleton_context_provider.Instance()._hal_initialization_configuration.PLL2.PLL2Q = factors._q;
+	_singleton_context_provider.Instance()._hal_initialization_configuration.PLL2.PLL2R = factors._r;
+	_singleton_context_provider.Instance()._hal_initialization_configuration.PLL2.PLL2RGE = pll_range;
+	_singleton_context_provider.Instance()._hal_initialization_configuration.PLL2.PLL2VCOSEL = RCC_PLL2VCOWIDE;
+	_singleton_context_provider.Instance()._hal_initialization_configuration.PLL2.PLL2FRACN = 0;
 
-	HAL_StatusTypeDef result = HAL_RCCEx_PeriphCLKConfig(&def);
+	HAL_StatusTypeDef result = HAL_RCCEx_PeriphCLKConfig(&_singleton_context_provider.Instance()._hal_initialization_configuration);
 	if (result != HAL_StatusTypeDef::HAL_OK)
 	{
 		throw std::runtime_error{CODE_POS_STR + "配置 PLL 失败。"};

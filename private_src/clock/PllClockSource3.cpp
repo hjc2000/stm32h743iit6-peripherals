@@ -154,6 +154,7 @@ void bsp::PllClockSource3::Configure(std::map<std::string, uint32_t> const &chan
 	def.PLL3.PLL3Q = factors._q;
 	def.PLL3.PLL3R = factors._r;
 	def.PLL3.PLL3RGE = pll_range;
+	def.PLL3.PLL3VCOSEL = RCC_PLL3VCOWIDE;
 	def.PLL3.PLL3FRACN = 0;
 
 	HAL_StatusTypeDef result = HAL_RCCEx_PeriphCLKConfig(&def);

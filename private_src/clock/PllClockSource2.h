@@ -28,6 +28,8 @@ namespace bsp
 			base::unit::MHz _p_freq;
 			base::unit::MHz _q_freq;
 			base::unit::MHz _r_freq;
+
+			RCC_PeriphCLKInitTypeDef _hal_initialization_configuration{};
 		};
 
 		inline static base::SingletonProvider<SingletonContext> _singleton_context_provider{};
@@ -51,6 +53,16 @@ namespace bsp
 
 		virtual void TurnOff() override
 		{
+		}
+
+		RCC_PeriphCLKInitTypeDef const &HalInitializationConfiguration() const
+		{
+			if (!_singleton_context_provider.Instance()._configured)
+			{
+				throw std::runtime_error{CODE_POS_STR + "必须先通过本类配置后才能查看配置。"};
+			}
+
+			return _singleton_context_provider.Instance()._hal_initialization_configuration;
 		}
 	};
 

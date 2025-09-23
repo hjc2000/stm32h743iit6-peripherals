@@ -2,6 +2,7 @@
 #include "base/embedded/clock/ClockSource.h"
 #include "base/string/define.h"
 #include "hal.h"
+#include "PllClockSource2.h"
 #include <stdexcept>
 
 base::unit::MHz bsp::FmcClock::Frequency() const
@@ -44,10 +45,9 @@ base::unit::MHz bsp::FmcClock::Frequency() const
 
 void bsp::FmcClock::Configure(std::string const &input_channel_name)
 {
-	RCC_PeriphCLKInitTypeDef PeriphClkInitStruct{};
-
 	if (input_channel_name == "hclk3")
 	{
+		RCC_PeriphCLKInitTypeDef PeriphClkInitStruct{};
 		PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_FMC;
 		PeriphClkInitStruct.FmcClockSelection = RCC_FMCCLKSOURCE_D1HCLK;
 		HAL_StatusTypeDef result = HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
@@ -63,6 +63,7 @@ void bsp::FmcClock::Configure(std::string const &input_channel_name)
 
 	if (input_channel_name == "pll1_q")
 	{
+		RCC_PeriphCLKInitTypeDef PeriphClkInitStruct{};
 		PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_FMC;
 		PeriphClkInitStruct.FmcClockSelection = RCC_FMCCLKSOURCE_PLL;
 		HAL_StatusTypeDef result = HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
@@ -78,6 +79,8 @@ void bsp::FmcClock::Configure(std::string const &input_channel_name)
 
 	if (input_channel_name == "pll2_r")
 	{
+		bsp::PllClockSource2 pll2_clock_source{};
+		RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = pll2_clock_source.HalInitializationConfiguration();
 		PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_FMC;
 		PeriphClkInitStruct.FmcClockSelection = RCC_FMCCLKSOURCE_PLL2;
 		HAL_StatusTypeDef result = HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
@@ -93,6 +96,7 @@ void bsp::FmcClock::Configure(std::string const &input_channel_name)
 
 	if (input_channel_name == "per_ck")
 	{
+		RCC_PeriphCLKInitTypeDef PeriphClkInitStruct{};
 		PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_FMC;
 		PeriphClkInitStruct.FmcClockSelection = RCC_FMCCLKSOURCE_CLKP;
 		HAL_StatusTypeDef result = HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
