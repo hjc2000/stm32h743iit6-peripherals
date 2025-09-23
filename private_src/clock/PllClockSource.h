@@ -1,4 +1,5 @@
 #pragma once
+#include "base/SingletonProvider.h"
 #include "base/unit/MHz.h"
 #include "clock_source_handle.h"
 #include "hal.h"
@@ -20,12 +21,21 @@ namespace bsp
 			uint32_t _r{};
 		};
 
-		inline static bool _configured = false;
-		inline static base::unit::MHz _p_freq;
-		inline static base::unit::MHz _q_freq;
-		inline static base::unit::MHz _r_freq;
+		///
+		/// @brief 需要是单例的上下文保存到这里。
+		///
+		struct SingletonContext
+		{
+			bool _configured = false;
 
-		std::string _clock_source_name;
+			base::unit::MHz _p_freq;
+			base::unit::MHz _q_freq;
+			base::unit::MHz _r_freq;
+
+			std::string _clock_source_name;
+		};
+
+		inline static base::SingletonProvider<SingletonContext> _singleton_context_provider{};
 
 		static uint32_t input_channel_name_to_define_value(std::string const &input_channel_name);
 
@@ -58,7 +68,7 @@ namespace bsp
 				throw std::runtime_error{"关闭 PLL 失败。"};
 			}
 
-			_configured = false;
+			_singleton_context_provider.Instance()._configured = false;
 		}
 
 		///
@@ -68,7 +78,7 @@ namespace bsp
 		///
 		std::string ClockSourceName() const
 		{
-			return _clock_source_name;
+			return _singleton_context_provider.Instance()._clock_source_name;
 		}
 	};
 

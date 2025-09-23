@@ -132,24 +132,24 @@ uint32_t bsp::PllClockSource::calculate_pll_range(base::unit::MHz const &m_chann
 
 base::unit::MHz bsp::PllClockSource::Frequency(std::string const &output_channel_name) const
 {
-	if (!_configured)
+	if (!_singleton_context_provider.Instance()._configured)
 	{
 		throw std::runtime_error{CODE_POS_STR + "必须先通过本类配置后才能查看频率。"};
 	}
 
 	if (output_channel_name == "p")
 	{
-		return _p_freq;
+		return _singleton_context_provider.Instance()._p_freq;
 	}
 
 	if (output_channel_name == "q")
 	{
-		return _q_freq;
+		return _singleton_context_provider.Instance()._q_freq;
 	}
 
 	if (output_channel_name == "r")
 	{
-		return _r_freq;
+		return _singleton_context_provider.Instance()._r_freq;
 	}
 
 	throw std::invalid_argument{CODE_POS_STR + "非法输出通道。"};
@@ -158,7 +158,7 @@ base::unit::MHz bsp::PllClockSource::Frequency(std::string const &output_channel
 void bsp::PllClockSource::Configure(std::string const &input_channel_name,
 									std::map<std::string, uint32_t> const &channel_factor_map)
 {
-	_clock_source_name = input_channel_name;
+	_singleton_context_provider.Instance()._clock_source_name = input_channel_name;
 	Factors factors = get_factors(channel_factor_map);
 	base::unit::MHz input_frequency = get_input_frequency(input_channel_name);
 	uint32_t pll_range = calculate_pll_range(input_frequency / factors._m);
@@ -182,9 +182,9 @@ void bsp::PllClockSource::Configure(std::string const &input_channel_name,
 	}
 
 	// 打开后，记录各个输出通道的频率
-	_p_freq = input_frequency / factors._m * factors._n / factors._p;
-	_q_freq = input_frequency / factors._m * factors._n / factors._q;
-	_r_freq = input_frequency / factors._m * factors._n / factors._r;
+	_singleton_context_provider.Instance()._p_freq = input_frequency / factors._m * factors._n / factors._p;
+	_singleton_context_provider.Instance()._q_freq = input_frequency / factors._m * factors._n / factors._q;
+	_singleton_context_provider.Instance()._r_freq = input_frequency / factors._m * factors._n / factors._r;
 
-	_configured = true;
+	_singleton_context_provider.Instance()._configured = true;
 }
