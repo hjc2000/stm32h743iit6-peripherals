@@ -2,7 +2,7 @@
 #include "base/embedded/cache/cache.h"
 #include "base/embedded/interrupt/interrupt.h"
 #include "base/string/define.h"
-#include "define.h"
+#include "dma_define.h"
 #include "stm32h7xx_hal_dma.h"
 #include <functional>
 #include <stdexcept>
