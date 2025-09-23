@@ -12,7 +12,7 @@ namespace bsp
 		public base::clock::clock_source_handle
 	{
 	private:
-		uint32_t _input_divider = 4;
+		inline static uint32_t _input_divider = 4;
 		inline static bool _configured = false;
 
 	public:
