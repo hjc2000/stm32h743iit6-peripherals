@@ -6,9 +6,11 @@
 #include <functional>
 #include <stdexcept>
 
+/* #region 中断服务函数 */
+
 namespace
 {
-	std::function<void()> _dma1_stream2_isr;
+	std::function<void()> _dma_isr;
 
 }
 
@@ -18,13 +20,15 @@ extern "C"
 	{
 		try
 		{
-			_dma1_stream2_isr();
+			_dma_isr();
 		}
 		catch (...)
 		{
 		}
 	}
 }
+
+/* #endregion */
 
 void bsp::MemoryDma1::InitializeCallback()
 {
@@ -51,7 +55,7 @@ void bsp::MemoryDma1::InitializeInterrupt()
 {
 	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream2_IRQn));
 
-	_dma1_stream2_isr = [this]()
+	_dma_isr = [this]()
 	{
 		HAL_DMA_IRQHandler(&_handle_context._handle);
 	};
@@ -62,7 +66,7 @@ void bsp::MemoryDma1::InitializeInterrupt()
 bsp::MemoryDma1::~MemoryDma1()
 {
 	base::interrupt::disable_interrupt(static_cast<uint32_t>(IRQn_Type::DMA1_Stream2_IRQn));
-	_dma1_stream2_isr = nullptr;
+	_dma_isr = nullptr;
 }
 
 void bsp::MemoryDma1::Initialize()
