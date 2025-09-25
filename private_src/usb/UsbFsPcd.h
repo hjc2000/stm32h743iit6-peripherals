@@ -82,9 +82,7 @@ namespace bsp
 			base::usb::fs_pcd::msp_initialize(1);
 		}
 
-		virtual void InitializeAsDevice(std::string const &clock_source_name,
-										uint32_t divider,
-										base::usb::PhyType phy_type) override;
+		virtual void InitializeAsDevice(base::usb::PhyType phy_type) override;
 	};
 
 } // namespace bsp

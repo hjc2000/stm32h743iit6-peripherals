@@ -72,9 +72,7 @@ void bsp::UsbFsPcd::InitializeCallback()
 	};
 }
 
-void bsp::UsbFsPcd::InitializeAsDevice(std::string const &clock_source_name,
-									   uint32_t divider,
-									   base::usb::PhyType phy_type)
+void bsp::UsbFsPcd::InitializeAsDevice(base::usb::PhyType phy_type)
 {
 	__HAL_RCC_USB_OTG_FS_CLK_ENABLE();
 	HAL_PWREx_EnableUSBVoltageDetector();
