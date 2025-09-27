@@ -2,7 +2,6 @@
 #include "base/embedded/interrupt/interrupt.h"
 #include "base/embedded/usb/usb_fs_pcd_handle.h"
 #include "base/stream/ReadOnlySpan.h"
-#include "base/stream/Span.h"
 #include "base/string/define.h"
 #include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
@@ -130,12 +129,7 @@ namespace bsp
 		{
 			if (_data_in_stage_callback)
 			{
-				base::Span span{
-					_handle_context._handle.IN_ep[epnum].xfer_buff,
-					0,
-				};
-
-				base::usb::fs_pcd::DataInStageCallbackArgs args{epnum, span};
+				base::usb::fs_pcd::DataInStageCallbackArgs args{epnum};
 				_data_in_stage_callback(args);
 			}
 		}

@@ -133,7 +133,7 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 								{
 									USBD_LL_DataInStage(&bsp::UsbCdcSerialPort::UsbdHandle(),
 														args.EndpointNumber(),
-														args.Span().Buffer());
+														bsp::UsbFsPcd::HalPcdHandle().IN_ep[args.EndpointNumber()].xfer_buff);
 								});
 
 	HAL_PCD_RegisterIsoOutIncpltCallback(&bsp::UsbFsPcd::HalPcdHandle(),
