@@ -78,4 +78,10 @@ void base::usb::fs_pcd::set_data_out_stage_callback(base::usb::fs_pcd::usb_fs_pc
 	self.SetDataOutStageCallback(callback);
 }
 
+void base::usb::fs_pcd::set_data_in_stage_callback(base::usb::fs_pcd::usb_fs_pcd_handle &self,
+												   std::function<void(base::usb::fs_pcd::DataInStageCallbackArgs const &)> const &callback)
+{
+	self.SetDataInStageCallback(self, callback);
+}
+
 /* #endregion */

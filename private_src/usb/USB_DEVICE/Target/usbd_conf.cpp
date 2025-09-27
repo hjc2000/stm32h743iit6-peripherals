@@ -33,21 +33,6 @@
 USBD_StatusTypeDef USBD_Get_USB_Status(HAL_StatusTypeDef hal_status);
 
 /**
- * @brief  Data In stage callback.
- * @param  hpcd: PCD handle
- * @param  epnum: Endpoint number
- * @retval None
- */
-#if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)
-static void PCD_DataInStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
-#else
-void HAL_PCD_DataInStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
-#endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
-{
-	USBD_LL_DataInStage((USBD_HandleTypeDef *)hpcd->pData, epnum, hpcd->IN_ep[epnum].xfer_buff);
-}
-
-/**
  * @brief  ISOOUTIncomplete callback.
  * @param  hpcd: PCD handle
  * @param  epnum: Endpoint number
@@ -143,8 +128,12 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 														  const_cast<uint8_t *>(args.Span().Buffer()));
 								 });
 
-	HAL_PCD_RegisterDataInStageCallback(&bsp::UsbFsPcd::HalPcdHandle(),
-										PCD_DataInStageCallback);
+	pcd->SetDataInStageCallback([](base::usb::fs_pcd::DataInStageCallbackArgs const &args)
+								{
+									USBD_LL_DataInStage(&bsp::UsbCdcSerialPort::UsbdHandle(),
+														args.EndpointNumber(),
+														args.Span().Buffer());
+								});
 
 	HAL_PCD_RegisterIsoOutIncpltCallback(&bsp::UsbFsPcd::HalPcdHandle(),
 										 PCD_ISOOUTIncompleteCallback);

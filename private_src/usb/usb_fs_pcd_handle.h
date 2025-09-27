@@ -30,5 +30,8 @@ public:
 
 	virtual void SetDataOutStageCallback(std::function<void(base::usb::fs_pcd::DataOutStageCallbackArgs const &)> const &callback) = 0;
 
+	virtual void SetDataInStageCallback(base::usb::fs_pcd::usb_fs_pcd_handle &self,
+										std::function<void(base::usb::fs_pcd::DataInStageCallbackArgs const &)> const &callback) = 0;
+
 	/* #endregion */
 };

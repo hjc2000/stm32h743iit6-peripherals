@@ -2,6 +2,7 @@
 #include "base/embedded/interrupt/interrupt.h"
 #include "base/embedded/usb/usb_fs_pcd_handle.h"
 #include "base/stream/ReadOnlySpan.h"
+#include "base/stream/Span.h"
 #include "base/string/define.h"
 #include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
@@ -46,6 +47,7 @@ namespace bsp
 		std::function<void()> _connect_callback;
 		std::function<void()> _disconnect_callback;
 		std::function<void(base::usb::fs_pcd::DataOutStageCallbackArgs const &)> _data_out_stage_callback;
+		std::function<void(base::usb::fs_pcd::DataInStageCallbackArgs const &)> _data_in_stage_callback;
 
 		void OnSofCallback()
 		{
@@ -126,6 +128,16 @@ namespace bsp
 
 		void OnDataInStageCallback(uint8_t epnum)
 		{
+			if (_data_in_stage_callback)
+			{
+				base::Span span{
+					_handle_context._handle.IN_ep[epnum].xfer_buff,
+					0,
+				};
+
+				base::usb::fs_pcd::DataInStageCallbackArgs args{epnum, span};
+				_data_in_stage_callback(args);
+			}
 		}
 
 		void OnISOOUTIncompleteCallback(uint8_t epnum)
@@ -226,6 +238,13 @@ namespace bsp
 		{
 			base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::OTG_FS_IRQn));
 			_data_out_stage_callback = callback;
+		}
+
+		virtual void SetDataInStageCallback(base::usb::fs_pcd::usb_fs_pcd_handle &self,
+											std::function<void(base::usb::fs_pcd::DataInStageCallbackArgs const &)> const &callback) override
+		{
+			base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::OTG_FS_IRQn));
+			_data_in_stage_callback = callback;
 		}
 
 		/* #endregion */
