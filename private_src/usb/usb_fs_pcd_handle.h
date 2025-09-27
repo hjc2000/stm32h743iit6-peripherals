@@ -28,5 +28,7 @@ public:
 
 	virtual void SetDisconnectCallback(std::function<void()> const &callback) = 0;
 
+	virtual void SetDataOutStageCallback(std::function<void(base::usb::fs_pcd::DataOutStageCallbackArgs const &)> const &callback) = 0;
+
 	/* #endregion */
 };

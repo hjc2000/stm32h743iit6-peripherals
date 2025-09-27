@@ -45,6 +45,7 @@ namespace bsp
 		std::function<void()> _resume_callback;
 		std::function<void()> _connect_callback;
 		std::function<void()> _disconnect_callback;
+		std::function<void(base::usb::fs_pcd::DataOutStageCallbackArgs const &)> _data_out_stage_callback;
 
 		void OnSofCallback()
 		{
@@ -111,6 +112,16 @@ namespace bsp
 
 		void OnDataOutStageCallback(uint8_t epnum)
 		{
+			if (_data_out_stage_callback)
+			{
+				base::ReadOnlySpan span{
+					_handle_context._handle.OUT_ep[epnum].xfer_buff,
+					HAL_PCD_EP_GetRxCount(&_handle_context._handle, epnum),
+				};
+
+				base::usb::fs_pcd::DataOutStageCallbackArgs args{epnum, span};
+				_data_out_stage_callback(args);
+			}
 		}
 
 		void OnDataInStageCallback(uint8_t epnum)
@@ -209,6 +220,12 @@ namespace bsp
 		{
 			base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::OTG_FS_IRQn));
 			_disconnect_callback = callback;
+		}
+
+		virtual void SetDataOutStageCallback(std::function<void(base::usb::fs_pcd::DataOutStageCallbackArgs const &)> const &callback) override
+		{
+			base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::OTG_FS_IRQn));
+			_data_out_stage_callback = callback;
 		}
 
 		/* #endregion */

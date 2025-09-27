@@ -72,4 +72,10 @@ void base::usb::fs_pcd::set_disconnect_callback(base::usb::fs_pcd::usb_fs_pcd_ha
 	self.SetDisconnectCallback(callback);
 }
 
+void base::usb::fs_pcd::set_data_out_stage_callback(base::usb::fs_pcd::usb_fs_pcd_handle &self,
+													std::function<void(base::usb::fs_pcd::DataOutStageCallbackArgs const &)> const &callback)
+{
+	self.SetDataOutStageCallback(callback);
+}
+
 /* #endregion */
