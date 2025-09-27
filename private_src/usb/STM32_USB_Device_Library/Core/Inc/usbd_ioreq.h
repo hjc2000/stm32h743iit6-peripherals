@@ -88,8 +88,6 @@ extern "C"
 	USBD_StatusTypeDef USBD_CtlSendStatus(USBD_HandleTypeDef *pdev);
 	USBD_StatusTypeDef USBD_CtlReceiveStatus(USBD_HandleTypeDef *pdev);
 
-	uint32_t USBD_GetRxCount(USBD_HandleTypeDef *pdev, uint8_t ep_addr);
-
 	/**
 	 * @}
 	 */
