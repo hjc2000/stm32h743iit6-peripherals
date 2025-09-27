@@ -251,7 +251,7 @@ extern "C"
 		uint8_t (*EP0_RxReady)(struct _USBD_HandleTypeDef *pdev);
 		/* Class Specific Endpoints*/
 		uint8_t (*DataIn)(struct _USBD_HandleTypeDef *pdev, uint8_t epnum);
-		uint8_t (*DataOut)(struct _USBD_HandleTypeDef *pdev, uint8_t epnum);
+		uint8_t (*DataOut)(struct _USBD_HandleTypeDef *pdev, uint8_t epnum, size_t size);
 		uint8_t (*SOF)(struct _USBD_HandleTypeDef *pdev);
 		uint8_t (*IsoINIncomplete)(struct _USBD_HandleTypeDef *pdev, uint8_t epnum);
 		uint8_t (*IsoOUTIncomplete)(struct _USBD_HandleTypeDef *pdev, uint8_t epnum);

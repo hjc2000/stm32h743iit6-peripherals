@@ -102,7 +102,7 @@ extern "C"
 	USBD_StatusTypeDef USBD_ClrClassConfig(USBD_HandleTypeDef *pdev, uint8_t cfgidx);
 
 	USBD_StatusTypeDef USBD_LL_SetupStage(USBD_HandleTypeDef *pdev, uint8_t *psetup);
-	USBD_StatusTypeDef USBD_LL_DataOutStage(USBD_HandleTypeDef *pdev, uint8_t epnum, uint8_t *pdata);
+	USBD_StatusTypeDef USBD_LL_DataOutStage(USBD_HandleTypeDef *pdev, uint8_t epnum, uint8_t *pdata, size_t size);
 	USBD_StatusTypeDef USBD_LL_DataInStage(USBD_HandleTypeDef *pdev, uint8_t epnum, uint8_t *pdata);
 
 	USBD_StatusTypeDef USBD_LL_Reset(USBD_HandleTypeDef *pdev);
@@ -143,7 +143,6 @@ extern "C"
 	#endif /* USBD_HS_TESTMODE_ENABLE */
 
 	uint8_t USBD_LL_IsStallEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr);
-	uint32_t USBD_LL_GetRxDataSize(USBD_HandleTypeDef *pdev, uint8_t ep_addr);
 
 	void USBD_LL_Delay(uint32_t Delay);
 

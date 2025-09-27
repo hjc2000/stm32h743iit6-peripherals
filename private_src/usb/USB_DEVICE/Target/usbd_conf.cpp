@@ -125,7 +125,8 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 								 {
 									 USBD_LL_DataOutStage(&bsp::UsbCdcSerialPort::UsbdHandle(),
 														  args.EndpointNumber(),
-														  const_cast<uint8_t *>(args.Span().Buffer()));
+														  const_cast<uint8_t *>(args.Span().Buffer()),
+														  args.Span().Size());
 								 });
 
 	pcd->SetDataInStageCallback([](base::usb::fs_pcd::DataInStageCallbackArgs const &args)
@@ -345,17 +346,6 @@ USBD_StatusTypeDef USBD_LL_PrepareReceive(USBD_HandleTypeDef *pdev, uint8_t ep_a
 	usb_status = USBD_Get_USB_Status(hal_status);
 
 	return usb_status;
-}
-
-/**
- * @brief  Returns the last transferred packet size.
- * @param  pdev: Device handle
- * @param  ep_addr: Endpoint number
- * @retval Received Data Size
- */
-uint32_t USBD_LL_GetRxDataSize(USBD_HandleTypeDef *pdev, uint8_t ep_addr)
-{
-	return HAL_PCD_EP_GetRxCount((PCD_HandleTypeDef *)pdev->pData, ep_addr);
 }
 
 #ifdef USBD_HS_TESTMODE_ENABLE

@@ -58,6 +58,7 @@ EndBSPDependencies */
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_cdc.h"
 #include "usbd_ctlreq.h"
+#include <cstddef>
 
 /** @addtogroup STM32_USB_DEVICE_LIBRARY
  * @{
@@ -98,7 +99,7 @@ static uint8_t USBD_CDC_Init(USBD_HandleTypeDef *pdev, uint8_t cfgidx);
 static uint8_t USBD_CDC_DeInit(USBD_HandleTypeDef *pdev, uint8_t cfgidx);
 static uint8_t USBD_CDC_Setup(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *req);
 static uint8_t USBD_CDC_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum);
-static uint8_t USBD_CDC_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum);
+static uint8_t USBD_CDC_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum, size_t size);
 static uint8_t USBD_CDC_EP0_RxReady(USBD_HandleTypeDef *pdev);
 #ifndef USE_USBD_COMPOSITE
 static uint8_t *USBD_CDC_GetFSCfgDesc(uint16_t *length);
@@ -564,7 +565,7 @@ static uint8_t USBD_CDC_DataIn(USBD_HandleTypeDef *pdev, uint8_t epnum)
  * @param  epnum: endpoint number
  * @retval status
  */
-static uint8_t USBD_CDC_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum)
+static uint8_t USBD_CDC_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum, size_t size)
 {
 	USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
 
@@ -574,7 +575,7 @@ static uint8_t USBD_CDC_DataOut(USBD_HandleTypeDef *pdev, uint8_t epnum)
 	}
 
 	/* Get the received data length */
-	hcdc->RxLength = USBD_LL_GetRxDataSize(pdev, epnum);
+	hcdc->RxLength = size;
 
 	/* USB data will be immediately processed, this allow next USB traffic being
 	NAKed till the end of the application Xfer */

@@ -578,7 +578,8 @@ USBD_StatusTypeDef USBD_LL_SetupStage(USBD_HandleTypeDef *pdev, uint8_t *psetup)
  * @retval status
  */
 USBD_StatusTypeDef USBD_LL_DataOutStage(USBD_HandleTypeDef *pdev,
-										uint8_t epnum, uint8_t *pdata)
+										uint8_t epnum, uint8_t *pdata,
+										size_t size)
 {
 	USBD_EndpointTypeDef *pep;
 	USBD_StatusTypeDef ret = USBD_OK;
@@ -651,7 +652,7 @@ USBD_StatusTypeDef USBD_LL_DataOutStage(USBD_HandleTypeDef *pdev,
 				if (pdev->pClass[idx]->DataOut != NULL)
 				{
 					pdev->classId = idx;
-					ret = (USBD_StatusTypeDef)pdev->pClass[idx]->DataOut(pdev, epnum);
+					ret = (USBD_StatusTypeDef)pdev->pClass[idx]->DataOut(pdev, epnum, size);
 				}
 			}
 			if (ret != USBD_OK)
