@@ -32,36 +32,6 @@
 
 USBD_StatusTypeDef USBD_Get_USB_Status(HAL_StatusTypeDef hal_status);
 
-/**
- * @brief  ISOOUTIncomplete callback.
- * @param  hpcd: PCD handle
- * @param  epnum: Endpoint number
- * @retval None
- */
-#if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)
-static void PCD_ISOOUTIncompleteCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
-#else
-void HAL_PCD_ISOOUTIncompleteCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
-#endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
-{
-	USBD_LL_IsoOUTIncomplete((USBD_HandleTypeDef *)hpcd->pData, epnum);
-}
-
-/**
- * @brief  ISOINIncomplete callback.
- * @param  hpcd: PCD handle
- * @param  epnum: Endpoint number
- * @retval None
- */
-#if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)
-static void PCD_ISOINIncompleteCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
-#else
-void HAL_PCD_ISOINIncompleteCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
-#endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
-{
-	USBD_LL_IsoINIncomplete((USBD_HandleTypeDef *)hpcd->pData, epnum);
-}
-
 /*******************************************************************************
 					   LL Driver Interface (USB Device Library --> PCD)
 *******************************************************************************/
@@ -136,11 +106,17 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 														bsp::UsbFsPcd::HalPcdHandle().IN_ep[args.EndpointNumber()].xfer_buff);
 								});
 
-	HAL_PCD_RegisterIsoOutIncpltCallback(&bsp::UsbFsPcd::HalPcdHandle(),
-										 PCD_ISOOUTIncompleteCallback);
+	pcd->SetIsoOutIncompleteCallback([](base::usb::fs_device_pcd::IsoOutIncompleteCallbackArgs const &args)
+									 {
+										 USBD_LL_IsoOUTIncomplete(&bsp::UsbCdcSerialPort::UsbdHandle(),
+																  args.EndpointNumber());
+									 });
 
-	HAL_PCD_RegisterIsoInIncpltCallback(&bsp::UsbFsPcd::HalPcdHandle(),
-										PCD_ISOINIncompleteCallback);
+	pcd->SetIsoInIncompleteCallback([](base::usb::fs_device_pcd::IsoInIncompleteCallbackArgs const &args)
+									{
+										USBD_LL_IsoINIncomplete(&bsp::UsbCdcSerialPort::UsbdHandle(),
+																args.EndpointNumber());
+									});
 
 	return USBD_OK;
 }

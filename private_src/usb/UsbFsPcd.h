@@ -138,10 +138,20 @@ namespace bsp
 
 		void OnISOOUTIncompleteCallback(uint8_t epnum)
 		{
+			if (_iso_out_incomplete_callback)
+			{
+				base::usb::fs_device_pcd::IsoOutIncompleteCallbackArgs args{epnum};
+				_iso_out_incomplete_callback(args);
+			}
 		}
 
 		void OnISOINIncompleteCallback(uint8_t epnum)
 		{
+			if (_iso_in_incomplete_callback)
+			{
+				base::usb::fs_device_pcd::IsoInIncompleteCallbackArgs args{epnum};
+				_iso_in_incomplete_callback(args);
+			}
 		}
 
 		/* #endregion */
