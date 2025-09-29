@@ -153,7 +153,7 @@ namespace bsp
 			_handle = &_handle_context._handle;
 		}
 
-		virtual void InitializeAsDevice(base::usb::PhyType phy_type) override;
+		virtual void Initialize(base::usb::PhyType phy_type) override;
 
 		virtual void Start() override
 		{

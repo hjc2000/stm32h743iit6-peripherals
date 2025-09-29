@@ -7,10 +7,10 @@ std::shared_ptr<base::usb::fs_device_pcd::usb_fs_pcd_handle> base::usb::fs_devic
 	return std::shared_ptr<base::usb::fs_device_pcd::usb_fs_pcd_handle>{new bsp::UsbFsPcd{}};
 }
 
-void base::usb::fs_device_pcd::initialize_as_device(base::usb::fs_device_pcd::usb_fs_pcd_handle &self,
-													base::usb::PhyType phy_type)
+void base::usb::fs_device_pcd::initialize(base::usb::fs_device_pcd::usb_fs_pcd_handle &self,
+										  base::usb::PhyType phy_type)
 {
-	self.InitializeAsDevice(phy_type);
+	self.Initialize(phy_type);
 }
 
 void base::usb::fs_device_pcd::start(base::usb::fs_device_pcd::usb_fs_pcd_handle &self)

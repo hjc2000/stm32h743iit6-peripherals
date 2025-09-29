@@ -4,7 +4,7 @@
 class base::usb::fs_device_pcd::usb_fs_pcd_handle
 {
 public:
-	virtual void InitializeAsDevice(base::usb::PhyType phy_type) = 0;
+	virtual void Initialize(base::usb::PhyType phy_type) = 0;
 
 	virtual void Start() = 0;
 
