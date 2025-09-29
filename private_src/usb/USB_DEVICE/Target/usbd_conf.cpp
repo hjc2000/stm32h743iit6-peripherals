@@ -101,6 +101,8 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 
 	pcd->SetDataInStageCallback([](base::usb::fs_device_pcd::DataInStageCallbackArgs const &args)
 								{
+									// bsp::UsbFsPcd::HalPcdHandle().IN_ep[args.EndpointNumber()].xfer_buff
+									// 指向的是用户调用 USBD_LL_Transmit 时传入的缓冲区。
 									USBD_LL_DataInStage(&bsp::UsbCdcSerialPort::UsbdHandle(),
 														args.EndpointNumber(),
 														bsp::UsbFsPcd::HalPcdHandle().IN_ep[args.EndpointNumber()].xfer_buff);
