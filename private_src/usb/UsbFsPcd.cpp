@@ -87,12 +87,20 @@ void bsp::UsbFsPcd::InitializeCallback()
 		self->OnDataInStageCallback(epnum);
 	};
 
+	// 等时传输中，如果主机输出的数据没有及时被设备接收，就会触发此回调。
+	//
+	// 当主机试图发送数据给 stm32, 但是 stm32 的 USB 外设的端点接收 FIFO
+	// 正在被占用，上一次的数据还没处理完，就会触发此回调。
 	_handle_context._handle.ISOOUTIncompleteCallback = [](PCD_HandleTypeDef *handle, uint8_t epnum)
 	{
 		UsbFsPcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
 		self->OnISOOUTIncompleteCallback(epnum);
 	};
 
+	// 等时传输中，主机没有及时取走输入数据，就会触发此回调。
+	//
+	// 设备将准备给主机的数据放到 FIFO 中，等待主机取走，主机如果没有及时取走，
+	// 就会触发此回调。但是设备不管，设备会放入新的数据，替换掉旧数据，旧数据直接丢包。
 	_handle_context._handle.ISOINIncompleteCallback = [](PCD_HandleTypeDef *handle, uint8_t epnum)
 	{
 		UsbFsPcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
