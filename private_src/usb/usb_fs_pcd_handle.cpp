@@ -13,21 +13,6 @@ void base::usb::fs_device_pcd::initialize(base::usb::fs_device_pcd::usb_fs_pcd_h
 	self.Initialize(phy_type);
 }
 
-void base::usb::fs_device_pcd::start(base::usb::fs_device_pcd::usb_fs_pcd_handle &self)
-{
-	self.Start();
-}
-
-void base::usb::fs_device_pcd::suspend(base::usb::fs_device_pcd::usb_fs_pcd_handle &self)
-{
-	self.Suspend();
-}
-
-void base::usb::fs_device_pcd::resume(base::usb::fs_device_pcd::usb_fs_pcd_handle &self)
-{
-	self.Resume();
-}
-
 /* #region 注册回调 */
 
 void base::usb::fs_device_pcd::set_sof_callback(base::usb::fs_device_pcd::usb_fs_pcd_handle &self,
@@ -97,3 +82,18 @@ void base::usb::fs_device_pcd::set_iso_in_incomplete_callback(base::usb::fs_devi
 }
 
 /* #endregion */
+
+void base::usb::fs_device_pcd::start(base::usb::fs_device_pcd::usb_fs_pcd_handle &self)
+{
+	self.Start();
+}
+
+void base::usb::fs_device_pcd::suspend(base::usb::fs_device_pcd::usb_fs_pcd_handle &self)
+{
+	self.Suspend();
+}
+
+void base::usb::fs_device_pcd::resume(base::usb::fs_device_pcd::usb_fs_pcd_handle &self)
+{
+	self.Resume();
+}

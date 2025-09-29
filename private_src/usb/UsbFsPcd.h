@@ -165,32 +165,6 @@ namespace bsp
 
 		virtual void Initialize(base::usb::PhyType phy_type) override;
 
-		virtual void Start() override
-		{
-			HAL_StatusTypeDef result = HAL_PCD_Start(&_handle_context._handle);
-			if (result != HAL_StatusTypeDef::HAL_OK)
-			{
-				throw std::runtime_error{CODE_POS_STR + "启动失败。"};
-			}
-
-			base::interrupt::enable_interrupt(static_cast<int32_t>(IRQn_Type::OTG_FS_IRQn), 5);
-		}
-
-		virtual void Suspend() override
-		{
-			__HAL_PCD_GATE_PHYCLOCK(&_handle_context._handle);
-
-			if (_handle_context._handle.Init.low_power_enable)
-			{
-				/* Set SLEEPDEEP bit and SleepOnExit of Cortex System Control Register. */
-				SCB->SCR |= (uint32_t)((uint32_t)(SCB_SCR_SLEEPDEEP_Msk | SCB_SCR_SLEEPONEXIT_Msk));
-			}
-		}
-
-		virtual void Resume() override
-		{
-		}
-
 		static PCD_HandleTypeDef &HalPcdHandle()
 		{
 			return *_handle;
@@ -266,6 +240,32 @@ namespace bsp
 		}
 
 		/* #endregion */
+
+		virtual void Start() override
+		{
+			HAL_StatusTypeDef result = HAL_PCD_Start(&_handle_context._handle);
+			if (result != HAL_StatusTypeDef::HAL_OK)
+			{
+				throw std::runtime_error{CODE_POS_STR + "启动失败。"};
+			}
+
+			base::interrupt::enable_interrupt(static_cast<int32_t>(IRQn_Type::OTG_FS_IRQn), 5);
+		}
+
+		virtual void Suspend() override
+		{
+			__HAL_PCD_GATE_PHYCLOCK(&_handle_context._handle);
+
+			if (_handle_context._handle.Init.low_power_enable)
+			{
+				/* Set SLEEPDEEP bit and SleepOnExit of Cortex System Control Register. */
+				SCB->SCR |= (uint32_t)((uint32_t)(SCB_SCR_SLEEPDEEP_Msk | SCB_SCR_SLEEPONEXIT_Msk));
+			}
+		}
+
+		virtual void Resume() override
+		{
+		}
 	};
 
 } // namespace bsp
