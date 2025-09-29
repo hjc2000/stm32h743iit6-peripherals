@@ -33,5 +33,9 @@ public:
 	virtual void SetDataInStageCallback(base::usb::fs_device_pcd::usb_fs_pcd_handle &self,
 										std::function<void(base::usb::fs_device_pcd::DataInStageCallbackArgs const &)> const &callback) = 0;
 
+	virtual void SetIsoOutIncompleteCallback(std::function<void(base::usb::fs_device_pcd::IsoOutIncompleteCallbackArgs const &)> const &callback) = 0;
+
+	virtual void SetIsoInIncompleteCallback(std::function<void(base::usb::fs_device_pcd::IsoInIncompleteCallbackArgs const &)> const &callback) = 0;
+
 	/* #endregion */
 };

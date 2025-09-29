@@ -84,4 +84,16 @@ void base::usb::fs_device_pcd::set_data_in_stage_callback(base::usb::fs_device_p
 	self.SetDataInStageCallback(self, callback);
 }
 
+void base::usb::fs_device_pcd::set_iso_out_incomplete_callback(base::usb::fs_device_pcd::usb_fs_pcd_handle &self,
+															   std::function<void(base::usb::fs_device_pcd::IsoOutIncompleteCallbackArgs const &)> const &callback)
+{
+	self.SetIsoOutIncompleteCallback(callback);
+}
+
+void base::usb::fs_device_pcd::set_iso_in_incomplete_callback(base::usb::fs_device_pcd::usb_fs_pcd_handle &self,
+															  std::function<void(base::usb::fs_device_pcd::IsoInIncompleteCallbackArgs const &)> const &callback)
+{
+	self.SetIsoInIncompleteCallback(callback);
+}
+
 /* #endregion */

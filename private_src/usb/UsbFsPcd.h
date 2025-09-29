@@ -47,6 +47,8 @@ namespace bsp
 		std::function<void()> _disconnect_callback;
 		std::function<void(base::usb::fs_device_pcd::DataOutStageCallbackArgs const &)> _data_out_stage_callback;
 		std::function<void(base::usb::fs_device_pcd::DataInStageCallbackArgs const &)> _data_in_stage_callback;
+		std::function<void(base::usb::fs_device_pcd::IsoOutIncompleteCallbackArgs const &)> _iso_out_incomplete_callback;
+		std::function<void(base::usb::fs_device_pcd::IsoInIncompleteCallbackArgs const &)> _iso_in_incomplete_callback;
 
 		void OnSofCallback()
 		{
@@ -239,6 +241,18 @@ namespace bsp
 		{
 			base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::OTG_FS_IRQn));
 			_data_in_stage_callback = callback;
+		}
+
+		virtual void SetIsoOutIncompleteCallback(std::function<void(base::usb::fs_device_pcd::IsoOutIncompleteCallbackArgs const &)> const &callback) override
+		{
+			base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::OTG_FS_IRQn));
+			_iso_out_incomplete_callback = callback;
+		}
+
+		virtual void SetIsoInIncompleteCallback(std::function<void(base::usb::fs_device_pcd::IsoInIncompleteCallbackArgs const &)> const &callback) override
+		{
+			base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::OTG_FS_IRQn));
+			_iso_in_incomplete_callback = callback;
 		}
 
 		/* #endregion */
