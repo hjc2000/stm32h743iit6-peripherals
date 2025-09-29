@@ -1,5 +1,5 @@
 #pragma once
-#include "base/embedded/usb/usb_fs_pcd_handle.h"
+#include "base/embedded/usb/fs_device_pcd/usb_fs_pcd_handle.h"
 #include "base/string/define.h"
 #include "hal.h" // IWYU pragma: keep
 #include <cstdint>
@@ -7,21 +7,21 @@
 
 namespace bsp
 {
-	namespace usb::fs_pcd
+	namespace usb::fs_device_pcd
 	{
-		constexpr uint32_t phy_type_to_define_value(base::usb::fs_pcd::PhyType phy_type)
+		constexpr uint32_t phy_type_to_define_value(base::usb::fs_device_pcd::PhyType phy_type)
 		{
 			switch (phy_type)
 			{
-			case base::usb::fs_pcd::PhyType::ULPI:
+			case base::usb::fs_device_pcd::PhyType::ULPI:
 				{
 					return PCD_PHY_ULPI;
 				}
-			case base::usb::fs_pcd::PhyType::UTMI:
+			case base::usb::fs_device_pcd::PhyType::UTMI:
 				{
 					return PCD_PHY_UTMI;
 				}
-			case base::usb::fs_pcd::PhyType::Embedded:
+			case base::usb::fs_device_pcd::PhyType::Embedded:
 				{
 					return PCD_PHY_EMBEDDED;
 				}
@@ -32,5 +32,5 @@ namespace bsp
 			}
 		}
 
-	} // namespace usb::fs_pcd
+	} // namespace usb::fs_device_pcd
 } // namespace bsp

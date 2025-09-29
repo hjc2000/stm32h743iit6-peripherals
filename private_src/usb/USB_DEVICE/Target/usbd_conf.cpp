@@ -19,7 +19,7 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "base/embedded/usb/UsbFsPcd.h"
+#include "base/embedded/usb/fs_device_pcd/UsbFsPcd.h"
 #include "stm32h7xx_hal.h"
 #include "stm32h7xx_hal_pcd.h"
 #include "UsbCdcSerialPort.h"
@@ -76,14 +76,14 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 	bsp::UsbFsPcd::HalPcdHandle().pData = pdev;
 	pdev->pData = &bsp::UsbFsPcd::HalPcdHandle();
 
-	std::shared_ptr<base::usb::fs_pcd::UsbFsPcd> pcd = base::usb::fs_pcd::usb_fs_pcd_slot()[0];
+	std::shared_ptr<base::usb::fs_device_pcd::UsbFsPcd> pcd = base::usb::fs_device_pcd::usb_fs_pcd_slot()[0];
 
 	pcd->SetSofCallback([]()
 						{
 							USBD_LL_SOF(&bsp::UsbCdcSerialPort::UsbdHandle());
 						});
 
-	pcd->SetSetupStageCallback([](base::usb::fs_pcd::SetupStageCallbackArgs const &args)
+	pcd->SetSetupStageCallback([](base::usb::fs_device_pcd::SetupStageCallbackArgs const &args)
 							   {
 								   USBD_LL_SetupStage(&bsp::UsbCdcSerialPort::UsbdHandle(), const_cast<uint8_t *>(args.Span().Buffer()));
 							   });
@@ -99,13 +99,13 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 								/* Inform USB library that core enters in suspend Mode. */
 								USBD_LL_Suspend(&bsp::UsbCdcSerialPort::UsbdHandle());
 
-								std::shared_ptr<base::usb::fs_pcd::UsbFsPcd> pcd = base::usb::fs_pcd::usb_fs_pcd_slot()[0];
+								std::shared_ptr<base::usb::fs_device_pcd::UsbFsPcd> pcd = base::usb::fs_device_pcd::usb_fs_pcd_slot()[0];
 								pcd->Suspend();
 							});
 
 	pcd->SetResumeCallback([]()
 						   {
-							   std::shared_ptr<base::usb::fs_pcd::UsbFsPcd> pcd = base::usb::fs_pcd::usb_fs_pcd_slot()[0];
+							   std::shared_ptr<base::usb::fs_device_pcd::UsbFsPcd> pcd = base::usb::fs_device_pcd::usb_fs_pcd_slot()[0];
 							   pcd->Resume();
 
 							   USBD_LL_Resume(&bsp::UsbCdcSerialPort::UsbdHandle());
@@ -121,7 +121,7 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 								   USBD_LL_DevDisconnected(&bsp::UsbCdcSerialPort::UsbdHandle());
 							   });
 
-	pcd->SetDataOutStageCallback([](base::usb::fs_pcd::DataOutStageCallbackArgs const &args)
+	pcd->SetDataOutStageCallback([](base::usb::fs_device_pcd::DataOutStageCallbackArgs const &args)
 								 {
 									 USBD_LL_DataOutStage(&bsp::UsbCdcSerialPort::UsbdHandle(),
 														  args.EndpointNumber(),
@@ -129,7 +129,7 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 														  args.Span().Size());
 								 });
 
-	pcd->SetDataInStageCallback([](base::usb::fs_pcd::DataInStageCallbackArgs const &args)
+	pcd->SetDataInStageCallback([](base::usb::fs_device_pcd::DataInStageCallbackArgs const &args)
 								{
 									USBD_LL_DataInStage(&bsp::UsbCdcSerialPort::UsbdHandle(),
 														args.EndpointNumber(),
@@ -152,7 +152,7 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
  */
 USBD_StatusTypeDef USBD_LL_Start(USBD_HandleTypeDef *pdev)
 {
-	std::shared_ptr<base::usb::fs_pcd::UsbFsPcd> pcd = base::usb::fs_pcd::usb_fs_pcd_slot()[0];
+	std::shared_ptr<base::usb::fs_device_pcd::UsbFsPcd> pcd = base::usb::fs_device_pcd::usb_fs_pcd_slot()[0];
 	pcd->Start();
 
 	HAL_StatusTypeDef hal_status = HAL_OK;

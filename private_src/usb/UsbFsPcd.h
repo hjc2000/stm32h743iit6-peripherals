@@ -1,6 +1,6 @@
 #pragma once
 #include "base/embedded/interrupt/interrupt.h"
-#include "base/embedded/usb/usb_fs_pcd_handle.h"
+#include "base/embedded/usb/fs_device_pcd/usb_fs_pcd_handle.h"
 #include "base/stream/ReadOnlySpan.h"
 #include "base/string/define.h"
 #include "base/UsageStateManager.h"
@@ -13,7 +13,7 @@
 namespace bsp
 {
 	class UsbFsPcd final :
-		public base::usb::fs_pcd::usb_fs_pcd_handle
+		public base::usb::fs_device_pcd::usb_fs_pcd_handle
 	{
 	private:
 		class hal_pcd_handle_context
@@ -39,14 +39,14 @@ namespace bsp
 		/* #region USB 回调 */
 
 		std::function<void()> _sof_callback;
-		std::function<void(base::usb::fs_pcd::SetupStageCallbackArgs const &)> _setup_stage_callback;
+		std::function<void(base::usb::fs_device_pcd::SetupStageCallbackArgs const &)> _setup_stage_callback;
 		std::function<void()> _reset_callback;
 		std::function<void()> _suspend_callback;
 		std::function<void()> _resume_callback;
 		std::function<void()> _connect_callback;
 		std::function<void()> _disconnect_callback;
-		std::function<void(base::usb::fs_pcd::DataOutStageCallbackArgs const &)> _data_out_stage_callback;
-		std::function<void(base::usb::fs_pcd::DataInStageCallbackArgs const &)> _data_in_stage_callback;
+		std::function<void(base::usb::fs_device_pcd::DataOutStageCallbackArgs const &)> _data_out_stage_callback;
+		std::function<void(base::usb::fs_device_pcd::DataInStageCallbackArgs const &)> _data_in_stage_callback;
 
 		void OnSofCallback()
 		{
@@ -65,7 +65,7 @@ namespace bsp
 					sizeof(_handle_context._handle.Setup),
 				};
 
-				base::usb::fs_pcd::SetupStageCallbackArgs args{span};
+				base::usb::fs_device_pcd::SetupStageCallbackArgs args{span};
 
 				_setup_stage_callback(args);
 			}
@@ -120,7 +120,7 @@ namespace bsp
 					HAL_PCD_EP_GetRxCount(&_handle_context._handle, epnum),
 				};
 
-				base::usb::fs_pcd::DataOutStageCallbackArgs args{epnum, span};
+				base::usb::fs_device_pcd::DataOutStageCallbackArgs args{epnum, span};
 				_data_out_stage_callback(args);
 			}
 		}
@@ -129,7 +129,7 @@ namespace bsp
 		{
 			if (_data_in_stage_callback)
 			{
-				base::usb::fs_pcd::DataInStageCallbackArgs args{epnum};
+				base::usb::fs_device_pcd::DataInStageCallbackArgs args{epnum};
 				_data_in_stage_callback(args);
 			}
 		}
@@ -147,7 +147,7 @@ namespace bsp
 	public:
 		UsbFsPcd()
 		{
-			base::usb::fs_pcd::msp_initialize(1);
+			base::usb::fs_device_pcd::msp_initialize(1);
 			_handle = &_handle_context._handle;
 		}
 
@@ -192,7 +192,7 @@ namespace bsp
 			_sof_callback = callback;
 		}
 
-		virtual void SetSetupStageCallback(std::function<void(base::usb::fs_pcd::SetupStageCallbackArgs const &)> const &callback) override
+		virtual void SetSetupStageCallback(std::function<void(base::usb::fs_device_pcd::SetupStageCallbackArgs const &)> const &callback) override
 		{
 			base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::OTG_FS_IRQn));
 			_setup_stage_callback = callback;
@@ -228,14 +228,14 @@ namespace bsp
 			_disconnect_callback = callback;
 		}
 
-		virtual void SetDataOutStageCallback(std::function<void(base::usb::fs_pcd::DataOutStageCallbackArgs const &)> const &callback) override
+		virtual void SetDataOutStageCallback(std::function<void(base::usb::fs_device_pcd::DataOutStageCallbackArgs const &)> const &callback) override
 		{
 			base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::OTG_FS_IRQn));
 			_data_out_stage_callback = callback;
 		}
 
-		virtual void SetDataInStageCallback(base::usb::fs_pcd::usb_fs_pcd_handle &self,
-											std::function<void(base::usb::fs_pcd::DataInStageCallbackArgs const &)> const &callback) override
+		virtual void SetDataInStageCallback(base::usb::fs_device_pcd::usb_fs_pcd_handle &self,
+											std::function<void(base::usb::fs_device_pcd::DataInStageCallbackArgs const &)> const &callback) override
 		{
 			base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::OTG_FS_IRQn));
 			_data_in_stage_callback = callback;
