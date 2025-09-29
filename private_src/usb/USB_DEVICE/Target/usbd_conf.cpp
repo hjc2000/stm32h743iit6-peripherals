@@ -19,7 +19,7 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "base/embedded/usb/fs_device_pcd/UsbFsPcd.h"
+#include "base/embedded/usb/fs-device-pcd/UsbFsPcd.h"
 #include "stm32h7xx_hal.h"
 #include "stm32h7xx_hal_pcd.h"
 #include "UsbCdcSerialPort.h"
