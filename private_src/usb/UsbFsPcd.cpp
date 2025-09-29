@@ -94,7 +94,7 @@ void bsp::UsbFsPcd::InitializeCallback()
 	_handle_context._handle.ISOOUTIncompleteCallback = [](PCD_HandleTypeDef *handle, uint8_t epnum)
 	{
 		UsbFsPcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
-		self->OnISOOUTIncompleteCallback(epnum);
+		self->OnIsoOutIncompleteCallback(epnum);
 	};
 
 	// 等时传输中，主机没有及时取走输入数据，就会触发此回调。
@@ -104,7 +104,7 @@ void bsp::UsbFsPcd::InitializeCallback()
 	_handle_context._handle.ISOINIncompleteCallback = [](PCD_HandleTypeDef *handle, uint8_t epnum)
 	{
 		UsbFsPcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
-		self->OnISOINIncompleteCallback(epnum);
+		self->OnIsoInIncompleteCallback(epnum);
 	};
 }
 

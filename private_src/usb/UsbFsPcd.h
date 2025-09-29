@@ -136,7 +136,7 @@ namespace bsp
 			}
 		}
 
-		void OnISOOUTIncompleteCallback(uint8_t epnum)
+		void OnIsoOutIncompleteCallback(uint8_t epnum)
 		{
 			if (_iso_out_incomplete_callback)
 			{
@@ -145,7 +145,7 @@ namespace bsp
 			}
 		}
 
-		void OnISOINIncompleteCallback(uint8_t epnum)
+		void OnIsoInIncompleteCallback(uint8_t epnum)
 		{
 			if (_iso_in_incomplete_callback)
 			{
