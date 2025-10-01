@@ -19,14 +19,14 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "base/embedded/usb/fs-device-pcd/UsbFsPcd.h"
+#include "base/embedded/usb/fs-device-pcd/UsbFsDevicePcd.h"
 #include "stm32h7xx_hal.h"
 #include "stm32h7xx_hal_pcd.h"
 #include "UsbCdcSerialPort.h"
 #include "usbd_cdc.h"
 #include "usbd_core.h"
 #include "usbd_def.h"
-#include "UsbFsPcd.h"
+#include "UsbFsDevicePcd.h"
 #include <cstdint>
 #include <memory>
 
@@ -43,10 +43,10 @@ USBD_StatusTypeDef USBD_Get_USB_Status(HAL_StatusTypeDef hal_status);
  */
 USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 {
-	bsp::UsbFsPcd::HalPcdHandle().pData = pdev;
-	pdev->pData = &bsp::UsbFsPcd::HalPcdHandle();
+	bsp::UsbFsDevicePcd::HalPcdHandle().pData = pdev;
+	pdev->pData = &bsp::UsbFsDevicePcd::HalPcdHandle();
 
-	std::shared_ptr<base::usb::fs_device_pcd::UsbFsPcd> pcd = base::usb::fs_device_pcd::usb_fs_pcd_slot()[0];
+	std::shared_ptr<base::usb::fs_device_pcd::UsbFsDevicePcd> pcd = base::usb::fs_device_pcd::usb_fs_pcd_slot()[0];
 
 	pcd->SetSofCallback([]()
 						{
@@ -69,13 +69,13 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 								/* Inform USB library that core enters in suspend Mode. */
 								USBD_LL_Suspend(&bsp::usb_cdc_serial_port_slot()[0]->UsbdHandle());
 
-								std::shared_ptr<base::usb::fs_device_pcd::UsbFsPcd> pcd = base::usb::fs_device_pcd::usb_fs_pcd_slot()[0];
+								std::shared_ptr<base::usb::fs_device_pcd::UsbFsDevicePcd> pcd = base::usb::fs_device_pcd::usb_fs_pcd_slot()[0];
 								pcd->Suspend();
 							});
 
 	pcd->SetResumeCallback([]()
 						   {
-							   std::shared_ptr<base::usb::fs_device_pcd::UsbFsPcd> pcd = base::usb::fs_device_pcd::usb_fs_pcd_slot()[0];
+							   std::shared_ptr<base::usb::fs_device_pcd::UsbFsDevicePcd> pcd = base::usb::fs_device_pcd::usb_fs_pcd_slot()[0];
 							   pcd->Resume();
 
 							   USBD_LL_Resume(&bsp::usb_cdc_serial_port_slot()[0]->UsbdHandle());
@@ -101,11 +101,11 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 
 	pcd->SetDataInStageCallback([](base::usb::fs_device_pcd::DataInStageCallbackArgs const &args)
 								{
-									// bsp::UsbFsPcd::HalPcdHandle().IN_ep[args.EndpointNumber()].xfer_buff
+									// bsp::UsbFsDevicePcd::HalPcdHandle().IN_ep[args.EndpointNumber()].xfer_buff
 									// 指向的是用户调用 USBD_LL_Transmit 时传入的缓冲区。
 									USBD_LL_DataInStage(&bsp::usb_cdc_serial_port_slot()[0]->UsbdHandle(),
 														args.EndpointNumber(),
-														bsp::UsbFsPcd::HalPcdHandle().IN_ep[args.EndpointNumber()].xfer_buff);
+														bsp::UsbFsDevicePcd::HalPcdHandle().IN_ep[args.EndpointNumber()].xfer_buff);
 								});
 
 	pcd->SetIsoOutIncompleteCallback([](base::usb::fs_device_pcd::IsoOutIncompleteCallbackArgs const &args)
@@ -130,7 +130,7 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
  */
 USBD_StatusTypeDef USBD_LL_Start(USBD_HandleTypeDef *pdev)
 {
-	std::shared_ptr<base::usb::fs_device_pcd::UsbFsPcd> pcd = base::usb::fs_device_pcd::usb_fs_pcd_slot()[0];
+	std::shared_ptr<base::usb::fs_device_pcd::UsbFsDevicePcd> pcd = base::usb::fs_device_pcd::usb_fs_pcd_slot()[0];
 	pcd->Start();
 
 	HAL_StatusTypeDef hal_status = HAL_OK;

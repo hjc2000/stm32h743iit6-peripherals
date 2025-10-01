@@ -1,34 +1,34 @@
 #pragma once
 #include "base/embedded/interrupt/interrupt.h"
-#include "base/embedded/usb/fs-device-pcd/usb_fs_pcd_handle.h"
+#include "base/embedded/usb/fs-device-pcd/usb_fs_device_pcd_handle.h"
 #include "base/stream/ReadOnlySpan.h"
 #include "base/string/define.h"
 #include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
-#include "usb_fs_pcd_handle.h"
+#include "usb_fs_device_pcd_handle.h"
 #include <cstdint>
 #include <functional>
 #include <stdexcept>
 
 namespace bsp
 {
-	class UsbFsPcd final :
-		public base::usb::fs_device_pcd::usb_fs_pcd_handle
+	class UsbFsDevicePcd final :
+		public base::usb::fs_device_pcd::usb_fs_device_pcd_handle
 	{
 	private:
 		class hal_pcd_handle_context
 		{
 		public:
-			hal_pcd_handle_context(UsbFsPcd *self)
+			hal_pcd_handle_context(UsbFsDevicePcd *self)
 				: _self{self}
 			{
 			}
 
 			PCD_HandleTypeDef _handle{};
-			UsbFsPcd *_self{};
+			UsbFsDevicePcd *_self{};
 		};
 
-		base::UsageStateManager<UsbFsPcd> _usage_state_manager{};
+		base::UsageStateManager<UsbFsDevicePcd> _usage_state_manager{};
 		hal_pcd_handle_context _handle_context{this};
 		inline static PCD_HandleTypeDef *_handle{};
 
@@ -157,7 +157,7 @@ namespace bsp
 		/* #endregion */
 
 	public:
-		UsbFsPcd()
+		UsbFsDevicePcd()
 		{
 			base::usb::fs_device_pcd::msp_initialize(1);
 			_handle = &_handle_context._handle;
@@ -220,7 +220,7 @@ namespace bsp
 			_data_out_stage_callback = callback;
 		}
 
-		virtual void SetDataInStageCallback(base::usb::fs_device_pcd::usb_fs_pcd_handle &self,
+		virtual void SetDataInStageCallback(base::usb::fs_device_pcd::usb_fs_device_pcd_handle &self,
 											std::function<void(base::usb::fs_device_pcd::DataInStageCallbackArgs const &)> const &callback) override
 		{
 			base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::OTG_FS_IRQn));

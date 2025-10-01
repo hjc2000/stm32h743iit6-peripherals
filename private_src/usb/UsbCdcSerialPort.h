@@ -1,10 +1,10 @@
 #pragma once
 #include "base/embedded/Slot.h"
-#include "base/embedded/usb/fs-device-pcd/usb_fs_pcd_handle.h"
-#include "base/embedded/usb/fs-device-pcd/UsbFsPcd.h"
+#include "base/embedded/usb/fs-device-pcd/usb_fs_device_pcd_handle.h"
+#include "base/embedded/usb/fs-device-pcd/UsbFsDevicePcd.h"
 #include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
-#include "usb_fs_pcd_handle.h"
+#include "usb_fs_device_pcd_handle.h"
 #include "usbd_def.h"
 #include <cstdint>
 #include <memory>
@@ -27,10 +27,10 @@ namespace bsp
 		};
 
 		handle_context _handle_context{this};
-		std::shared_ptr<base::usb::fs_device_pcd::UsbFsPcd> _pcd;
+		std::shared_ptr<base::usb::fs_device_pcd::UsbFsDevicePcd> _pcd;
 
 	public:
-		UsbCdcSerialPort(std::shared_ptr<base::usb::fs_device_pcd::UsbFsPcd> const &pcd)
+		UsbCdcSerialPort(std::shared_ptr<base::usb::fs_device_pcd::UsbFsDevicePcd> const &pcd)
 		{
 			_pcd = pcd;
 		}

@@ -1,4 +1,4 @@
-#include "UsbFsPcd.h"
+#include "UsbFsDevicePcd.h"
 #include "base/embedded/interrupt/interrupt.h"
 #include "stm32_hal_legacy.h"
 #include <cstdint>
@@ -21,7 +21,7 @@ extern "C"
 
 /* #endregion */
 
-void bsp::UsbFsPcd::InitializeInterrupt()
+void bsp::UsbFsDevicePcd::InitializeInterrupt()
 {
 	base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::OTG_FS_IRQn));
 
@@ -31,59 +31,59 @@ void bsp::UsbFsPcd::InitializeInterrupt()
 	};
 }
 
-void bsp::UsbFsPcd::InitializeCallback()
+void bsp::UsbFsDevicePcd::InitializeCallback()
 {
 	_handle_context._handle.SOFCallback = [](PCD_HandleTypeDef *handle)
 	{
-		UsbFsPcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
+		UsbFsDevicePcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
 		self->OnSofCallback();
 	};
 
 	_handle_context._handle.SetupStageCallback = [](PCD_HandleTypeDef *handle)
 	{
-		UsbFsPcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
+		UsbFsDevicePcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
 		self->OnSetupStageCallback();
 	};
 
 	_handle_context._handle.ResetCallback = [](PCD_HandleTypeDef *handle)
 	{
-		UsbFsPcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
+		UsbFsDevicePcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
 		self->OnResetCallback();
 	};
 
 	_handle_context._handle.SuspendCallback = [](PCD_HandleTypeDef *handle)
 	{
-		UsbFsPcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
+		UsbFsDevicePcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
 		self->OnSuspendCallback();
 	};
 
 	_handle_context._handle.ResumeCallback = [](PCD_HandleTypeDef *handle)
 	{
-		UsbFsPcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
+		UsbFsDevicePcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
 		self->OnResumeCallback();
 	};
 
 	_handle_context._handle.ConnectCallback = [](PCD_HandleTypeDef *handle)
 	{
-		UsbFsPcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
+		UsbFsDevicePcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
 		self->OnConnectCallback();
 	};
 
 	_handle_context._handle.DisconnectCallback = [](PCD_HandleTypeDef *handle)
 	{
-		UsbFsPcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
+		UsbFsDevicePcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
 		self->OnDisconnectCallback();
 	};
 
 	_handle_context._handle.DataOutStageCallback = [](PCD_HandleTypeDef *handle, uint8_t epnum)
 	{
-		UsbFsPcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
+		UsbFsDevicePcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
 		self->OnDataOutStageCallback(epnum);
 	};
 
 	_handle_context._handle.DataInStageCallback = [](PCD_HandleTypeDef *handle, uint8_t epnum)
 	{
-		UsbFsPcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
+		UsbFsDevicePcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
 		self->OnDataInStageCallback(epnum);
 	};
 
@@ -93,7 +93,7 @@ void bsp::UsbFsPcd::InitializeCallback()
 	// 正在被占用，上一次的数据还没处理完，就会触发此回调。
 	_handle_context._handle.ISOOUTIncompleteCallback = [](PCD_HandleTypeDef *handle, uint8_t epnum)
 	{
-		UsbFsPcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
+		UsbFsDevicePcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
 		self->OnIsoOutIncompleteCallback(epnum);
 	};
 
@@ -103,12 +103,12 @@ void bsp::UsbFsPcd::InitializeCallback()
 	// 就会触发此回调。但是设备不管，设备会放入新的数据，替换掉旧数据，旧数据直接丢包。
 	_handle_context._handle.ISOINIncompleteCallback = [](PCD_HandleTypeDef *handle, uint8_t epnum)
 	{
-		UsbFsPcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
+		UsbFsDevicePcd *self = reinterpret_cast<hal_pcd_handle_context *>(handle)->_self;
 		self->OnIsoInIncompleteCallback(epnum);
 	};
 }
 
-void bsp::UsbFsPcd::Initialize(base::usb::PhyType phy_type)
+void bsp::UsbFsDevicePcd::Initialize(base::usb::PhyType phy_type)
 {
 	__HAL_RCC_USB_OTG_FS_CLK_ENABLE();
 	HAL_PWREx_EnableUSBVoltageDetector();
