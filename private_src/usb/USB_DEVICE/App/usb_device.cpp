@@ -36,22 +36,22 @@
 void MX_USB_DEVICE_Init(void)
 {
 	/* Init Device Library, add supported class and start the library. */
-	if (USBD_Init(&bsp::UsbCdcSerialPort::UsbdHandle(), &FS_Desc, 0) != USBD_OK)
+	if (USBD_Init(&bsp::usb_cdc_serial_port().UsbdHandle(), &FS_Desc, 0) != USBD_OK)
 	{
 		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
 	}
 
-	if (USBD_RegisterClass(&bsp::UsbCdcSerialPort::UsbdHandle(), &USBD_CDC) != USBD_OK)
+	if (USBD_RegisterClass(&bsp::usb_cdc_serial_port().UsbdHandle(), &USBD_CDC) != USBD_OK)
 	{
 		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
 	}
 
-	if (USBD_CDC_RegisterInterface(&bsp::UsbCdcSerialPort::UsbdHandle(), &USBD_Interface_fops_FS) != USBD_OK)
+	if (USBD_CDC_RegisterInterface(&bsp::usb_cdc_serial_port().UsbdHandle(), &USBD_Interface_fops_FS) != USBD_OK)
 	{
 		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
 	}
 
-	if (USBD_Start(&bsp::UsbCdcSerialPort::UsbdHandle()) != USBD_OK)
+	if (USBD_Start(&bsp::usb_cdc_serial_port().UsbdHandle()) != USBD_OK)
 	{
 		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
 	}

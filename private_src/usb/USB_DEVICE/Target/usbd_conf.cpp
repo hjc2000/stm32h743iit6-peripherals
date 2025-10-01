@@ -50,24 +50,24 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 
 	pcd->SetSofCallback([]()
 						{
-							USBD_LL_SOF(&bsp::UsbCdcSerialPort::UsbdHandle());
+							USBD_LL_SOF(&bsp::usb_cdc_serial_port().UsbdHandle());
 						});
 
 	pcd->SetSetupStageCallback([](base::usb::fs_device_pcd::SetupStageCallbackArgs const &args)
 							   {
-								   USBD_LL_SetupStage(&bsp::UsbCdcSerialPort::UsbdHandle(), const_cast<uint8_t *>(args.Span().Buffer()));
+								   USBD_LL_SetupStage(&bsp::usb_cdc_serial_port().UsbdHandle(), const_cast<uint8_t *>(args.Span().Buffer()));
 							   });
 
 	pcd->SetResetCallback([]()
 						  {
-							  USBD_LL_SetSpeed(&bsp::UsbCdcSerialPort::UsbdHandle(), USBD_SPEED_FULL);
-							  USBD_LL_Reset(&bsp::UsbCdcSerialPort::UsbdHandle());
+							  USBD_LL_SetSpeed(&bsp::usb_cdc_serial_port().UsbdHandle(), USBD_SPEED_FULL);
+							  USBD_LL_Reset(&bsp::usb_cdc_serial_port().UsbdHandle());
 						  });
 
 	pcd->SetSuspendCallback([]()
 							{
 								/* Inform USB library that core enters in suspend Mode. */
-								USBD_LL_Suspend(&bsp::UsbCdcSerialPort::UsbdHandle());
+								USBD_LL_Suspend(&bsp::usb_cdc_serial_port().UsbdHandle());
 
 								std::shared_ptr<base::usb::fs_device_pcd::UsbFsPcd> pcd = base::usb::fs_device_pcd::usb_fs_pcd_slot()[0];
 								pcd->Suspend();
@@ -78,22 +78,22 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 							   std::shared_ptr<base::usb::fs_device_pcd::UsbFsPcd> pcd = base::usb::fs_device_pcd::usb_fs_pcd_slot()[0];
 							   pcd->Resume();
 
-							   USBD_LL_Resume(&bsp::UsbCdcSerialPort::UsbdHandle());
+							   USBD_LL_Resume(&bsp::usb_cdc_serial_port().UsbdHandle());
 						   });
 
 	pcd->SetConnectCallback([]()
 							{
-								USBD_LL_DevConnected(&bsp::UsbCdcSerialPort::UsbdHandle());
+								USBD_LL_DevConnected(&bsp::usb_cdc_serial_port().UsbdHandle());
 							});
 
 	pcd->SetDisconnectCallback([]()
 							   {
-								   USBD_LL_DevDisconnected(&bsp::UsbCdcSerialPort::UsbdHandle());
+								   USBD_LL_DevDisconnected(&bsp::usb_cdc_serial_port().UsbdHandle());
 							   });
 
 	pcd->SetDataOutStageCallback([](base::usb::fs_device_pcd::DataOutStageCallbackArgs const &args)
 								 {
-									 USBD_LL_DataOutStage(&bsp::UsbCdcSerialPort::UsbdHandle(),
+									 USBD_LL_DataOutStage(&bsp::usb_cdc_serial_port().UsbdHandle(),
 														  args.EndpointNumber(),
 														  const_cast<uint8_t *>(args.Span().Buffer()),
 														  args.Span().Size());
@@ -103,20 +103,20 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
 								{
 									// bsp::UsbFsPcd::HalPcdHandle().IN_ep[args.EndpointNumber()].xfer_buff
 									// 指向的是用户调用 USBD_LL_Transmit 时传入的缓冲区。
-									USBD_LL_DataInStage(&bsp::UsbCdcSerialPort::UsbdHandle(),
+									USBD_LL_DataInStage(&bsp::usb_cdc_serial_port().UsbdHandle(),
 														args.EndpointNumber(),
 														bsp::UsbFsPcd::HalPcdHandle().IN_ep[args.EndpointNumber()].xfer_buff);
 								});
 
 	pcd->SetIsoOutIncompleteCallback([](base::usb::fs_device_pcd::IsoOutIncompleteCallbackArgs const &args)
 									 {
-										 USBD_LL_IsoOUTIncomplete(&bsp::UsbCdcSerialPort::UsbdHandle(),
+										 USBD_LL_IsoOUTIncomplete(&bsp::usb_cdc_serial_port().UsbdHandle(),
 																  args.EndpointNumber());
 									 });
 
 	pcd->SetIsoInIncompleteCallback([](base::usb::fs_device_pcd::IsoInIncompleteCallbackArgs const &args)
 									{
-										USBD_LL_IsoINIncomplete(&bsp::UsbCdcSerialPort::UsbdHandle(),
+										USBD_LL_IsoINIncomplete(&bsp::usb_cdc_serial_port().UsbdHandle(),
 																args.EndpointNumber());
 									});
 

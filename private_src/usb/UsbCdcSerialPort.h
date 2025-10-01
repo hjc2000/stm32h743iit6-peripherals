@@ -11,22 +11,24 @@ namespace bsp
 	class UsbCdcSerialPort
 	{
 	private:
-		class usbd_handle_context
+		class handle_context
 		{
 		public:
-			usbd_handle_context(UsbCdcSerialPort *self)
+			handle_context(UsbCdcSerialPort *self)
 				: _self{self}
 			{
 			}
 
-			inline static USBD_HandleTypeDef _handle{};
+			USBD_HandleTypeDef _handle{};
 			UsbCdcSerialPort *_self{};
 		};
 
+		handle_context _handle_context{this};
+
 	public:
-		static USBD_HandleTypeDef &UsbdHandle()
+		USBD_HandleTypeDef &UsbdHandle()
 		{
-			return usbd_handle_context::_handle;
+			return _handle_context._handle;
 		}
 	};
 
