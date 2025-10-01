@@ -152,8 +152,8 @@ static int8_t CDC_Init_FS(void)
 {
 	/* USER CODE BEGIN 3 */
 	/* Set Application Buffers */
-	USBD_CDC_SetTxBuffer(&bsp::usb_cdc_serial_port().UsbdHandle(), UserTxBufferFS, 0);
-	USBD_CDC_SetRxBuffer(&bsp::usb_cdc_serial_port().UsbdHandle(), UserRxBufferFS);
+	USBD_CDC_SetTxBuffer(&bsp::usb_cdc_serial_port_slot()[0]->UsbdHandle(), UserTxBufferFS, 0);
+	USBD_CDC_SetRxBuffer(&bsp::usb_cdc_serial_port_slot()[0]->UsbdHandle(), UserRxBufferFS);
 	return (USBD_OK);
 	/* USER CODE END 3 */
 }
@@ -262,8 +262,8 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t *pbuf, uint16_t length)
 static int8_t CDC_Receive_FS(uint8_t *Buf, uint32_t *Len)
 {
 	/* USER CODE BEGIN 6 */
-	USBD_CDC_SetRxBuffer(&bsp::usb_cdc_serial_port().UsbdHandle(), &Buf[0]);
-	USBD_CDC_ReceivePacket(&bsp::usb_cdc_serial_port().UsbdHandle());
+	USBD_CDC_SetRxBuffer(&bsp::usb_cdc_serial_port_slot()[0]->UsbdHandle(), &Buf[0]);
+	USBD_CDC_ReceivePacket(&bsp::usb_cdc_serial_port_slot()[0]->UsbdHandle());
 
 	{
 		// 消息回显
@@ -289,14 +289,14 @@ uint8_t CDC_Transmit_FS(uint8_t *Buf, uint16_t Len)
 {
 	uint8_t result = USBD_OK;
 	/* USER CODE BEGIN 7 */
-	USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)bsp::usb_cdc_serial_port().UsbdHandle().pClassData;
+	USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)bsp::usb_cdc_serial_port_slot()[0]->UsbdHandle().pClassData;
 	if (hcdc->TxState != 0)
 	{
 		return USBD_BUSY;
 	}
 
-	USBD_CDC_SetTxBuffer(&bsp::usb_cdc_serial_port().UsbdHandle(), Buf, Len);
-	result = USBD_CDC_TransmitPacket(&bsp::usb_cdc_serial_port().UsbdHandle());
+	USBD_CDC_SetTxBuffer(&bsp::usb_cdc_serial_port_slot()[0]->UsbdHandle(), Buf, Len);
+	result = USBD_CDC_TransmitPacket(&bsp::usb_cdc_serial_port_slot()[0]->UsbdHandle());
 	/* USER CODE END 7 */
 	return result;
 }

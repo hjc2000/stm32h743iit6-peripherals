@@ -3,10 +3,10 @@
 
 namespace
 {
-	base::SingletonProvider<bsp::UsbCdcSerialPort> _provider;
+	base::SingletonProvider<base::Slot<bsp::UsbCdcSerialPort>> _provider;
 }
 
-bsp::UsbCdcSerialPort &bsp::usb_cdc_serial_port()
+base::Slot<bsp::UsbCdcSerialPort> &bsp::usb_cdc_serial_port_slot()
 {
 	return _provider.Instance();
 }
