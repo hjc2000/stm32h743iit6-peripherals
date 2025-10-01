@@ -269,6 +269,7 @@ uint8_t *USBD_FS_ConfigStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
 	{
 		USBD_GetString((uint8_t *)USBD_CONFIGURATION_STRING_FS, USBD_StrDesc, length);
 	}
+
 	return USBD_StrDesc;
 }
 

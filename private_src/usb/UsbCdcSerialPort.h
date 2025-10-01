@@ -24,11 +24,12 @@ namespace bsp
 		};
 
 	public:
-
 		static USBD_HandleTypeDef &UsbdHandle()
 		{
 			return usbd_handle_context::_handle;
 		}
 	};
+
+	bsp::UsbCdcSerialPort &usb_cdc_serial_port();
 
 } // namespace bsp
