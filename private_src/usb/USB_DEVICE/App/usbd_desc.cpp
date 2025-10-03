@@ -50,23 +50,6 @@ static void IntToUnicode(uint32_t value, uint8_t *pbuf, uint8_t len);
  * @}
  */
 
-/** @defgroup USBD_DESC_Private_FunctionPrototypes USBD_DESC_Private_FunctionPrototypes
- * @brief Private functions declaration for FS.
- * @{
- */
-
-/**
- * @}
- */
-
-/** @defgroup USBD_DESC_Private_Variables USBD_DESC_Private_Variables
- * @brief Private variables.
- * @{
- */
-
-#if defined(__ICCARM__) /* IAR Compiler */
-	#pragma data_alignment = 4
-#endif /* defined ( __ICCARM__ ) */
 /** USB standard device descriptor. */
 __ALIGN_BEGIN uint8_t USBD_FS_DeviceDesc[USB_LEN_DEV_DESC] __ALIGN_END =
 	{
@@ -93,9 +76,6 @@ __ALIGN_BEGIN uint8_t USBD_FS_DeviceDesc[USB_LEN_DEV_DESC] __ALIGN_END =
 /* USB_DeviceDescriptor */
 /** BOS descriptor. */
 #if (USBD_LPM_ENABLED == 1)
-	#if defined(__ICCARM__) /* IAR Compiler */
-		#pragma data_alignment = 4
-	#endif /* defined ( __ICCARM__ ) */
 __ALIGN_BEGIN uint8_t USBD_FS_BOSDesc[USB_SIZ_BOS_DESC] __ALIGN_END =
 	{
 		0x5,
@@ -122,10 +102,6 @@ __ALIGN_BEGIN uint8_t USBD_FS_BOSDesc[USB_SIZ_BOS_DESC] __ALIGN_END =
  * @{
  */
 
-#if defined(__ICCARM__) /* IAR Compiler */
-	#pragma data_alignment = 4
-#endif /* defined ( __ICCARM__ ) */
-
 /** USB lang identifier descriptor. */
 __ALIGN_BEGIN uint8_t USBD_LangIDDesc[USB_LEN_LANGID_STR_DESC] __ALIGN_END = {
 	USB_LEN_LANGID_STR_DESC,
@@ -136,15 +112,9 @@ __ALIGN_BEGIN uint8_t USBD_LangIDDesc[USB_LEN_LANGID_STR_DESC] __ALIGN_END = {
 
 #define USB_SIZ_STRING_SERIAL 0x1A
 
-#if defined(__ICCARM__) /* IAR Compiler */
-	#pragma data_alignment = 4
-#endif /* defined ( __ICCARM__ ) */
 /* Internal string descriptor. */
 __ALIGN_BEGIN uint8_t USBD_StrDesc[USBD_MAX_STR_DESC_SIZ] __ALIGN_END;
 
-#if defined(__ICCARM__) /*!< IAR Compiler */
-	#pragma data_alignment = 4
-#endif
 __ALIGN_BEGIN uint8_t USBD_StringSerial[USB_SIZ_STRING_SERIAL] __ALIGN_END = {
 	USB_SIZ_STRING_SERIAL,
 	USB_DESC_TYPE_STRING,
