@@ -19,9 +19,9 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "usbd_desc.h"
 #include "usbd_conf.h"
 #include "usbd_core.h"
+#include "usbd_def.h"
 
 /** @defgroup USBD_DESC_Private_Defines USBD_DESC_Private_Defines
  * @brief Private defines.
@@ -133,6 +133,8 @@ __ALIGN_BEGIN uint8_t USBD_LangIDDesc[USB_LEN_LANGID_STR_DESC] __ALIGN_END = {
 	LOBYTE(USBD_LANGID_STRING),
 	HIBYTE(USBD_LANGID_STRING),
 };
+
+#define USB_SIZ_STRING_SERIAL 0x1A
 
 #if defined(__ICCARM__) /* IAR Compiler */
 	#pragma data_alignment = 4
@@ -281,6 +283,10 @@ uint8_t *USBD_FS_InterfaceStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *lengt
  */
 static void Get_SerialNum(void)
 {
+#define DEVICE_ID1 (UID_BASE)
+#define DEVICE_ID2 (UID_BASE + 0x4)
+#define DEVICE_ID3 (UID_BASE + 0x8)
+
 	uint32_t deviceserial0;
 	uint32_t deviceserial1;
 	uint32_t deviceserial2;
