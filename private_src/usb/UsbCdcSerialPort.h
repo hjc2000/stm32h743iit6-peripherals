@@ -16,6 +16,14 @@
 #include <memory>
 #include <stdexcept>
 
+uint8_t *USBD_FS_DeviceDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
+uint8_t *USBD_FS_LangIDStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
+uint8_t *USBD_FS_ManufacturerStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
+uint8_t *USBD_FS_ProductStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
+uint8_t *USBD_FS_SerialStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
+uint8_t *USBD_FS_ConfigStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
+uint8_t *USBD_FS_InterfaceStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
+
 namespace bsp
 {
 	class UsbCdcSerialPort
@@ -35,6 +43,16 @@ namespace bsp
 
 		handle_context _handle_context{this};
 		std::shared_ptr<base::usb::fs_device_pcd::UsbFsDevicePcd> _pcd;
+
+		USBD_DescriptorsTypeDef FS_Desc = {
+			USBD_FS_DeviceDescriptor,
+			USBD_FS_LangIDStrDescriptor,
+			USBD_FS_ManufacturerStrDescriptor,
+			USBD_FS_ProductStrDescriptor,
+			USBD_FS_SerialStrDescriptor,
+			USBD_FS_ConfigStrDescriptor,
+			USBD_FS_InterfaceStrDescriptor,
+		};
 
 	public:
 		UsbCdcSerialPort(std::shared_ptr<base::usb::fs_device_pcd::UsbFsDevicePcd> const &pcd)
