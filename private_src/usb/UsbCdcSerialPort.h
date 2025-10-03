@@ -2,12 +2,19 @@
 #include "base/embedded/Slot.h"
 #include "base/embedded/usb/fs-device-pcd/usb_fs_device_pcd_handle.h"
 #include "base/embedded/usb/fs-device-pcd/UsbFsDevicePcd.h"
+#include "base/string/define.h"
 #include "base/UsageStateManager.h"
 #include "hal.h" // IWYU pragma: keep
+#include "usb_device.h"
 #include "usb_fs_device_pcd_handle.h"
+#include "usbd_cdc.h"
+#include "usbd_cdc_if.h"
+#include "usbd_core.h"
 #include "usbd_def.h"
+#include "usbd_desc.h"
 #include <cstdint>
 #include <memory>
+#include <stdexcept>
 
 namespace bsp
 {
@@ -30,10 +37,7 @@ namespace bsp
 		std::shared_ptr<base::usb::fs_device_pcd::UsbFsDevicePcd> _pcd;
 
 	public:
-		UsbCdcSerialPort(std::shared_ptr<base::usb::fs_device_pcd::UsbFsDevicePcd> const &pcd)
-		{
-			_pcd = pcd;
-		}
+		UsbCdcSerialPort(std::shared_ptr<base::usb::fs_device_pcd::UsbFsDevicePcd> const &pcd);
 
 		USBD_HandleTypeDef &UsbdHandle()
 		{

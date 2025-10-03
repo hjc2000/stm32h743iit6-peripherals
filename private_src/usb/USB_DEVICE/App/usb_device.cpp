@@ -40,27 +40,4 @@ void MX_USB_DEVICE_Init(void)
 	std::shared_ptr<base::usb::fs_device_pcd::UsbFsDevicePcd> pcd = base::usb::fs_device_pcd::usb_fs_pcd_slot()[0];
 	std::shared_ptr<bsp::UsbCdcSerialPort> port{new bsp::UsbCdcSerialPort{pcd}};
 	bsp::usb_cdc_serial_port_slot().Add(port);
-
-	/* Init Device Library, add supported class and start the library. */
-	if (USBD_Init(&bsp::usb_cdc_serial_port_slot()[0]->UsbdHandle(), &FS_Desc, 0) != USBD_OK)
-	{
-		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
-	}
-
-	if (USBD_RegisterClass(&bsp::usb_cdc_serial_port_slot()[0]->UsbdHandle(), &USBD_CDC) != USBD_OK)
-	{
-		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
-	}
-
-	if (USBD_CDC_RegisterInterface(&bsp::usb_cdc_serial_port_slot()[0]->UsbdHandle(), &USBD_Interface_fops_FS) != USBD_OK)
-	{
-		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
-	}
-
-	if (USBD_Start(&bsp::usb_cdc_serial_port_slot()[0]->UsbdHandle()) != USBD_OK)
-	{
-		throw std::runtime_error{CODE_POS_STR + "初始化失败。"};
-	}
-
-	HAL_PWREx_EnableUSBVoltageDetector();
 }
