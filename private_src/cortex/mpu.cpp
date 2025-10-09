@@ -285,10 +285,10 @@ void base::cortex::mpu::configure(uint32_t region_number,
 	MPU_Region_InitTypeDef mpu_region_init_handle{};
 	mpu_region_init_handle.Enable = MPU_REGION_ENABLE;
 	mpu_region_init_handle.Number = region_number_to_define(region_number);
-	mpu_region_init_handle.BaseAddress = base_address;
-	mpu_region_init_handle.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
-	mpu_region_init_handle.Size = size_to_define(size);
 	mpu_region_init_handle.SubRegionDisable = 0x00;
+	mpu_region_init_handle.BaseAddress = base_address;
+	mpu_region_init_handle.Size = size_to_define(size);
+	mpu_region_init_handle.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
 	mpu_region_init_handle.AccessPermission = MPU_REGION_FULL_ACCESS;
 	configure_memory_type(mpu_region_init_handle, memory_type);
 	HAL_MPU_ConfigRegion(&mpu_region_init_handle);
