@@ -7,14 +7,15 @@
 
 namespace bsp
 {
+	///
 	/// @brief 封装 FMC 接口。
+	///
 	class SdramController1 final :
 		public base::sdram::sdram_controller_handle
 	{
 	private:
 		base::UsageStateManager<SdramController1> _usage_manager{};
 		SDRAM_HandleTypeDef _handle{};
-
 		base::sdram::sdram_timing _timing{};
 
 	public:
