@@ -17,35 +17,6 @@ namespace bsp
 
 		base::sdram::sdram_timing _timing{};
 
-		uint8_t mpu_set_protection(uint32_t base_address,
-								   uint32_t size,
-								   uint32_t number,
-								   uint8_t disable_execute,
-								   uint8_t access_permission,
-								   uint8_t shareable,
-								   uint8_t cacheable,
-								   uint8_t bufferable)
-		{
-			MPU_Region_InitTypeDef mpu_region_init_handle{};
-
-			HAL_MPU_Disable(); /* 配置MPU之前先关闭MPU,配置完成以后在使能MPU */
-
-			mpu_region_init_handle.Enable = MPU_REGION_ENABLE;           /* 使能该保护区域 */
-			mpu_region_init_handle.Number = number;                      /* 设置保护区域 */
-			mpu_region_init_handle.BaseAddress = base_address;           /* 设置基址 */
-			mpu_region_init_handle.DisableExec = disable_execute;        /* 是否允许指令访问 */
-			mpu_region_init_handle.Size = size;                          /* 设置保护区域大小 */
-			mpu_region_init_handle.SubRegionDisable = 0X00;              /* 禁止子区域 */
-			mpu_region_init_handle.TypeExtField = MPU_TEX_LEVEL1;        /* 设置类型扩展域为level0 */
-			mpu_region_init_handle.AccessPermission = access_permission; /* 设置访问权限, */
-			mpu_region_init_handle.IsShareable = shareable;              /* 是否共用? */
-			mpu_region_init_handle.IsCacheable = cacheable;              /* 是否cache? */
-			mpu_region_init_handle.IsBufferable = bufferable;            /* 是否缓冲? */
-			HAL_MPU_ConfigRegion(&mpu_region_init_handle);               /* 配置MPU */
-			HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);                      /* 开启MPU */
-			return 0;
-		}
-
 	public:
 		SdramController1()
 		{
