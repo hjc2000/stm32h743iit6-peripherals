@@ -202,7 +202,7 @@ namespace
 		}
 	}
 
-	void configure_memory_type(MPU_Region_InitTypeDef &configuration, base::cortex::MemoryType value)
+	constexpr void configure_memory_type(MPU_Region_InitTypeDef &configuration, base::cortex::MemoryType value)
 	{
 		switch (value)
 		{
