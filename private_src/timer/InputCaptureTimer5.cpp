@@ -229,9 +229,14 @@ void bsp::InputCaptureTimer5::ConfigureChannel(uint32_t channel_id,
 		}
 	}
 
-	HAL_TIM_IC_ConfigChannel(&_handle_context._handle,
-							 &configuration,
-							 bsp::channel_id_to_channel_define(channel_id));
+	HAL_StatusTypeDef result = HAL_TIM_IC_ConfigChannel(&_handle_context._handle,
+														&configuration,
+														bsp::channel_id_to_channel_define(channel_id));
+
+	if (result != HAL_StatusTypeDef::HAL_OK)
+	{
+		throw std::runtime_error{CODE_POS_STR + "配置捕获通道失败。"};
+	}
 }
 
 void bsp::InputCaptureTimer5::SetPeriod(std::chrono::nanoseconds const &value)
