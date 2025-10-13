@@ -71,13 +71,7 @@ void bsp::InputCaptureTimer5::OnPeriodElapsedCallback()
 		return;
 	}
 
-	try
-	{
-		_on_period_elapsed_callback();
-	}
-	catch (...)
-	{
-	}
+	_on_period_elapsed_callback();
 }
 
 void bsp::InputCaptureTimer5::OnCaptureCompleteCallback()
@@ -87,54 +81,48 @@ void bsp::InputCaptureTimer5::OnCaptureCompleteCallback()
 		return;
 	}
 
-	try
+	switch (_handle_context._handle.Channel)
 	{
-		switch (_handle_context._handle.Channel)
+	case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_1:
 		{
-		case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_1:
-			{
-				base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR1};
-				_on_capture_complete_callback(args);
-				break;
-			}
-		case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_2:
-			{
-				base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR2};
-				_on_capture_complete_callback(args);
-				break;
-			}
-		case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_3:
-			{
-				base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR3};
-				_on_capture_complete_callback(args);
-				break;
-			}
-		case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_4:
-			{
-				base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR4};
-				_on_capture_complete_callback(args);
-				break;
-			}
-		case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_5:
-			{
-				base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR5};
-				_on_capture_complete_callback(args);
-				break;
-			}
-		case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_6:
-			{
-				base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR6};
-				_on_capture_complete_callback(args);
-				break;
-			}
-		default:
-			{
-				break;
-			}
+			base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR1};
+			_on_capture_complete_callback(args);
+			break;
 		}
-	}
-	catch (...)
-	{
+	case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_2:
+		{
+			base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR2};
+			_on_capture_complete_callback(args);
+			break;
+		}
+	case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_3:
+		{
+			base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR3};
+			_on_capture_complete_callback(args);
+			break;
+		}
+	case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_4:
+		{
+			base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR4};
+			_on_capture_complete_callback(args);
+			break;
+		}
+	case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_5:
+		{
+			base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR5};
+			_on_capture_complete_callback(args);
+			break;
+		}
+	case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_6:
+		{
+			base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR6};
+			_on_capture_complete_callback(args);
+			break;
+		}
+	default:
+		{
+			break;
+		}
 	}
 }
 

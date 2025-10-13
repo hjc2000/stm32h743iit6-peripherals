@@ -40,13 +40,7 @@ namespace bsp
 				return;
 			}
 
-			try
-			{
-				_on_period_elapsed_callback();
-			}
-			catch (...)
-			{
-			}
+			_on_period_elapsed_callback();
 		}
 
 	public:
