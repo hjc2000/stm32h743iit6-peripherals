@@ -1,5 +1,5 @@
 #pragma once
-#include "base/math/pow.h"
+#include "base/math/math.h"
 #include "base/string/define.h"
 #include "base/unit/Hz.h"
 #include "base/UsageStateManager.h"
