@@ -3,6 +3,7 @@
 #include "base/string/define.h"
 #include "hal.h"
 #include <cstdint>
+#include <stdexcept>
 
 namespace
 {
