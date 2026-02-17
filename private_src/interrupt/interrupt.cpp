@@ -1,13 +1,6 @@
 #include "bsp-interface/di/interrupt.h"
 #include "base/embedded/interrupt/interrupt.h"
-#include "base/SingletonProvider.h"
 #include "hal.h"
-
-namespace
-{
-	base::SingletonProvider<base::interrupt::Impelement> _impelement_provider{};
-
-}
 
 void base::interrupt::Impelement::disable_global_interrupt() noexcept
 {
@@ -17,11 +10,6 @@ void base::interrupt::Impelement::disable_global_interrupt() noexcept
 void base::interrupt::Impelement::enable_global_interrupt() noexcept
 {
 	__enable_irq();
-}
-
-base::interrupt::Impelement &base::interrupt::impelement()
-{
-	return _impelement_provider.Instance();
 }
 
 void base::interrupt::disable_interrupt(int32_t irq) noexcept
