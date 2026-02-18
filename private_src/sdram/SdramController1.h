@@ -1,5 +1,6 @@
 #pragma once
 #include "base/embedded/sdram/sdram_timing.h"
+#include "base/stream/Span.h"
 #include "base/UsageStateManager.h"
 #include "sdram_controller_handle.h"
 #include <base/define.h>
@@ -75,14 +76,18 @@ namespace bsp
 		base::sdram::sdram_timing const &Timing() const override;
 
 		///
-		/// @brief 此 SDRAM 控制器所管理的内存段的起始地址。打开 SDRAM 后，对着这个地址开始往后的内存区域
-		/// 读写数据即可读写 SDRAM 的内容。
+		/// @brief 此 SDRAM 控制器所管理的内存段。
 		///
 		/// @return
 		///
-		uint8_t *StartAddress() const override
+		virtual base::Span Span() const override
 		{
-			return reinterpret_cast<uint8_t *>(0xC0000000);
+			base::Span ret{
+				reinterpret_cast<uint8_t *>(0xC0000000),
+				256 * 1024 * 1024,
+			};
+
+			return ret;
 		}
 	};
 

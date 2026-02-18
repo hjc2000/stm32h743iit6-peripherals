@@ -1,5 +1,6 @@
 #pragma once
 #include "base/embedded/sdram/sdram_controller_handle.h"
+#include "base/stream/Span.h"
 
 class base::sdram::sdram_controller_handle
 {
@@ -55,10 +56,9 @@ public:
 	virtual base::sdram::sdram_timing const &Timing() const = 0;
 
 	///
-	/// @brief 此 SDRAM 控制器所管理的内存段的起始地址。打开 SDRAM 后，对着这个地址开始往后的内存区域
-	/// 读写数据即可读写 SDRAM 的内容。
+	/// @brief 此 SDRAM 控制器所管理的内存段。
 	///
 	/// @return
 	///
-	virtual uint8_t *StartAddress() const = 0;
+	virtual base::Span Span() const = 0;
 };

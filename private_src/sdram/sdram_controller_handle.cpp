@@ -57,5 +57,5 @@ base::sdram::sdram_timing const &base::sdram::timing(base::sdram::sdram_controll
 
 base::Span base::sdram::span(base::sdram::sdram_controller_handle &h)
 {
-	return base::Span{h.StartAddress(), 32 * 1024 * 1024};
+	return h.Span();
 }
