@@ -6,6 +6,7 @@
 #include "base/unit/Nanosecond.h"
 #include "define.h"
 #include "isr/timer5_isr.h"
+#include <cstdint>
 #include <stdexcept>
 
 /* #region 初始化辅助函数 */
@@ -76,47 +77,84 @@ void bsp::InputCaptureTimer5::OnPeriodElapsedCallback()
 
 void bsp::InputCaptureTimer5::OnCaptureCompleteCallback()
 {
-	if (_on_capture_complete_callback == nullptr)
-	{
-		return;
-	}
-
 	switch (_handle_context._handle.Channel)
 	{
 	case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_1:
 		{
+			constexpr uint32_t channel_id = 1;
+
+			if (_on_capture_complete_callback_functions[channel_id - 1] == nullptr)
+			{
+				return;
+			}
+
 			base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR1};
-			_on_capture_complete_callback(args);
+			_on_capture_complete_callback_functions[channel_id - 1](args);
 			break;
 		}
 	case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_2:
 		{
+			constexpr uint32_t channel_id = 2;
+
+			if (_on_capture_complete_callback_functions[channel_id - 1] == nullptr)
+			{
+				return;
+			}
+
 			base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR2};
-			_on_capture_complete_callback(args);
+			_on_capture_complete_callback_functions[channel_id - 1](args);
 			break;
 		}
 	case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_3:
 		{
+			constexpr uint32_t channel_id = 3;
+
+			if (_on_capture_complete_callback_functions[channel_id - 1] == nullptr)
+			{
+				return;
+			}
+
 			base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR3};
-			_on_capture_complete_callback(args);
+			_on_capture_complete_callback_functions[channel_id - 1](args);
 			break;
 		}
 	case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_4:
 		{
+			constexpr uint32_t channel_id = 4;
+
+			if (_on_capture_complete_callback_functions[channel_id - 1] == nullptr)
+			{
+				return;
+			}
+
 			base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR4};
-			_on_capture_complete_callback(args);
+			_on_capture_complete_callback_functions[channel_id - 1](args);
 			break;
 		}
 	case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_5:
 		{
+			constexpr uint32_t channel_id = 5;
+
+			if (_on_capture_complete_callback_functions[channel_id - 1] == nullptr)
+			{
+				return;
+			}
+
 			base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR5};
-			_on_capture_complete_callback(args);
+			_on_capture_complete_callback_functions[channel_id - 1](args);
 			break;
 		}
 	case HAL_TIM_ActiveChannel::HAL_TIM_ACTIVE_CHANNEL_6:
 		{
+			constexpr uint32_t channel_id = 6;
+
+			if (_on_capture_complete_callback_functions[channel_id - 1] == nullptr)
+			{
+				return;
+			}
+
 			base::input_capture_timer::CaptureCompleteEventArgs args{TIM5->CCR6};
-			_on_capture_complete_callback(args);
+			_on_capture_complete_callback_functions[channel_id - 1](args);
 			break;
 		}
 	default:
@@ -260,10 +298,16 @@ void bsp::InputCaptureTimer5::SetPeriodElapsedCallback(std::function<void()> con
 	__HAL_TIM_ENABLE_IT(&_handle_context._handle, TIM_IT_UPDATE);
 }
 
-void bsp::InputCaptureTimer5::SetCaptureCompleteCallback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback)
+void bsp::InputCaptureTimer5::SetCaptureCompleteCallback(uint32_t channel_id,
+														 std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback)
 {
+	if (channel_id >= _on_capture_complete_callback_functions.size())
+	{
+		throw std::invalid_argument{CODE_POS_STR + "通道编号超出范围。"};
+	}
+
 	base::interrupt::disable_interrupt(static_cast<int32_t>(IRQn_Type::TIM5_IRQn));
-	_on_capture_complete_callback = callback;
+	_on_capture_complete_callback_functions[channel_id - 1] = callback;
 	base::interrupt::enable_interrupt(static_cast<int32_t>(IRQn_Type::TIM5_IRQn), 5);
 }
 

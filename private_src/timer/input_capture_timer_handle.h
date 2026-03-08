@@ -20,7 +20,8 @@ public:
 
 	virtual void SetPeriodElapsedCallback(std::function<void()> const &callback) = 0;
 
-	virtual void SetCaptureCompleteCallback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback) = 0;
+	virtual void SetCaptureCompleteCallback(uint32_t channel_id,
+											std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback) = 0;
 
 	virtual void Start() = 0;
 

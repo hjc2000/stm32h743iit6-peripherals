@@ -3,6 +3,7 @@
 #include "hal.h" // IWYU pragma: keep
 #include "input_capture_timer_handle.h"
 #include "Timer3.h"
+#include <array>
 #include <cstdint>
 #include <functional>
 
@@ -27,7 +28,7 @@ namespace bsp
 
 		handle_context _handle_context{this};
 		std::function<void()> _on_period_elapsed_callback;
-		std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> _on_capture_complete_callback;
+		std::array<std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)>, 6> _on_capture_complete_callback_functions{};
 		std::chrono::nanoseconds _period{};
 
 		void InitializePeriod(std::chrono::nanoseconds const &period);
@@ -77,7 +78,8 @@ namespace bsp
 
 		virtual void SetPeriodElapsedCallback(std::function<void()> const &callback) override;
 
-		virtual void SetCaptureCompleteCallback(std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback) override;
+		virtual void SetCaptureCompleteCallback(uint32_t channel_id,
+												std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback) override;
 
 		virtual void Start() override
 		{

@@ -66,9 +66,10 @@ void base::input_capture_timer::set_period_elapsed_callback(base::input_capture_
 }
 
 void base::input_capture_timer::set_capture_complete_callback(base::input_capture_timer::input_capture_timer_handle &self,
+															  uint32_t channel_id,
 															  std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)> const &callback)
 {
-	self.SetCaptureCompleteCallback(callback);
+	self.SetCaptureCompleteCallback(channel_id, callback);
 }
 
 void base::input_capture_timer::start(base::input_capture_timer::input_capture_timer_handle &self)
