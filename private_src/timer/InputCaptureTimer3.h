@@ -27,8 +27,8 @@ namespace bsp
 		};
 
 		handle_context _handle_context{this};
-		std::function<void()> _on_period_elapsed_callback;
-		std::array<std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)>, 6> _on_capture_complete_callback_functions{};
+		std::function<void()> _period_elapsed_callback;
+		std::array<std::function<void(base::input_capture_timer::CaptureCompleteEventArgs const &)>, 6> _capture_complete_callback_functions{};
 		std::chrono::nanoseconds _period{};
 
 		void InitializePeriod(std::chrono::nanoseconds const &period);
