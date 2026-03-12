@@ -1,5 +1,5 @@
 #pragma once
-#include "base/SingletonProvider.h"
+#include "base/GlobalObjectProvider.h"
 #include "base/unit/MHz.h"
 #include "clock_source_handle.h"
 #include "hal.h" // IWYU pragma: keep
@@ -30,7 +30,7 @@ namespace bsp
 			base::unit::MHz _r_freq;
 		};
 
-		inline static base::SingletonProvider<SingletonContext> _singleton_context_provider{};
+		inline static base::GlobalObjectProvider<SingletonContext> _singleton_context_provider{};
 
 		static Factors get_factors(std::map<std::string, uint32_t> const &channel_factor_map);
 

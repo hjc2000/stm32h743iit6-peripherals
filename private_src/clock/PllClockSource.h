@@ -1,5 +1,5 @@
 #pragma once
-#include "base/SingletonProvider.h"
+#include "base/GlobalObjectProvider.h"
 #include "base/unit/MHz.h"
 #include "clock_source_handle.h"
 #include "hal.h"
@@ -35,7 +35,7 @@ namespace bsp
 			std::string _clock_source_name;
 		};
 
-		inline static base::SingletonProvider<SingletonContext> _singleton_context_provider{};
+		inline static base::GlobalObjectProvider<SingletonContext> _singleton_context_provider{};
 
 		static uint32_t input_channel_name_to_define_value(std::string const &input_channel_name);
 

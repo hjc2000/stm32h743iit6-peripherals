@@ -1,5 +1,5 @@
 #pragma once
-#include "base/SingletonProvider.h"
+#include "base/GlobalObjectProvider.h"
 #include "clock_source_handle.h"
 
 namespace bsp
@@ -27,7 +27,7 @@ namespace bsp
 			bool _configured = false;
 		};
 
-		inline static base::SingletonProvider<SingletonContext> _singleton_context_provider{};
+		inline static base::GlobalObjectProvider<SingletonContext> _singleton_context_provider{};
 
 	public:
 		virtual base::unit::MHz Frequency() const override;
