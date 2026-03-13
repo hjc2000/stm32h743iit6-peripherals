@@ -2,12 +2,12 @@
 #include "base/embedded/interrupt/interrupt.h"
 #include "hal.h"
 
-void base::interrupt::DisableGlobalInterruptionImplementation::disable_global_interrupt() noexcept
+void base::detail::interface::interrupt::disable_global_interrupt() noexcept
 {
 	__disable_irq();
 }
 
-void base::interrupt::DisableGlobalInterruptionImplementation::enable_global_interrupt() noexcept
+void base::detail::interface::interrupt::enable_global_interrupt() noexcept
 {
 	__enable_irq();
 }
