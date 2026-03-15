@@ -55,13 +55,14 @@ bsp::EthernetController1::EthernetController1()
 	_send_completion_signal.Release();
 }
 
-base::IEnumerable<base::ReadOnlySpan> const &bsp::EthernetController1::ReceiveMultiSpans()
+base::List<base::ReadOnlySpan> const &bsp::EthernetController1::ReceiveMultiSpans()
 {
 	while (true)
 	{
 		_received_span_list.Clear();
 
 		ETH_BufferTypeDef rx_buffers[ETH_RX_DESC_CNT]{};
+
 		for (uint32_t i = 0; i < ETH_RX_DESC_CNT - 1; i++)
 		{
 			rx_buffers[i].next = &rx_buffers[i + 1];

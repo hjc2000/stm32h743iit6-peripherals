@@ -45,7 +45,7 @@ namespace bsp
 
 		/// @brief 接收。
 		/// @return
-		base::IEnumerable<base::ReadOnlySpan> const &ReceiveMultiSpans();
+		base::List<base::ReadOnlySpan> const &ReceiveMultiSpans();
 
 	public:
 		EthernetController1();
